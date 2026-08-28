@@ -4,6 +4,7 @@ import { proyectos } from "@/data/proyectos";
 import { Reveal } from "@/components/ui/Reveal";
 import { Seccion } from "@/components/ui/Seccion";
 import { TarjetaProyecto } from "@/components/ui/TarjetaProyecto";
+import { ResaltableProyecto } from "@/components/ui/ResaltableProyecto";
 
 type Props = { idioma: Idioma; t: Diccionario };
 
@@ -23,12 +24,14 @@ export function Proyectos({ idioma, t }: Props) {
           {proyectos.map((proyecto, i) => (
             <li key={proyecto.slug} className="flex">
               <Reveal retardo={(i % 2) * 0.08} className="flex w-full">
-                <TarjetaProyecto
-                  proyecto={proyecto}
-                  idioma={idioma}
-                  t={t}
-                  indice={String(i + 1).padStart(2, "0")}
-                />
+                <ResaltableProyecto tecnologias={proyecto.tecnologias}>
+                  <TarjetaProyecto
+                    proyecto={proyecto}
+                    idioma={idioma}
+                    t={t}
+                    indice={String(i + 1).padStart(2, "0")}
+                  />
+                </ResaltableProyecto>
               </Reveal>
             </li>
           ))}

@@ -16,10 +16,15 @@ export function Experiencia({ idioma, t }: Props) {
       titulo={t.experiencia.titulo}
     >
       <ol className="relative">
-        {/* Línea de tiempo: decorativa, se oculta a lectores de pantalla. */}
+        {/* Línea de tiempo: decorativa, se oculta a lectores de pantalla.
+            La segunda capa se rellena en acento a medida que se baja. */}
         <span
           aria-hidden="true"
           className="absolute left-[5px] top-2 bottom-2 w-px bg-borde"
+        />
+        <span
+          aria-hidden="true"
+          className="linea-progreso absolute left-[5px] top-2 bottom-2 w-px origin-top bg-acento"
         />
 
         {experiencia.map((hito, i) => (

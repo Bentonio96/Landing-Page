@@ -241,3 +241,71 @@
     }
   }
 }
+
+/* ============================================================
+   LÍNEA DE TIEMPO QUE SE LLENA AL HACER SCROLL
+
+   Usa animaciones ligadas al scroll de CSS: cero JavaScript y corre
+   fuera del hilo principal. Donde no hay soporte, la capa de acento
+   simplemente no se dibuja y queda la regla gris de base.
+   ============================================================ */
+
+@keyframes llenar-linea {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@layer components {
+  .linea-progreso {
+    transform: scaleY(0);
+  }
+
+  @supports (animation-timeline: view()) {
+    .linea-progreso {
+      animation: llenar-linea linear both;
+      animation-timeline: view();
+      animation-range: cover 5% cover 65%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .linea-progreso {
+      animation: none;
+      transform: scaleY(1);
+    }
+  }
+}
+
+/* ============================================================
+   TRANSICIÓN DE TEMA
+
+   El tema nuevo se abre en círculo desde el botón. El recorte lo
+   anima el propio botón; aquí solo se apagan las animaciones por
+   defecto y se ordenan las capas.
+   ============================================================ */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

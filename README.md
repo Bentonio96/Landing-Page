@@ -98,6 +98,12 @@ Regenerar imágenes (foto optimizada, favicons, Open Graph) después de cambiar 
 node scripts/generar-assets.mjs
 ```
 
+Regenerar las miniaturas de los proyectos capturando sus sitios en vivo:
+
+```bash
+node scripts/capturar-proyectos.mjs
+```
+
 ---
 
 ## Capturas
@@ -199,6 +205,18 @@ El sitio sirve español en `/` e inglés en `/en`, ambos **prerenderizados está
 La estructura es un único root layout dentro de `src/app/[idioma]/`, que es lo que permite que `<html lang>` sea correcto en cada idioma sin renderizado dinámico. La raíz `/` sirve el español mediante un **rewrite** (no un redirect), así que el enlace del CV queda limpio y sin saltos.
 
 No se usó `next-intl` ni similar: para dos idiomas y un diccionario plano, un `Record<Idioma, string>` tipado hace lo mismo con cero kilobytes de runtime.
+
+### Lo que se mueve, y por qué
+
+Cuatro interacciones, todas respetando `prefers-reduced-motion` y ninguna a costa de las métricas:
+
+- **Miniaturas de proyecto.** Cada tarjeta muestra una captura del sitio real, generada por [`scripts/capturar-proyectos.mjs`](scripts/capturar-proyectos.mjs) desde la demo en producción, así que no se desactualizan a mano. Se ven siempre, no al pasar el cursor: esconder la captura tras un hover dejaría fuera a quien entra desde un teléfono, y es justo lo que alguien quiere ver antes de decidir si abre el proyecto. Lo que reacciona es un acercamiento discreto. Las tres cargan en diferido — la sección queda bajo el pliegue en todos los tamaños, así que precargarlas solo le quitaría ancho de banda a la foto del hero, que sí es el elemento LCP.
+
+- **Cruce entre Stack y Proyectos.** Apuntar una tecnología del stack resalta los proyectos que la usan; apuntar o **enfocar** un proyecto resalta sus tecnologías en el stack. "React" y "React 19" se reconocen como la misma cosa. El resalte suma un anillo de acento en vez de atenuar el resto: bajar la opacidad de lo no coincidente reduciría el contraste del texto. Es una mejora progresiva — la relación ya está escrita en la página, cada tarjeta lista sus tecnologías — así que no añade paradas de tabulación, y quien navega con teclado igual obtiene la dirección proyecto → stack vía foco.
+
+- **Transición de tema.** El tema nuevo se abre en círculo desde el propio botón, con la View Transitions API. Sin soporte o con movimiento reducido, cambia al instante.
+
+- **Línea de tiempo que se llena.** La regla vertical de Experiencia se rellena en acento a medida que bajas, con animaciones ligadas al scroll de CSS: cero JavaScript y fuera del hilo principal. Donde no hay soporte, queda la regla gris de base.
 
 ### Animaciones en CSS, no en JavaScript
 

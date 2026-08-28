@@ -10,6 +10,7 @@ import { Stack } from "@/components/sections/Stack";
 import { Proyectos } from "@/components/sections/Proyectos";
 import { Experiencia } from "@/components/sections/Experiencia";
 import { Contacto } from "@/components/sections/Contacto";
+import { ProveedorTecnologia } from "@/components/ui/ContextoTecnologia";
 
 type Props = { idioma: Idioma };
 
@@ -50,14 +51,16 @@ export function Pagina({ idioma }: Props) {
       <SaltarAlContenido texto={t.saltarAlContenido} />
       <Encabezado idioma={idioma} t={t} />
 
-      <main id="contenido">
-        <Hero t={t} />
-        <SobreMi idioma={idioma} t={t} />
-        <Stack idioma={idioma} t={t} />
-        <Proyectos idioma={idioma} t={t} />
-        <Experiencia idioma={idioma} t={t} />
-        <Contacto t={t} />
-      </main>
+      <ProveedorTecnologia>
+        <main id="contenido">
+          <Hero t={t} />
+          <SobreMi idioma={idioma} t={t} />
+          <Stack idioma={idioma} t={t} />
+          <Proyectos idioma={idioma} t={t} />
+          <Experiencia idioma={idioma} t={t} />
+          <Contacto t={t} />
+        </main>
+      </ProveedorTecnologia>
 
       <PieDePagina idioma={idioma} t={t} />
 

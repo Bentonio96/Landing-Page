@@ -29,6 +29,7 @@ export function Stack({ idioma, t }: Props) {
                     key={item.nombre}
                     principal={item.principal}
                     etiquetaPrincipal={t.stack.principal}
+                    origen="stack"
                   >
                     {item.nombre}
                   </Chip>

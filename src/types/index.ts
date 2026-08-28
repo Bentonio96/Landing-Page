@@ -25,6 +25,12 @@ export type Proyecto = {
   repoUrl?: string;
   /** Año o rango, se muestra como metadato discreto. */
   anio?: string;
+  /**
+   * Miniatura del proyecto, relativa a /public. La genera
+   * scripts/capturar-proyectos.mjs desde el sitio en vivo. Si falta, la
+   * tarjeta se renderiza sin imagen.
+   */
+  imagen?: string;
 };
 
 /** Una tecnología dentro del stack. */
