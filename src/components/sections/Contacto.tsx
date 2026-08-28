@@ -3,6 +3,7 @@ import type { Diccionario } from "@/i18n/diccionario";
 import { perfil } from "@/data/perfil";
 import { enlaceCorreo } from "@/lib/utils";
 import { Boton } from "@/components/ui/Boton";
+import { BotonCorreo } from "@/components/ui/BotonCorreo";
 import { Reveal } from "@/components/ui/Reveal";
 import { Seccion } from "@/components/ui/Seccion";
 
@@ -104,18 +105,17 @@ export function Contacto({ t }: Props) {
 
         <Reveal retardo={0.14}>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Boton
+            <BotonCorreo
               href={enlaceCorreo(
                 perfil.email,
                 t.contacto.asuntoCorreo,
                 t.contacto.cuerpoCorreo,
               )}
-              variante="primario"
+              email={perfil.email}
+              texto={t.contacto.botonCorreo}
+              avisoCopiado={t.contacto.correoCopiado}
               className="w-full sm:w-auto"
-            >
-              <Mail aria-hidden="true" className="size-4" />
-              {t.contacto.botonCorreo}
-            </Boton>
+            />
 
             {/* El CV es de lo que más se pide para evaluar experiencia:
                 lleva la variante de acento para que no se pierda al lado del

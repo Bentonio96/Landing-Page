@@ -78,6 +78,8 @@ const diccionario = {
       telefono: "Teléfono",
       ubicacion: "Ubicación",
       botonCorreo: "Enviar un correo",
+      correoCopiado:
+        "Copiamos la dirección, por si no se abrió tu cliente de correo.",
       descargarCV: "Descargar CV",
       cvFormato: "(PDF)",
       asuntoCorreo: "Proyecto freelance",
@@ -169,6 +171,8 @@ const diccionario = {
       telefono: "Phone",
       ubicacion: "Location",
       botonCorreo: "Send an email",
+      correoCopiado:
+        "Address copied, in case your mail client didn't open.",
       descargarCV: "Download CV",
       cvFormato: "(PDF, in Spanish)",
       asuntoCorreo: "Freelance project",

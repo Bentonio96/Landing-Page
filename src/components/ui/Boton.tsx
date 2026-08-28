@@ -20,6 +20,8 @@ type Props = {
   /** Texto accesible completo, si el visible no basta por sí solo. */
   etiquetaAccesible?: string;
   avisoExterno?: string;
+  /** Acción extra al pulsar; no reemplaza la navegación del enlace. */
+  onClick?: () => void;
   className?: string;
 };
 
@@ -45,11 +47,13 @@ export function Boton({
   descargar = false,
   etiquetaAccesible,
   avisoExterno,
+  onClick,
   className,
 }: Props) {
   return (
     <a
       href={href}
+      onClick={onClick}
       aria-label={etiquetaAccesible}
       {...(externo ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       {...(descargar ? { download: "" } : {})}

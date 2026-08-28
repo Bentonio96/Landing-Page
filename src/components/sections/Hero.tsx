@@ -1,9 +1,10 @@
 import Image from "next/image";
-import { ArrowDown, Mail } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import type { Diccionario } from "@/i18n/diccionario";
 import { perfil } from "@/data/perfil";
 import { enlaceCorreo } from "@/lib/utils";
 import { Boton } from "@/components/ui/Boton";
+import { BotonCorreo } from "@/components/ui/BotonCorreo";
 import { BLUR_PERFIL } from "@/lib/blur";
 
 type Props = { t: Diccionario };
@@ -57,18 +58,18 @@ export function Hero({ t }: Props) {
                 {t.hero.verProyectos}
                 <ArrowDown aria-hidden="true" className="size-4" />
               </Boton>
-              <Boton
+              <BotonCorreo
                 href={enlaceCorreo(
                   perfil.email,
                   t.contacto.asuntoCorreo,
                   t.contacto.cuerpoCorreo,
                 )}
+                email={perfil.email}
+                texto={t.hero.escribirme}
+                avisoCopiado={t.contacto.correoCopiado}
                 variante="secundario"
                 className="w-full sm:w-auto"
-              >
-                <Mail aria-hidden="true" className="size-4" />
-                {t.hero.escribirme}
-              </Boton>
+              />
             </div>
           </div>
 

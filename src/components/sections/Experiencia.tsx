@@ -1,7 +1,7 @@
 import type { Idioma } from "@/types";
 import type { Diccionario } from "@/i18n/diccionario";
 import { experiencia } from "@/data/experiencia";
-import { Reveal } from "@/components/ui/Reveal";
+import { HitoLinea } from "@/components/ui/HitoLinea";
 import { Seccion } from "@/components/ui/Seccion";
 import { cn } from "@/lib/utils";
 
@@ -20,26 +20,16 @@ export function Experiencia({ idioma, t }: Props) {
             La segunda capa se rellena en acento a medida que se baja. */}
         <span
           aria-hidden="true"
-          className="absolute left-[5px] top-2 bottom-2 w-px bg-borde"
+          className="absolute left-[10px] top-3 bottom-3 w-px -translate-x-1/2 bg-borde"
         />
         <span
           aria-hidden="true"
-          className="linea-progreso absolute left-[5px] top-2 bottom-2 w-px origin-top bg-acento"
+          className="linea-progreso absolute left-[10px] top-3 bottom-3 w-px -translate-x-1/2 origin-top bg-acento"
         />
 
         {experiencia.map((hito, i) => (
-          <li key={hito.id} className="relative pl-8 pb-10 last:pb-0">
-            <Reveal retardo={i * 0.06}>
-              <span
-                aria-hidden="true"
-                className={cn(
-                  "absolute left-0 top-2 size-[11px] rounded-full border-2",
-                  hito.actual
-                    ? "border-acento bg-acento"
-                    : "border-bordefuerte bg-fondo",
-                )}
-              />
-
+          <li key={hito.id} className="relative pl-10 pb-12 last:pb-0">
+            <HitoLinea actual={hito.actual} retardo={i * 0.06}>
               <p className="etiqueta flex flex-wrap items-center gap-x-3 gap-y-1">
                 <span className={cn(hito.actual && "text-acento")}>
                   {hito.periodo[idioma]}
@@ -58,7 +48,7 @@ export function Experiencia({ idioma, t }: Props) {
               <p className="mt-3 max-w-medida text-base leading-relaxed text-atenuado">
                 {hito.descripcion[idioma]}
               </p>
-            </Reveal>
+            </HitoLinea>
           </li>
         ))}
       </ol>
