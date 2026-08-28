@@ -45,7 +45,9 @@ for (const tema of ["light", "dark"]) {
     { name: "prefers-color-scheme", value: tema },
     { name: "prefers-reduced-motion", value: "reduce" },
   ]);
-  await p.goto(BASE, { waitUntil: "networkidle0" });
+  // networkidle2 y un margen amplio: contra un sitio remoto la red puede no
+  // quedarse nunca del todo quieta.
+  await p.goto(BASE, { waitUntil: "networkidle2", timeout: 60000 });
   await p.evaluate(() =>
     document
       .querySelectorAll(".revelar")
