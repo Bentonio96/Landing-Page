@@ -28,19 +28,19 @@ export const metadata = {
  */
 const estilos = `
   :root {
-    --fondo: #FCFCFB;
-    --texto: #1B2028;
-    --atenuado: #5A6474;
-    --acento: #4335C9;
+    --fondo: #FBFAF8;
+    --texto: #16181D;
+    --atenuado: #5C6069;
+    --acento: #B04426;
     --sobre-acento: #FFFFFF;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --fondo: #0E1117;
-      --texto: #ECEDEF;
-      --atenuado: #9AA3B2;
-      --acento: #A79BFF;
-      --sobre-acento: #0E1117;
+      --fondo: #0C0E12;
+      --texto: #EDEDEB;
+      --atenuado: #9BA1AB;
+      --acento: #F0784E;
+      --sobre-acento: #14100E;
     }
   }
   html { color-scheme: light dark; }

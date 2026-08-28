@@ -4,8 +4,8 @@ import { perfil, seo, SITIO_URL } from "@/data/perfil";
 
 export const viewportBase: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#FCFCFB" },
-    { media: "(prefers-color-scheme: dark)", color: "#0E1117" },
+    { media: "(prefers-color-scheme: light)", color: "#FBFAF8" },
+    { media: "(prefers-color-scheme: dark)", color: "#0C0E12" },
   ],
   colorScheme: "light dark",
 };

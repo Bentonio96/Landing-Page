@@ -18,10 +18,10 @@ const RAIZ = process.cwd();
 const PUBLICO = path.join(RAIZ, "public");
 const ORIGEN = path.join(PUBLICO, "benjamin-pena.jpg");
 
-const TINTA = "#0E1117";     // ink
-const ACENTO = "#A79BFF";    // accent-dim: el acento sobre fondo oscuro
-const HUESO = "#ECEDEF";
-const ATENUADO = "#9AA3B2";
+const TINTA = "#0C0E12";
+const ACENTO = "#F0784E";
+const HUESO = "#EDEDEB";
+const ATENUADO = "#9BA1AB";
 
 const marcaSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <rect width="64" height="64" rx="14" fill="${TINTA}"/>
@@ -91,7 +91,7 @@ function ogSvg({ rol, sitio }) {
   <text x="76" y="404" font-family="Georgia, 'Times New Roman', serif"
         font-size="104" fill="${HUESO}">Peña Díaz</text>
 
-  <rect x="80" y="470" width="380" height="1" fill="#333B4A"/>
+  <rect x="80" y="470" width="380" height="1" fill="#333944"/>
 
   <text x="80" y="522" font-family="Georgia, 'Times New Roman', serif"
         font-size="26" letter-spacing="2" fill="${ATENUADO}">${escapar(
