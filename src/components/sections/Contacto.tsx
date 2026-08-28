@@ -1,4 +1,4 @@
-import { Github, Linkedin, Mail, MapPin, Phone } from "lucide-react";
+import { Download, Github, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 import type { Diccionario } from "@/i18n/diccionario";
 import { perfil } from "@/data/perfil";
 import { enlaceCorreo } from "@/lib/utils";
@@ -103,17 +103,32 @@ export function Contacto({ t }: Props) {
         </Reveal>
 
         <Reveal retardo={0.14}>
-          <Boton
-            href={enlaceCorreo(
-              perfil.email,
-              t.contacto.asuntoCorreo,
-              t.contacto.cuerpoCorreo,
-            )}
-            variante="primario"
-          >
-            <Mail aria-hidden="true" className="size-4" />
-            {t.contacto.botonCorreo}
-          </Boton>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Boton
+              href={enlaceCorreo(
+                perfil.email,
+                t.contacto.asuntoCorreo,
+                t.contacto.cuerpoCorreo,
+              )}
+              variante="primario"
+              className="w-full sm:w-auto"
+            >
+              <Mail aria-hidden="true" className="size-4" />
+              {t.contacto.botonCorreo}
+            </Boton>
+
+            <Boton
+              href={perfil.cv}
+              variante="secundario"
+              descargar
+              className="w-full sm:w-auto"
+            >
+              <Download aria-hidden="true" className="size-4" />
+              <span>
+                {t.contacto.descargarCV} <span className="text-tenue">{t.contacto.cvFormato}</span>
+              </span>
+            </Boton>
+          </div>
         </Reveal>
       </div>
     </Seccion>
