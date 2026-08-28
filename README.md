@@ -257,27 +257,37 @@ El CV en PDF vive en `public/CV-Benjamin-Pena.pdf` y se enlaza desde Contacto co
 
 ## Deploy en Vercel
 
-1. Importa el repositorio en Vercel. Detecta Next.js solo, sin configuración.
-2. En **Settings → Environment Variables** agrega:
-
-   | Variable | Valor |
-   |---|---|
-   | `NEXT_PUBLIC_SITIO_URL` | `https://tu-dominio.com` (sin barra final) |
-
-   Sin esa variable el sitio funciona igual, pero las URLs canónicas, el sitemap y las imágenes de Open Graph apuntan al dominio de respaldo definido en [`src/data/perfil.ts`](src/data/perfil.ts).
-
-3. Deploy.
+1. Importa el repositorio en Vercel. Detecta Next.js solo.
+2. Deploy. **No hay que configurar nada.**
 
 Todo el sitio es estático: no hay funciones de servidor ni base de datos.
+
+### De dónde sale la URL del sitio
+
+Las canónicas, el `hreflang`, el sitemap, las imágenes de Open Graph y los datos estructurados necesitan la URL absoluta del sitio. Se resuelve sola en [`src/data/perfil.ts`](src/data/perfil.ts), en este orden:
+
+| Orden | Variable | De dónde viene |
+|---|---|---|
+| 1 | `NEXT_PUBLIC_SITIO_URL` | Tuya. Defínela **solo si tienes dominio propio**, con protocolo |
+| 2 | `VERCEL_PROJECT_PRODUCTION_URL` | La inyecta Vercel. Dominio de producción, estable entre despliegues |
+| 3 | `VERCEL_URL` | La inyecta Vercel. Única por despliegue: los previews se apuntan a sí mismos |
+| 4 | `http://localhost:3000` | Desarrollo local |
+
+Gracias al punto 2, un deploy en Vercel queda correcto sin tocar nada. `NEXT_PUBLIC_SITIO_URL` es una variable **de este proyecto**, no de Vercel, y solo hace falta el día que apuntes un dominio propio:
+
+```bash
+vercel env add NEXT_PUBLIC_SITIO_URL production
+```
+
+Ver también [`.env.example`](.env.example).
 
 ---
 
 ## Pendientes para Benjamín
 
-- [ ] **Definir `NEXT_PUBLIC_SITIO_URL`** en Vercel cuando tengas el dominio. Es lo único que falta para que las canónicas, el sitemap y las imágenes de Open Graph apunten al lugar correcto.
 - [ ] **Revisar la cuarta tarjeta.** El "Portal de Ciberoperaciones" lo saqué de tu CV: es trabajo interno de CMPC, así que no tiene demo ni repo y la tarjeta se renderiza sin botones. Si prefieres dejar solo los tres proyectos públicos, borra ese bloque de [`src/data/proyectos.ts`](src/data/proyectos.ts).
-- [ ] **Verificar tu URL de LinkedIn.** En [`src/data/perfil.ts`](src/data/perfil.ts) está como `benjamín-peña` (con tilde), que fue lo que me pasaste; en el PDF del CV se lee `benjamin-peña`. Si el slug real no lleva tilde, corrígelo ahí.
 - [ ] **Actualizar el CV** en `public/CV-Benjamin-Pena.pdf` cuando cambie. El botón de descarga en Contacto apunta a ese archivo.
+- [ ] Solo si algún día compras un dominio propio: definir `NEXT_PUBLIC_SITIO_URL` (ver [Deploy en Vercel](#deploy-en-vercel)).
 
 ---
 

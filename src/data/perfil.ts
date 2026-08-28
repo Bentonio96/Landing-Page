@@ -1,14 +1,44 @@
 import type { Certificacion, IdiomaHablado, Texto } from "@/types";
 
 /**
- * URL pública del sitio. Se usa en metadata, Open Graph y sitemap.
+ * URL pública del sitio. Se usa en las canónicas, hreflang, Open Graph,
+ * sitemap, robots y los datos estructurados.
  *
- * Define NEXT_PUBLIC_SITIO_URL en Vercel (Settings → Environment Variables)
- * con tu dominio final. El valor de abajo es solo el respaldo.
+ * Se resuelve sola, en este orden:
+ *
+ *   1. NEXT_PUBLIC_SITIO_URL — variable propia de este proyecto, no de
+ *      Vercel. Defínela solo si tienes dominio propio, con protocolo:
+ *      "https://benjaminpena.cl". Manda por sobre todo lo demás.
+ *
+ *   2. VERCEL_PROJECT_PRODUCTION_URL — la inyecta Vercel con el dominio
+ *      de producción del proyecto. Es estable entre despliegues y viene
+ *      sin protocolo. Gracias a esto el sitio queda correcto en Vercel
+ *      sin configurar nada.
+ *
+ *   3. VERCEL_URL — URL única de ese despliegue. Sirve para que los
+ *      previews se apunten a sí mismos en vez de a producción.
+ *
+ *   4. localhost, para desarrollo.
+ *
+ * Se lee solo en el servidor (metadata, sitemap, robots y el JSON-LD),
+ * así que las variables sin prefijo NEXT_PUBLIC_ funcionan bien aquí.
+ * Si algún día importas `perfil` desde un componente con "use client",
+ * solo la opción 1 seguirá resolviendo.
  */
-export const SITIO_URL =
-  process.env.NEXT_PUBLIC_SITIO_URL?.replace(/\/$/, "") ??
-  "https://benjaminpena.vercel.app";
+function resolverUrlDelSitio(): string {
+  const propia = process.env.NEXT_PUBLIC_SITIO_URL;
+  if (propia) return propia.replace(/\/+$/, "");
+
+  const produccion = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  if (produccion) return `https://${produccion.replace(/\/+$/, "")}`;
+
+  const despliegue = process.env.VERCEL_URL;
+  if (despliegue) return `https://${despliegue.replace(/\/+$/, "")}`;
+
+  return "http://localhost:3000";
+}
+
+export const SITIO_URL = resolverUrlDelSitio();
 
 export const perfil = {
   nombre: "Benjamín Peña Díaz",
