@@ -50,7 +50,7 @@ const diccionario = {
       etiqueta: "Stack",
       titulo: "Con qué trabajo",
       bajada:
-        "Las herramientas que uso a diario, agrupadas por lo que resuelven. Las principales van en naranja, y lo que estoy sumando va aparte.",
+        "Las herramientas que uso a diario, agrupadas por lo que resuelven. Las principales van resaltadas, y lo que estoy sumando va aparte.",
       principal: "herramienta principal",
     },
     proyectos: {
@@ -140,7 +140,7 @@ const diccionario = {
       etiqueta: "Stack",
       titulo: "What I work with",
       bajada:
-        "The tools I use day to day, grouped by what they solve. The main ones are in orange, and what I'm still picking up is listed separately.",
+        "The tools I use day to day, grouped by what they solve. The main ones are highlighted, and what I'm still picking up is listed separately.",
       principal: "core tool",
     },
     proyectos: {

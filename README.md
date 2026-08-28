@@ -64,7 +64,7 @@ El tipo `Proyecto` está en [`src/types/index.ts`](src/types/index.ts), así que
 En [`src/data/stack.ts`](src/data/stack.ts), `principal: true` pinta la tecnología con el color de acento:
 
 ```ts
-{ nombre: "React", principal: true },   // en naranja
+{ nombre: "React", principal: true },   // resaltada, en color de acento
 { nombre: "HTML semántico" },           // en neutro
 ```
 
@@ -158,7 +158,7 @@ La idea era que no pareciera plantilla de portafolio. Tres reglas sostienen todo
 
 1. **Grilla editorial visible.** Secciones numeradas en monoespaciada (`01 — SOBRE MÍ`), reglas capilares de 1 px, columnas asimétricas donde el título queda fijo (`sticky`) mientras el contenido se desplaza. Se lee como algo compuesto, no como bloques apilados.
 
-2. **Un solo acento, con disciplina.** El naranja quemado aparece en: el CTA primario, el botón de descarga del CV, las herramientas principales del stack, el indicador de sección activa del nav, el anillo de foco, el punto de "disponible", el hito actual de la línea de tiempo y el hover de enlaces. En ningún otro lugar, y todo lo demás vive en neutros.
+2. **Un solo acento, con disciplina.** El violeta aparece en: el CTA primario, el botón de descarga del CV, las herramientas principales del stack, el indicador de sección activa del nav, el anillo de foco, el punto de "disponible", el hito actual de la línea de tiempo y el hover de enlaces. En ningún otro lugar, y todo lo demás vive en neutros.
 
    La disciplina está en la proporción, no en la lista: en el stack solo 8 de 34 tecnologías van en acento. Si se resaltara la mitad, el resalte dejaría de significar algo. Y hay tres pesos, no dos: relleno sólido para el CTA principal, borde y texto en acento sobre fondo teñido para lo importante-pero-secundario (el CV, los chips principales), y neutro para el resto.
 
@@ -176,15 +176,18 @@ Escala modular de 1.25, fluida con `clamp()` en los tamaños grandes.
 
 ### Color
 
-Neutros fríos con un acento cálido. Todos los pares cumplen **WCAG AA** (verificado con axe-core, no a ojo):
+La paleta es la misma del CV en HTML, para que CV y portafolio se lean como una sola pieza. Todos los pares cumplen **WCAG AA**, verificado con axe-core y no a ojo:
 
-| Token | Claro | Oscuro | Contraste |
-|---|---|---|---|
-| Fondo | `#FBFAF8` | `#0C0E12` | — |
-| Texto | `#16181D` | `#EDEDEB` | 16.4:1 / 17.1:1 |
-| Atenuado | `#5C6069` | `#9BA1AB` | 6.0:1 / 7.5:1 |
-| Tenue | `#6A6E77` | `#878D98` | 4.9:1 / 5.4:1 |
-| **Acento** | `#B04426` | `#F0784E` | 5.4:1 / 6.9:1 |
+| Token | Claro | Oscuro | Contraste | En el CV |
+|---|---|---|---|---|
+| Fondo | `#FCFCFB` | `#0E1117` | — | `paper` / `ink` |
+| Texto | `#1B2028` | `#ECEDEF` | 15.9:1 / 16.8:1 | `text` |
+| Atenuado | `#5A6474` | `#9AA3B2` | 5.8:1 / 7.4:1 | `muted` |
+| Tenue | `#666F7E` | `#7E8798` | 5.0:1 / 4.9:1 | derivado |
+| Borde | `#E3E4E2` | `#242A36` | — | `line` |
+| **Acento** | `#4335C9` | `#A79BFF` | 7.9:1 / 7.9:1 | `accent-ink` / `accent-dim` |
+
+Una advertencia si tocas estos valores: el `--accent` del CV (`#6C5CFF`) **no sirve para texto sobre el fondo claro** — da 4.45:1 y se queda bajo AA. Por eso el CV define `accent-ink` para texto y `accent-dim` para fondos oscuros, y aquí se respeta ese reparto. El violeta vivo queda solo para fondos teñidos y rellenos.
 
 Los radios son de 2 px: casi rectos, editorial y no burbuja.
 
