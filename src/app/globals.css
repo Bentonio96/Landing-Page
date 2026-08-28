@@ -213,26 +213,27 @@
 /* ============================================================
    APARICIÓN AL HACER SCROLL
    La transición vive en CSS; el JS solo marca [data-visible].
+
+   Anima SOLO el desplazamiento, nunca la opacidad. En una página larga
+   todo lo que está bajo el pliegue espera al scroll: si eso implicara
+   opacity 0, el texto quedaría transparente para cualquier auditoría
+   automática, que lo reporta como fallo de contraste. Con transform el
+   contraste es siempre el final y el movimiento igual se lee.
    ============================================================ */
 
 @layer components {
   .revelar {
-    opacity: 0;
-    transform: translateY(18px);
-    transition:
-      opacity 0.55s var(--ease-salida),
-      transform 0.55s var(--ease-salida);
+    transform: translateY(22px);
+    transition: transform 0.6s var(--ease-salida);
   }
 
   .revelar[data-visible] {
-    opacity: 1;
     transform: none;
   }
 
   /* Sin animación de entrada si el sistema pide menos movimiento. */
   @media (prefers-reduced-motion: reduce) {
     .revelar {
-      opacity: 1;
       transform: none;
       transition: none;
     }

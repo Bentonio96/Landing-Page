@@ -29,7 +29,7 @@ export function LayoutRaiz({ idioma, children }: Props) {
         <script dangerouslySetInnerHTML={{ __html: scriptTema }} />
         <noscript>
           {/* Sin JS no hay animación de entrada: todo visible desde el inicio. */}
-          <style>{".revelar{opacity:1!important;transform:none!important}"}</style>
+          <style>{".revelar{transform:none!important}"}</style>
         </noscript>
       </head>
       <body className="min-h-dvh bg-fondo text-texto">{children}</body>

@@ -14,9 +14,13 @@ type Props = {
 /**
  * Aparición sutil al entrar en viewport.
  *
- * La animación es una transición CSS y la detección un IntersectionObserver
- * propio. Es ~40 KB menos de JS que una librería de animación y no puede
- * dejar una sección invisible.
+ * La animación es una transición CSS de `transform` y la detección un
+ * IntersectionObserver propio. Es ~40 KB menos de JS que una librería de
+ * animación y no puede dejar una sección invisible.
+ *
+ * A propósito no se anima la opacidad: el contenido bajo el pliegue espera
+ * al scroll, y si estuviera en opacity 0 las auditorías automáticas lo
+ * marcarían como texto sin contraste.
  *
  * Tres redes de seguridad, porque una sección en blanco arruinaría el sitio:
  *   1. Si no hay ref o no hay IntersectionObserver, se muestra de inmediato.
