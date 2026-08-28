@@ -232,6 +232,16 @@ Pasó exactamente eso: con las auras centradas, axe daba 0 violaciones mientras 
 
 La solución fue anclar las auras a los bordes —con parte del círculo fuera de pantalla— para que el color se vea intenso en los márgenes y caiga antes de llegar a la columna de texto, y oscurecer un punto el token `--c-tenue`. Peor caso actual: 4.76:1 en claro, 5.40:1 en oscuro.
 
+Sobre las auras hay además **paralaje**: la capa se desplaza unos píxeles en sentido contrario al puntero, lo que da sensación de profundidad. Se aplica como `transform` sobre la capa entera —no moviendo los centros de los gradientes— para que lo resuelva el compositor sin repintar el fondo, y el valor se escribe directo sobre el nodo con una ref, sin estado de React, para no disparar un render por evento. Se desactiva en pantallas táctiles y con `prefers-reduced-motion`.
+
+A propósito **no** hay un halo que siga al cursor: pasaría por encima del texto y le bajaría el contraste justo donde se está leyendo. El paralaje mueve auras ancladas a los bordes, que nunca invaden la columna de texto.
+
+Encima de todo va una capa de **grano**: un SVG de 160×160 con `feTurbulence`, embebido y repetido, al 3,5 % de opacidad (5 % en oscuro). Es lo que separa un degradado "de diseño" de una banda de color plana — rompe el bandeado y da textura. Va en su propia capa, quieta, porque un grano que se moviera con el paralaje delataría el truco.
+
+El `<h1>` lleva un **degradado recortado al texto**, de la tinta al acento en diagonal. El punto más claro del recorrido es el propio acento (5.4:1 en claro, 6.9:1 en oscuro), muy por encima del 3:1 que pide AA para texto grande. Si el navegador no sabe hacer `background-clip: text`, cae al color sólido en vez de dejar el titular invisible.
+
+Las **tarjetas de proyecto** tienen borde degradado: dos fondos superpuestos —el color de la superficie recortado a la caja de relleno y un degradado cónico recortado a la del borde— con el ángulo registrado vía `@property` para que el navegador sepa interpolarlo. Gira al pasar el cursor **y al recibir foco**, así que también aparece navegando con teclado.
+
 Las **auras** son tres gradientes radiales fijos detrás del contenido. Ambos tonos salen del mismo acento —uno tal cual y otro girado hacia el ámbar— para no romper la regla de un solo color. Son gradientes de fondo y no un filtro de desenfoque, así que no cuestan recomposición. Viven en una capa con `z-index` negativo, lo que obliga a que el color de fondo esté en `<html>` y no en `<body>`.
 
 ### Lo que se mueve, y por qué

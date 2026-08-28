@@ -364,9 +364,12 @@
 
 .ambiente {
   position: fixed;
-  inset: 0;
+  /* Se desborda a propósito: al desplazarse con el paralaje no debe
+     descubrirse ningún borde de la capa. */
+  inset: -3rem;
   z-index: -1;
   pointer-events: none;
+  will-change: transform;
   /* Ancladas a los bordes, con parte del círculo fuera de pantalla: el
      color se ve intenso en los márgenes y cae antes de llegar a la columna
      de texto. Centradas teñían el fondo bajo los textos pequeños y el
@@ -387,6 +390,37 @@
       var(--c-aura-calida),
       transparent 64%
     );
+}
+
+/* ============================================================
+   GRANO
+
+   Una pizca de ruido sobre el fondo. Es lo que separa un degradado
+   "de diseño" de una banda de color plana: rompe el bandeado y da
+   textura. Va en una capa aparte de las auras porque no debe moverse
+   con el paralaje — el grano quieto es lo que lo hace creíble.
+
+   El patrón es un SVG de 160×160 embebido y repetido: no hay petición
+   de red ni imagen que descargar.
+   ============================================================ */
+
+.grano {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+[data-tema="dark"] .grano {
+  opacity: 0.05;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambiente {
+    transform: none !important;
+  }
 }
 
 /* ============================================================
@@ -460,6 +494,108 @@
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .vidrio {
       background-color: var(--c-superficie);
+    }
+  }
+}
+
+/* ============================================================
+   TITULAR CON DEGRADADO
+
+   Solo para el <h1>. Va de la tinta al acento en diagonal, con el
+   acento apareciendo al final del recorrido para que se lea como un
+   brillo cálido y no como un titular bicolor.
+
+   Sobre contraste: el punto más claro del degradado es el propio
+   acento, que da 5.4:1 en claro y 6.9:1 en oscuro. Muy por encima del
+   3:1 que exige AA para texto grande.
+   ============================================================ */
+
+@layer components {
+  .titular-degradado {
+    background-image: linear-gradient(
+      135deg,
+      var(--c-texto) 0%,
+      var(--c-texto) 52%,
+      var(--c-acento) 118%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Si el navegador no sabe recortar el fondo al texto, se cae al color
+     sólido en vez de dejar el titular invisible. */
+  @supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+    .titular-degradado {
+      background-image: none;
+      color: var(--c-texto);
+    }
+  }
+}
+
+/* ============================================================
+   BORDE DEGRADADO EN LAS TARJETAS
+
+   Dos fondos superpuestos: el color de la superficie recortado a la
+   caja de relleno, y un degradado cónico recortado a la del borde. El
+   borde queda transparente y deja ver el degradado.
+
+   El ángulo se registra con @property para que el navegador sepa
+   interpolarlo; sin registrar, un ángulo en una custom property salta
+   en vez de animarse.
+   ============================================================ */
+
+@property --angulo-borde {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes girar-borde {
+  to {
+    --angulo-borde: 360deg;
+  }
+}
+
+@layer components {
+  .tarjeta-borde {
+    border: 1px solid transparent;
+    background:
+      linear-gradient(var(--c-superficie), var(--c-superficie)) padding-box,
+      conic-gradient(
+          from var(--angulo-borde),
+          var(--c-borde) 0deg,
+          var(--c-borde) 275deg,
+          var(--c-acento) 320deg,
+          var(--c-borde) 360deg
+        )
+        border-box;
+  }
+
+  .tarjeta-borde:hover,
+  .tarjeta-borde:focus-within {
+    animation: girar-borde 4s linear infinite;
+  }
+
+  /* Sin @property el ángulo no interpola: mejor un borde de acento fijo
+     que un parpadeo. */
+  @supports not (background: conic-gradient(from var(--angulo-borde), red, blue)) {
+    .tarjeta-borde {
+      background: var(--c-superficie);
+      border-color: var(--c-borde);
+    }
+    .tarjeta-borde:hover,
+    .tarjeta-borde:focus-within {
+      animation: none;
+      border-color: var(--c-acento);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tarjeta-borde:hover,
+    .tarjeta-borde:focus-within {
+      animation: none;
+      border-color: var(--c-acento);
     }
   }
 }

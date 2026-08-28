@@ -32,7 +32,7 @@ export function Hero({ t }: Props) {
 
             <h1
               id="hero-titulo"
-              className="mt-6 text-t1 font-normal tracking-[-0.03em]"
+              className="titular-degradado mt-6 text-t1 font-normal tracking-[-0.03em]"
             >
               Benjamín
               <br />

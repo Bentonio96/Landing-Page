@@ -46,7 +46,7 @@ export function TarjetaProyecto({
   return (
     <article
       aria-labelledby={idTitulo}
-      className="group flex h-full flex-col overflow-hidden border border-borde bg-superficie transition-colors duration-300 hover:border-bordefuerte"
+      className="tarjeta-borde group flex h-full flex-col overflow-hidden"
     >
       {imagen ? (
         <div className="relative aspect-[16/10] overflow-hidden border-b border-borde bg-elevado">
