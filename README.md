@@ -3,7 +3,7 @@
 Sitio personal de **Benjamín Peña Díaz**, desarrollador frontend en Santiago de Chile.
 Español en `/`, inglés en `/en`, modo claro y oscuro, y todo el contenido en archivos de datos tipados.
 
-**Lighthouse:** 100 / 100 / 100 / 100 en escritorio · 95 / 100 / 100 / 100 en móvil
+**Lighthouse:** 100 / 100 / 100 / 100 en escritorio · 96 / 100 / 100 / 100 en móvil
 **Accesibilidad:** 0 violaciones de axe-core (WCAG 2.1 AA) en las 5 pantallas auditadas
 
 ![Hero en modo claro](docs/capturas/hero-claro.png)
@@ -31,16 +31,16 @@ Nada más. La grilla, la numeración, las animaciones y los enlaces se ajustan s
 
 ```ts
 {
-  slug: "panel-cmpc",                    // identificador único, sin espacios
-  nombre: "Panel de operaciones",
+  slug: "epicentro",                     // identificador único, sin espacios
+  nombre: "Epicentro",
   descripcion: {
-    es: "Portal interno para el equipo de ciberseguridad. Sigue en uso.",
-    en: "Internal portal for the cybersecurity team. Still in use today.",
+    es: "Rastreador de sismos en Chile en tiempo casi real con datos del USGS.",
+    en: "Near real-time earthquake tracker for Chile using USGS data.",
   },
-  tecnologias: ["Next.js", "TypeScript", "Tailwind CSS"],
-  anio: "2025",
-  demoUrl: "https://panel.ejemplo.cl",              // ← opcional
-  repoUrl: "https://github.com/Bentonio96/panel",   // ← opcional
+  tecnologias: ["Next.js 15", "TypeScript", "Tailwind CSS", "MapLibre"],
+  anio: "2026",
+  demoUrl: "https://epicentro-sigma.vercel.app",         // ← opcional
+  repoUrl: "https://github.com/Bentonio96/Epicentro",    // ← opcional
 }
 ```
 
@@ -92,6 +92,10 @@ node scripts/generar-assets.mjs
 | Claro | Oscuro |
 |---|---|
 | ![Hero claro](docs/capturas/hero-claro.png) | ![Hero oscuro](docs/capturas/hero-oscuro.png) |
+
+**Sobre mí** — biografía, idiomas y certificaciones
+
+![Sobre mí](docs/capturas/sobre-mi.png)
 
 **Proyectos** — tarjetas con los dos enlaces, numeración editorial y chips de tecnología
 
@@ -175,7 +179,9 @@ No se usó `next-intl` ni similar: para dos idiomas y un diccionario plano, un `
 
 ### Animaciones en CSS, no en JavaScript
 
-Las apariciones al hacer scroll son transiciones CSS controladas por un `IntersectionObserver` propio ([`src/components/ui/Reveal.tsx`](src/components/ui/Reveal.tsx)).
+Las apariciones al hacer scroll son transiciones CSS de `transform` controladas por un `IntersectionObserver` propio ([`src/components/ui/Reveal.tsx`](src/components/ui/Reveal.tsx)).
+
+**No se anima la opacidad, y es deliberado.** En una página larga todo lo que está bajo el pliegue espera al scroll; si ese estado fuera `opacity: 0`, el texto quedaría transparente para cualquier auditoría automática, que lo reporta como fallo de contraste. Con la primera versión Lighthouse marcaba 35 nodos —incluidos títulos que en aislado dan 16:1— y la puntuación de accesibilidad oscilaba entre 96 y 100 según el momento del muestreo. Animando solo el desplazamiento el contraste es siempre el final, y la puntuación quedó en 100 de forma determinista (verificado en tres corridas seguidas).
 
 El plan original era Framer Motion, pero en la combinación **framer-motion 12.43 + React 19.2** las animaciones no se aplicaban: fallaron tanto `whileInView` como `animate`, y el `ref` sobre `motion.div` tampoco llegaba al DOM. Eso dejaba todas las secciones en `opacity: 0` — el sitio se veía vacío. Se reemplazó por CSS, que además sacó **39 kB** del bundle (154 → 115 kB de First Load JS).
 
@@ -187,7 +193,8 @@ Qué movió la aguja, medido y no supuesto:
 
 - **CLS 0.168 → 0.019.** La fila de CTAs del hero medía 96 px con la fuente de respaldo (envuelta en dos líneas) y colapsaba a 43 px al cargar la monoespaciada, arrastrando todo lo de abajo. Se apilan a ancho completo en móvil: altura determinista.
 - **Fuentes 202 → 79 kB.** Fraunces descargaba los ejes `SOFT`, `WONK` y `opsz` sin que ninguna regla los usara, y se pedían pesos 500 que solo hacían falta en los titulares.
-- **Móvil 81 → 95** en el score de rendimiento.
+- **Móvil 81 → 96** en el score de rendimiento.
+- **Accesibilidad 96 → 100 estable**, quitando la opacidad del reveal (ver arriba).
 
 ### Tema claro/oscuro
 
@@ -244,6 +251,8 @@ Para cambiar la paleta, la tipografía o el espaciado: **`src/app/globals.css`**
 
 Para cambiar textos de interfaz: **`src/i18n/diccionario.ts`**, en ambos idiomas.
 
+El CV en PDF vive en `public/CV-Benjamin-Pena.pdf` y se enlaza desde Contacto con el atributo `download`. La ruta está en `perfil.cv`, dentro de [`src/data/perfil.ts`](src/data/perfil.ts), junto con idiomas y certificaciones.
+
 ---
 
 ## Deploy en Vercel
@@ -265,11 +274,10 @@ Todo el sitio es estático: no hay funciones de servidor ni base de datos.
 
 ## Pendientes para Benjamín
 
-- [ ] **Completar las 4 URLs** en [`src/data/proyectos.ts`](src/data/proyectos.ts), junto con nombres y descripciones reales. Ahora son marcadores.
-- [ ] **Confirmar los períodos** en [`src/data/experiencia.ts`](src/data/experiencia.ts): no me diste meses, así que puse rangos consistentes con lo que contaste (CMPC 2024–2025 datos, 2025 práctica; universidad 2021–2026). Hay un `TODO` marcado.
-- [ ] **Revisar el stack** en [`src/data/stack.ts`](src/data/stack.ts). Armé la lista a partir de tu experiencia en datos y ciberseguridad — es mejor una lista corta y honesta que una larga y decorativa.
-- [ ] **Definir `NEXT_PUBLIC_SITIO_URL`** en Vercel cuando tengas el dominio.
-- [ ] Opcional: agregar tu CV en PDF a `public/` y enlazarlo desde Contacto.
+- [ ] **Definir `NEXT_PUBLIC_SITIO_URL`** en Vercel cuando tengas el dominio. Es lo único que falta para que las canónicas, el sitemap y las imágenes de Open Graph apunten al lugar correcto.
+- [ ] **Revisar la cuarta tarjeta.** El "Portal de Ciberoperaciones" lo saqué de tu CV: es trabajo interno de CMPC, así que no tiene demo ni repo y la tarjeta se renderiza sin botones. Si prefieres dejar solo los tres proyectos públicos, borra ese bloque de [`src/data/proyectos.ts`](src/data/proyectos.ts).
+- [ ] **Verificar tu URL de LinkedIn.** En [`src/data/perfil.ts`](src/data/perfil.ts) está como `benjamín-peña` (con tilde), que fue lo que me pasaste; en el PDF del CV se lee `benjamin-peña`. Si el slug real no lleva tilde, corrígelo ahí.
+- [ ] **Actualizar el CV** en `public/CV-Benjamin-Pena.pdf` cuando cambie. El botón de descarga en Contacto apunta a ese archivo.
 
 ---
 
