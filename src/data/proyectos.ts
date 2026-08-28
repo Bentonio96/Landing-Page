@@ -35,24 +35,6 @@ export const proyectos: Proyecto[] = [
     repoUrl: "https://github.com/Bentonio96/Epicentro",
   },
   {
-    slug: "centinela",
-    nombre: "Centinela",
-    descripcion: {
-      es: "Dashboard de monitoreo de incidentes de ciberseguridad. Una sola pantalla donde el analista ve qué hay abierto, qué es crítico y qué conviene mirar ahora.",
-      en: "Security incident monitoring dashboard. A single screen where an analyst sees what's open, what's critical and what to look at next.",
-    },
-    tecnologias: [
-      "React 19",
-      "TypeScript",
-      "Tailwind CSS",
-      "Recharts",
-      "Vite",
-    ],
-    anio: "2026",
-    demoUrl: "https://centinela-rho.vercel.app",
-    repoUrl: "https://github.com/Bentonio96/Centinela",
-  },
-  {
     slug: "turnera",
     nombre: "Turnera",
     descripcion: {
@@ -69,6 +51,24 @@ export const proyectos: Proyecto[] = [
     anio: "2026",
     demoUrl: "https://turnera-iota.vercel.app",
     repoUrl: "https://github.com/Bentonio96/Turnera",
+  },
+  {
+    slug: "centinela",
+    nombre: "Centinela",
+    descripcion: {
+      es: "Dashboard de monitoreo de incidentes de ciberseguridad. Una sola pantalla donde el analista ve qué hay abierto, qué es crítico y qué conviene mirar ahora.",
+      en: "Security incident monitoring dashboard. A single screen where an analyst sees what's open, what's critical and what to look at next.",
+    },
+    tecnologias: [
+      "React 19",
+      "TypeScript",
+      "Tailwind CSS",
+      "Recharts",
+      "Vite",
+    ],
+    anio: "2026",
+    demoUrl: "https://centinela-rho.vercel.app",
+    repoUrl: "https://github.com/Bentonio96/Centinela",
   },
   {
     // Proyecto sacado de tu CV. Es trabajo interno de CMPC: no tiene demo
