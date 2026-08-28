@@ -14,39 +14,40 @@
 :root {
   color-scheme: light;
 
-  /* --- Color: modo claro --- */
-  --c-fondo:         #FBFAF8;  /* hueso cálido */
+  /* --- Color: modo claro (paleta del CV) --- */
+  --c-fondo:         #FCFCFB;  /* paper */
   --c-superficie:    #FFFFFF;
-  --c-elevado:       #F4F2ED;
-  --c-texto:         #16181D;  /* 16.4:1 sobre fondo */
-  --c-atenuado:      #5C6069;  /*  5.6:1 sobre fondo — AA */
-  --c-tenue:         #6A6E77;  /*  4.9:1 sobre fondo, 5.1:1 sobre superficie — AA */
-  --c-borde:         #E4E2DD;
-  --c-borde-fuerte:  #CBC7BF;
-  --c-acento:        #B04426;  /*  5.4:1 sobre fondo — AA */
-  --c-acento-hover:  #8E3418;
-  --c-acento-sobre:  #FFFFFF;  /*  5.7:1 sobre acento — AA */
-  --c-acento-tenue:  rgba(176, 68, 38, 0.09);
-  --c-sombra:        rgba(22, 24, 29, 0.07);
+  --c-elevado:       #F2F2F0;
+  --c-texto:         #1B2028;  /* 15.9:1 sobre fondo */
+  --c-atenuado:      #5A6474;  /* muted — 5.8:1 sobre fondo — AA */
+  --c-tenue:         #666F7E;  /*  5.0:1 sobre fondo — AA */
+  --c-borde:         #E3E4E2;  /* line */
+  --c-borde-fuerte:  #CBCDC9;
+  /* accent-ink, no accent: #6C5CFF sobre papel da 4.45:1 y no llega a AA */
+  --c-acento:        #4335C9;  /*  7.9:1 sobre fondo — AA */
+  --c-acento-hover:  #33279E;
+  --c-acento-sobre:  #FFFFFF;  /*  7.9:1 sobre acento — AA */
+  --c-acento-tenue:  rgba(108, 92, 255, 0.10);  /* ≈ accent-soft */
+  --c-sombra:        rgba(27, 32, 40, 0.07);
 }
 
 [data-tema="dark"] {
   color-scheme: dark;
 
-  /* --- Color: modo oscuro --- */
-  --c-fondo:         #0C0E12;  /* tinta azulada */
-  --c-superficie:    #14171C;
-  --c-elevado:       #1B1F27;
-  --c-texto:         #EDEDEB;  /* 17.1:1 sobre fondo */
-  --c-atenuado:      #9BA1AB;  /*  7.5:1 sobre fondo — AA */
-  --c-tenue:         #878D98;  /*  5.4:1 sobre superficie — AA */
-  --c-borde:         #242830;
-  --c-borde-fuerte:  #363C47;
-  --c-acento:        #F0784E;  /*  6.9:1 sobre fondo — AA */
-  --c-acento-hover:  #FF9670;
-  --c-acento-sobre:  #14100E;  /*  6.6:1 sobre acento — AA */
-  --c-acento-tenue:  rgba(240, 120, 78, 0.13);
-  --c-sombra:        rgba(0, 0, 0, 0.4);
+  /* --- Color: modo oscuro (paleta del CV) --- */
+  --c-fondo:         #0E1117;  /* ink */
+  --c-superficie:    #151922;
+  --c-elevado:       #1C212C;
+  --c-texto:         #ECEDEF;  /* 16.8:1 sobre fondo */
+  --c-atenuado:      #9AA3B2;  /*  7.4:1 sobre fondo — AA */
+  --c-tenue:         #7E8798;  /*  4.9:1 sobre superficie — AA */
+  --c-borde:         #242A36;
+  --c-borde-fuerte:  #333B4A;
+  --c-acento:        #A79BFF;  /* accent-dim — 7.9:1 sobre fondo — AA */
+  --c-acento-hover:  #C4BCFF;
+  --c-acento-sobre:  #0E1117;  /*  7.9:1 sobre acento — AA */
+  --c-acento-tenue:  rgba(167, 155, 255, 0.14);
+  --c-sombra:        rgba(0, 0, 0, 0.45);
 }
 
 @theme inline {
