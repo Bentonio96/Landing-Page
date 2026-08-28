@@ -1,0 +1,240 @@
+@import "tailwindcss";
+
+/* Modo oscuro por clase, con persistencia manejada en lib/tema.ts */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================
+   SISTEMA DE DISEÑO — "Cordillera Editorial"
+   Fuente única de verdad: color, tipografía, espaciado, ritmo.
+   Cambiar un valor aquí lo cambia en todo el sitio.
+   ============================================================ */
+
+:root {
+  color-scheme: light;
+
+  /* --- Color: modo claro --- */
+  --c-fondo:         #FBFAF8;  /* hueso cálido */
+  --c-superficie:    #FFFFFF;
+  --c-elevado:       #F4F2ED;
+  --c-texto:         #16181D;  /* 16.4:1 sobre fondo */
+  --c-atenuado:      #5C6069;  /*  5.6:1 sobre fondo — AA */
+  --c-tenue:         #6A6E77;  /*  4.9:1 sobre fondo, 5.1:1 sobre superficie — AA */
+  --c-borde:         #E4E2DD;
+  --c-borde-fuerte:  #CBC7BF;
+  --c-acento:        #B04426;  /*  5.4:1 sobre fondo — AA */
+  --c-acento-hover:  #8E3418;
+  --c-acento-sobre:  #FFFFFF;  /*  5.7:1 sobre acento — AA */
+  --c-acento-tenue:  rgba(176, 68, 38, 0.09);
+  --c-sombra:        rgba(22, 24, 29, 0.07);
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* --- Color: modo oscuro --- */
+  --c-fondo:         #0C0E12;  /* tinta azulada */
+  --c-superficie:    #14171C;
+  --c-elevado:       #1B1F27;
+  --c-texto:         #EDEDEB;  /* 17.1:1 sobre fondo */
+  --c-atenuado:      #9BA1AB;  /*  7.5:1 sobre fondo — AA */
+  --c-tenue:         #878D98;  /*  5.4:1 sobre superficie — AA */
+  --c-borde:         #242830;
+  --c-borde-fuerte:  #363C47;
+  --c-acento:        #F0784E;  /*  6.9:1 sobre fondo — AA */
+  --c-acento-hover:  #FF9670;
+  --c-acento-sobre:  #14100E;  /*  6.6:1 sobre acento — AA */
+  --c-acento-tenue:  rgba(240, 120, 78, 0.13);
+  --c-sombra:        rgba(0, 0, 0, 0.4);
+}
+
+@theme inline {
+  /* --- Color semántico --- */
+  --color-fondo:        var(--c-fondo);
+  --color-superficie:   var(--c-superficie);
+  --color-elevado:      var(--c-elevado);
+  --color-texto:        var(--c-texto);
+  --color-atenuado:     var(--c-atenuado);
+  --color-tenue:        var(--c-tenue);
+  --color-borde:        var(--c-borde);
+  --color-bordefuerte:  var(--c-borde-fuerte);
+  --color-acento:       var(--c-acento);
+  --color-acentohover:  var(--c-acento-hover);
+  --color-acentosobre:  var(--c-acento-sobre);
+  --color-acentotenue:  var(--c-acento-tenue);
+
+  /* --- Tipografía --- */
+  --font-display: var(--fuente-display), Georgia, "Times New Roman", serif;
+  --font-sans:    var(--fuente-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:    var(--fuente-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* Escala modular 1.25, fluida donde importa */
+  --text-etiqueta:     0.75rem;    /* 12px — mono, versalitas */
+  --text-etiqueta--line-height: 1.4;
+  --text-menor:        0.8125rem;  /* 13px */
+  --text-menor--line-height: 1.5;
+  --text-base:         1rem;
+  --text-base--line-height: 1.65;
+  --text-cuerpo:       1.0625rem;  /* 17px — cuerpo de lectura */
+  --text-cuerpo--line-height: 1.7;
+  --text-guia:         clamp(1.125rem, 0.95rem + 0.75vw, 1.375rem);
+  --text-guia--line-height: 1.6;
+  --text-t3:           clamp(1.25rem, 1.1rem + 0.65vw, 1.5rem);
+  --text-t3--line-height: 1.3;
+  --text-t2:           clamp(1.75rem, 1.4rem + 1.6vw, 2.75rem);
+  --text-t2--line-height: 1.12;
+  --text-t1:           clamp(2.75rem, 1.9rem + 4.2vw, 5.5rem);
+  --text-t1--line-height: 0.95;
+
+  /* --- Ritmo vertical y medidas --- */
+  --spacing-seccion:    clamp(5rem, 3.5rem + 6vw, 9rem);
+  --spacing-canal:      clamp(1.25rem, 0.6rem + 2.6vw, 2.5rem);
+  --container-medida:   68ch;   /* medida de lectura cómoda */
+  --container-lienzo:   77rem;  /* ancho máximo del contenido */
+
+  /* --- Forma --- */
+  --radius-pieza: 2px;   /* casi recto: editorial, no burbuja */
+  --radius-chip:  3px;
+
+  /* --- Movimiento --- */
+  --ease-salida: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
+@layer base {
+  * {
+    border-color: var(--c-borde);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* el header fijo no debe tapar el destino de un ancla */
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--c-fondo);
+    color: var(--c-texto);
+    font-family: var(--font-sans);
+    font-size: var(--text-cuerpo);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Foco visible y consistente en todo el sitio — nunca se elimina */
+  :focus-visible {
+    outline: 2px solid var(--c-acento);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--c-acento);
+    color: var(--c-acento-sobre);
+  }
+
+  /* Respeta la preferencia del sistema en todo el sitio */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ============================================================
+   COMPONENTES DE LAYOUT
+   ============================================================ */
+
+@layer components {
+  /* Lienzo central con canales laterales fluidos */
+  .lienzo {
+    width: 100%;
+    max-width: var(--container-lienzo);
+    margin-inline: auto;
+    padding-inline: var(--spacing-canal);
+  }
+
+  /* Etiqueta monoespaciada de sección: "01 — PROYECTOS" */
+  .etiqueta {
+    font-family: var(--font-mono);
+    font-size: var(--text-etiqueta);
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-tenue);
+  }
+
+  /* Regla capilar editorial */
+  .regla {
+    height: 1px;
+    background-color: var(--c-borde);
+    border: 0;
+  }
+
+  /* Enlace de texto con subrayado que crece desde la izquierda */
+  .enlace {
+    color: var(--c-texto);
+    text-decoration: none;
+    background-image: linear-gradient(var(--c-acento), var(--c-acento));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1px;
+    transition: background-size 0.35s var(--ease-salida), color 0.2s ease;
+  }
+  .enlace:hover {
+    color: var(--c-acento);
+    background-size: 100% 1px;
+  }
+}
+
+/* ============================================================
+   APARICIÓN AL HACER SCROLL
+   La transición vive en CSS; el JS solo marca [data-visible].
+   ============================================================ */
+
+@layer components {
+  .revelar {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.55s var(--ease-salida),
+      transform 0.55s var(--ease-salida);
+  }
+
+  .revelar[data-visible] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Sin animación de entrada si el sistema pide menos movimiento. */
+  @media (prefers-reduced-motion: reduce) {
+    .revelar {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}
