@@ -1,0 +1,13 @@
+{
+  "name": "Benjamín Peña — Desarrollador Frontend",
+  "short_name": "Benjamín Peña",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0C0E12",
+  "theme_color": "#0C0E12",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/apple-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
