@@ -8,6 +8,11 @@
  *   • public/og-es.png / og-en.png — 1200×630 para LinkedIn y WhatsApp
  *
  * Uso:  node scripts/generar-assets.mjs
+ *       node scripts/generar-assets.mjs --solo-og
+ *
+ * Con --solo-og se regeneran solo las tarjetas sociales. Sirve cuando cambia
+ * el texto del titular pero no la foto: el paso 1 vuelve a codificar el JPEG
+ * de origen, y repetirlo sin necesidad solo le quita calidad.
  */
 import { Buffer } from "node:buffer";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
@@ -66,6 +71,7 @@ function escapar(texto) {
     .replace(/>/g, "&gt;");
 }
 
+/** `rol` llega como array: una entrada por línea, ya partida a mano. */
 function ogSvg({ rol, sitio }) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
   <defs>
@@ -81,28 +87,33 @@ function ogSvg({ rol, sitio }) {
 
   <rect x="80" y="92" width="54" height="3" fill="${ACENTO}"/>
 
-  <text x="80" y="168" font-family="Georgia, 'Times New Roman', serif"
+  ${rol
+    .map(
+      (linea, i) => `<text x="80" y="${158 + i * 42}"
+        font-family="Georgia, 'Times New Roman', serif"
         font-size="30" letter-spacing="7" fill="${ACENTO}">${escapar(
-          rol.toUpperCase(),
-        )}</text>
+          linea.toUpperCase(),
+        )}</text>`,
+    )
+    .join("\n  ")}
 
-  <text x="76" y="300" font-family="Georgia, 'Times New Roman', serif"
+  <text x="76" y="316" font-family="Georgia, 'Times New Roman', serif"
         font-size="104" fill="${HUESO}">Benjamín</text>
-  <text x="76" y="404" font-family="Georgia, 'Times New Roman', serif"
+  <text x="76" y="420" font-family="Georgia, 'Times New Roman', serif"
         font-size="104" fill="${HUESO}">Peña Díaz</text>
 
-  <rect x="80" y="470" width="380" height="1" fill="#333944"/>
+  <rect x="80" y="484" width="380" height="1" fill="#333944"/>
 
-  <text x="80" y="522" font-family="Georgia, 'Times New Roman', serif"
+  <text x="80" y="536" font-family="Georgia, 'Times New Roman', serif"
         font-size="26" letter-spacing="2" fill="${ATENUADO}">${escapar(
           sitio,
         )}</text>
 </svg>`;
 }
 
-async function main() {
-  await mkdir(PUBLICO, { recursive: true });
+const soloOg = process.argv.includes("--solo-og");
 
+async function limpiarFoto() {
   // 1 · Foto limpia (sin EXIF) y en sRGB.
   // Se lee a buffer antes de escribir: sharp mantendría el archivo abierto
   // y en Windows no se puede sobrescribir el mismo origen.
@@ -117,7 +128,20 @@ async function main() {
   console.log(
     `foto        ${meta.width}×${meta.height}  ${(limpia.length / 1024).toFixed(1)} KB`,
   );
+  return limpia;
+}
 
+async function main() {
+  await mkdir(PUBLICO, { recursive: true });
+
+  const limpia = soloOg ? await readFile(ORIGEN) : await limpiarFoto();
+  if (soloOg) console.log("foto        se reutiliza la ya procesada");
+
+  if (!soloOg) await pasosDerivados(limpia);
+  await tarjetasSociales(limpia);
+}
+
+async function pasosDerivados(limpia) {
   // 2 · Placeholder difuminado para next/image.
   const blur = await sharp(limpia).resize(16).jpeg({ quality: 55 }).toBuffer();
   await writeFile(
@@ -145,15 +169,26 @@ async function main() {
     ]),
   );
   console.log("iconos      icon.svg · favicon.ico · apple-icon.png");
+}
 
+async function tarjetasSociales(limpia) {
   // 4 · Open Graph por idioma.
   const retrato = await sharp(limpia)
     .resize(520, 630, { fit: "cover", position: "attention" })
     .toBuffer();
 
+  // El titular va partido en dos líneas: entero no cabe antes de la foto,
+  // que empieza en x=680. Georgia en versales con este tracking anda por los
+  // 28 px por carácter, así que el corte es obligado, no estético.
   const textos = {
-    es: { rol: "Desarrollador Frontend", sitio: "Santiago de Chile" },
-    en: { rol: "Frontend Developer", sitio: "Santiago, Chile" },
+    es: {
+      rol: ["Desarrollador Frontend", "& Data Analyst"],
+      sitio: "Santiago de Chile",
+    },
+    en: {
+      rol: ["Frontend Developer", "& Data Analyst"],
+      sitio: "Santiago, Chile",
+    },
   };
 
   for (const [idioma, valores] of Object.entries(textos)) {

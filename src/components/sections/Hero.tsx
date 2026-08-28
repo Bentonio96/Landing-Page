@@ -39,7 +39,22 @@ export function Hero({ t }: Props) {
               Peña Díaz
             </h1>
 
-            <p className="etiqueta mt-6 text-texto">{t.hero.rol}</p>
+            {/* Titular de rol en dos mitades, como en LinkedIn: quién soy y
+                con qué trabajo. Van apiladas siempre: en fila no caben en esta
+                columna, que ocupa media pantalla incluso en escritorio.
+
+                El tracking baja de 0.14em a 0.09em solo aquí. Son las dos
+                líneas de versales más largas de la página y con el valor por
+                defecto quedaban a seis píxeles del borde en móvil: muy justo,
+                porque el respaldo monoespaciado que toque el sistema no mide
+                exactamente igual. Con 0.09em sobran casi treinta, y de paso
+                las versales largas piden menos tracking que las cortas. */}
+            <p className="etiqueta mt-6 tracking-[0.09em] text-texto">
+              <span className="block">{t.hero.rol}</span>
+              <span className="mt-1.5 block text-tenue">
+                {t.hero.herramientas}
+              </span>
+            </p>
 
             <p className="mt-6 max-w-medida text-guia text-atenuado">
               {t.hero.intro}

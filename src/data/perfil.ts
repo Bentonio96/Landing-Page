@@ -91,17 +91,17 @@ export const seo: Record<"es" | "en", { titulo: string; descripcion: string }> &
   palabrasClave: Texto;
 } = {
   es: {
-    titulo: "Benjamín Peña — Desarrollador Frontend",
+    titulo: "Benjamín Peña — Desarrollador Frontend & Data Analyst",
     descripcion:
-      "Desarrollador frontend en Santiago de Chile. Construyo interfaces web con React, TypeScript y Tailwind, y las llevo a producción. Disponible para proyectos freelance.",
+      "Desarrollador frontend y analista de datos en Santiago de Chile. Interfaces con React, TypeScript y Tailwind; datos con Power BI, Power Apps y Python. Disponible freelance.",
   },
   en: {
-    titulo: "Benjamín Peña — Frontend Developer",
+    titulo: "Benjamín Peña — Frontend Developer & Data Analyst",
     descripcion:
-      "Frontend developer based in Santiago, Chile. I build web interfaces with React, TypeScript and Tailwind, and ship them to production. Available for freelance work.",
+      "Frontend developer and data analyst in Santiago, Chile. Interfaces with React, TypeScript and Tailwind; data with Power BI, Power Apps and Python. Available freelance.",
   },
   palabrasClave: {
-    es: "desarrollador frontend, React, TypeScript, Tailwind, Next.js, Power Pages, freelance, Santiago, Chile",
-    en: "frontend developer, React, TypeScript, Tailwind, Next.js, Power Pages, freelance, Santiago, Chile",
+    es: "desarrollador frontend, analista de datos, React, TypeScript, Tailwind, Next.js, Power Apps, Power BI, Power Pages, Python, freelance, Santiago, Chile",
+    en: "frontend developer, data analyst, React, TypeScript, Tailwind, Next.js, Power Apps, Power BI, Power Pages, Python, freelance, Santiago, Chile",
   },
 };

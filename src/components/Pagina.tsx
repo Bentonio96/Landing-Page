@@ -28,8 +28,24 @@ export function Pagina({ idioma }: Props) {
     "@context": "https://schema.org",
     "@type": "Person",
     name: perfil.nombre,
-    jobTitle: t.hero.rol,
+    // schema.org admite varios cargos. Se parte el titular en sus dos mitades
+    // en vez de declarar una sola cadena con un "&" dentro, que ningún
+    // buscador sabe interpretar como dos oficios distintos.
+    jobTitle: t.hero.rol.split("&").map((parte) => parte.trim()),
     description: t.hero.intro,
+    knowsAbout: [
+      "React",
+      "TypeScript",
+      "JavaScript",
+      "Tailwind CSS",
+      "Next.js",
+      "Power BI",
+      "Power Apps",
+      "Power Pages",
+      "Power Query",
+      "Python",
+      "SQL",
+    ],
     url: SITIO_URL,
     image: `${SITIO_URL}/benjamin-pena.jpg`,
     email: `mailto:${perfil.email}`,

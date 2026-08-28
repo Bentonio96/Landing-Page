@@ -26,10 +26,12 @@ const diccionario = {
       codigo: "EN",
     },
     hero: {
-      rol: "Desarrollador Frontend",
+      rol: "Desarrollador Frontend & Data Analyst",
+      /** Segunda mitad del titular: las tres herramientas del lado de datos. */
+      herramientas: "Power Apps · Power BI · Python",
       disponible: "Disponible para proyectos freelance",
       intro:
-        "Construyo interfaces web y las llevo a producción. Trabajo con React, TypeScript y Tailwind, con foco en mobile first, componentes reutilizables y accesibilidad.",
+        "Construyo interfaces web y las llevo a producción con React, TypeScript y Tailwind. Vengo del análisis de datos, así que también me muevo en Power BI, Power Apps y Python cuando el proyecto lo pide.",
       verProyectos: "Ver proyectos",
       escribirme: "Copiar mi correo",
       altFoto:
@@ -39,9 +41,10 @@ const diccionario = {
       etiqueta: "Sobre mí",
       titulo: "Quién soy",
       parrafos: [
-        "Soy desarrollador frontend y estoy terminando Ingeniería Civil en Informática en la Universidad Andrés Bello. Egreso en noviembre de 2026 y hoy tomo proyectos freelance.",
+        "Soy desarrollador frontend y analista de datos. Estoy terminando Ingeniería Civil en Informática en la Universidad Andrés Bello, egreso en noviembre de 2026, y hoy tomo proyectos freelance.",
         "Pasé un año y medio continuo en CMPC. Empecé como analista de datos armando tableros en Power BI, y después hice mi práctica en Cybersecurity Operations TI/OT, donde desarrollé el portal interno del área: definí la arquitectura de la interfaz, los flujos de navegación y la jerarquía visual de vistas con mucha densidad de información. Está en producción y el equipo lo usa a diario.",
         "Entrego interfaces terminadas, no maquetas. Traduzco un diseño de Figma a una interfaz responsive y accesible, y defino la jerarquía visual cuando el diseño todavía no existe. Me importa el detalle: que cargue rápido, que se pueda recorrer con el teclado, que aguante en un teléfono de gama media.",
+        "El frontend es mi foco, pero no es mi único terreno. Si el proyecto necesita un tablero en Power BI, una app interna en Power Apps o un script en Python que ordene los datos antes de mostrarlos, también lo tomo. Haber trabajado de los dos lados me ayuda a construir interfaces que entienden de dónde vienen los datos que muestran.",
       ],
       idiomas: "Idiomas",
       certificaciones: "Certificaciones",
@@ -119,10 +122,11 @@ const diccionario = {
       codigo: "ES",
     },
     hero: {
-      rol: "Frontend Developer",
+      rol: "Frontend Developer & Data Analyst",
+      herramientas: "Power Apps · Power BI · Python",
       disponible: "Available for freelance work",
       intro:
-        "I build web interfaces and ship them to production. I work with React, TypeScript and Tailwind, focused on mobile first, reusable components and accessibility.",
+        "I build web interfaces and ship them to production with React, TypeScript and Tailwind. I come from data analysis, so I'm just as comfortable in Power BI, Power Apps and Python when a project calls for it.",
       verProyectos: "View projects",
       escribirme: "Copy my email",
       altFoto:
@@ -132,9 +136,10 @@ const diccionario = {
       etiqueta: "About",
       titulo: "Who I am",
       parrafos: [
-        "I'm a frontend developer, currently finishing a Computer Engineering degree at Universidad Andrés Bello in Santiago. I graduate in November 2026 and I'm taking on freelance work.",
+        "I'm a frontend developer and data analyst. I'm finishing a Computer Engineering degree at Universidad Andrés Bello in Santiago, graduating in November 2026, and I'm currently taking on freelance work.",
         "I spent a year and a half at CMPC. I started as a data analyst building Power BI dashboards, then did my internship in IT/OT Cybersecurity Operations, where I built the team's internal portal: I defined the interface architecture, the navigation flows and the visual hierarchy for very information-dense views. It's in production and the team uses it every day.",
         "I ship finished interfaces, not mockups. I turn a Figma design into a responsive, accessible interface — and define the visual hierarchy myself when the design doesn't exist yet. I care about the details: that it loads fast, that you can navigate it with a keyboard, that it holds up on a mid-range phone.",
+        "Frontend is my focus, but it isn't my only ground. If a project needs a Power BI dashboard, an internal Power Apps tool, or a Python script to sort the data before it's displayed, I'll take that on too. Having worked on both sides helps me build interfaces that understand where their data comes from.",
       ],
       idiomas: "Languages",
       certificaciones: "Certifications",

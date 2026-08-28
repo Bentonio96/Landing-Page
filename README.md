@@ -274,6 +274,7 @@ El componente tiene tres redes de seguridad para que una sección **nunca** qued
 Qué movió la aguja, medido y no supuesto:
 
 - **CLS 0.168 → 0.019.** La fila de CTAs del hero medía 96 px con la fuente de respaldo (envuelta en dos líneas) y colapsaba a 43 px al cargar la monoespaciada, arrastrando todo lo de abajo. Se apilan a ancho completo en móvil: altura determinista.
+- **CLS 0.032 → 0.000 en móvil**, cambiando el respaldo de la monoespaciada. `next/font` lo genera solo, y para JetBrains Mono eligió `local("Arial")` con `size-adjust: 134.59%`: ajusta las métricas verticales, pero Arial es proporcional y estirarla un 35 % deja cada carácter casi un 30 % más ancho que la fuente real. Las líneas largas de versales del hero envolvían con el respaldo y se recolocaban al llegar la real. Con `adjustFontFallback: false` y una lista de monoespaciadas de verdad (`ui-monospace`, `Consolas`, `Menlo`), el avance coincide y los bloques miden igual con una fuente y con la otra. Se pierde el ajuste vertical automático, pero todo lo que usa la mono declara su propio `line-height`.
 - **Fuentes 202 → 79 kB.** Fraunces descargaba los ejes `SOFT`, `WONK` y `opsz` sin que ninguna regla los usara, y se pedían pesos 500 que solo hacían falta en los titulares.
 - **Móvil 81 → 96** en el score de rendimiento.
 - **Accesibilidad 96 → 100 estable**, quitando la opacidad del reveal (ver arriba).
