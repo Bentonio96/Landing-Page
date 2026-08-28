@@ -257,10 +257,31 @@ El CV en PDF vive en `public/CV-Benjamin-Pena.pdf` y se enlaza desde Contacto co
 
 ## Deploy en Vercel
 
-1. Importa el repositorio en Vercel. Detecta Next.js solo.
+1. Importa el repositorio en Vercel.
 2. Deploy. **No hay que configurar nada.**
 
+El [`vercel.json`](vercel.json) declara `"framework": "nextjs"` de forma explícita, para no depender de la autodetección. Se usa `vercel.json` y no `vercel.ts` a propósito: este último necesita instalar `@vercel/config`, y no vale la pena sumar una dependencia por tres líneas de configuración.
+
 Todo el sitio es estático: no hay funciones de servidor ni base de datos.
+
+### Si el deploy devuelve 404
+
+Síntoma: `/og-es.png` y `/favicon.ico` cargan, pero `/`, `/es`, `/en`, `/robots.txt` y `/sitemap.xml` dan 404 de Vercel (`X-Vercel-Error: NOT_FOUND`).
+
+Significa que el proyecto quedó con el preset **"Other"** en vez de Next.js: en ese modo Vercel publica la carpeta `public/` tal cual y descarta la aplicación. Se arregla en **Settings → Build and Deployment**:
+
+- **Framework Preset:** `Next.js`
+- **Build Command / Output Directory / Install Command:** con el override **apagado**, usando los valores por defecto
+- **Root Directory:** vacío
+
+Después, **Deployments → ⋯ → Redeploy**. Un diagnóstico rápido para distinguirlo:
+
+```bash
+curl -s -o /dev/null -w "%{http_code}
+" https://TU-DOMINIO.vercel.app/sitemap.xml
+```
+
+`200` es que la app está desplegada; `404` con `/favicon.ico` en `200` es este caso.
 
 ### De dónde sale la URL del sitio
 
