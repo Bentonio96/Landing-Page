@@ -117,15 +117,20 @@ export function Contacto({ t }: Props) {
               {t.contacto.botonCorreo}
             </Boton>
 
+            {/* El CV es de lo que más se pide para evaluar experiencia:
+                lleva la variante de acento para que no se pierda al lado del
+                CTA de correo, sin volverse un segundo botón sólido. */}
             <Boton
               href={perfil.cv}
-              variante="secundario"
+              variante="acento"
               descargar
               className="w-full sm:w-auto"
             >
               <Download aria-hidden="true" className="size-4" />
+              {/* El formato hereda el color del botón a propósito: sobre el
+                  fondo teñido de acento, el gris atenuado caía a 4.31:1. */}
               <span>
-                {t.contacto.descargarCV} <span className="text-tenue">{t.contacto.cvFormato}</span>
+                {t.contacto.descargarCV} {t.contacto.cvFormato}
               </span>
             </Boton>
           </div>

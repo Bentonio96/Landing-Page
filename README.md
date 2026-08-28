@@ -59,6 +59,19 @@ Nada más. La grilla, la numeración, las animaciones y los enlaces se ajustan s
 
 El tipo `Proyecto` está en [`src/types/index.ts`](src/types/index.ts), así que si te falta un campo obligatorio TypeScript te avisa antes de compilar.
 
+### Resaltar una tecnología del stack
+
+En [`src/data/stack.ts`](src/data/stack.ts), `principal: true` pinta la tecnología con el color de acento:
+
+```ts
+{ nombre: "React", principal: true },   // en naranja
+{ nombre: "HTML semántico" },           // en neutro
+```
+
+Úsalo con moderación: hoy son 8 de 34. El resalte funciona porque es minoría.
+
+Para lectores de pantalla el chip añade "— herramienta principal", porque el criterio WCAG 1.4.1 no permite transmitir información solo con color.
+
 ---
 
 ## Puesta en marcha
@@ -97,6 +110,10 @@ node scripts/generar-assets.mjs
 
 ![Sobre mí](docs/capturas/sobre-mi.png)
 
+**Stack** — las herramientas principales van en acento; el resto, en neutro
+
+![Stack](docs/capturas/stack.png)
+
 **Proyectos** — tarjetas con los dos enlaces, numeración editorial y chips de tecnología
 
 ![Proyectos](docs/capturas/proyectos.png)
@@ -108,6 +125,10 @@ node scripts/generar-assets.mjs
 **Inglés** (`/en`) — misma composición, `lang="en"`, hreflang cruzado
 
 ![Versión en inglés](docs/capturas/ingles.png)
+
+**Contacto** — el CTA de correo sólido, el CV en variante de acento
+
+![Contacto](docs/capturas/contacto.png)
 
 **Móvil** — 390 px, navegación en panel desplegable
 
@@ -137,7 +158,9 @@ La idea era que no pareciera plantilla de portafolio. Tres reglas sostienen todo
 
 1. **Grilla editorial visible.** Secciones numeradas en monoespaciada (`01 — SOBRE MÍ`), reglas capilares de 1 px, columnas asimétricas donde el título queda fijo (`sticky`) mientras el contenido se desplaza. Se lee como algo compuesto, no como bloques apilados.
 
-2. **Un solo acento, con disciplina.** El naranja quemado aparece únicamente en: el CTA primario, el indicador de sección activa del nav, el anillo de foco, el punto de "disponible", el hito actual de la línea de tiempo y el hover de enlaces. En ningún otro lugar. Todo lo demás vive en neutros.
+2. **Un solo acento, con disciplina.** El naranja quemado aparece en: el CTA primario, el botón de descarga del CV, las herramientas principales del stack, el indicador de sección activa del nav, el anillo de foco, el punto de "disponible", el hito actual de la línea de tiempo y el hover de enlaces. En ningún otro lugar, y todo lo demás vive en neutros.
+
+   La disciplina está en la proporción, no en la lista: en el stack solo 8 de 34 tecnologías van en acento. Si se resaltara la mitad, el resalte dejaría de significar algo. Y hay tres pesos, no dos: relleno sólido para el CTA principal, borde y texto en acento sobre fondo teñido para lo importante-pero-secundario (el CV, los chips principales), y neutro para el resto.
 
 3. **La foto como pieza, no como avatar.** Bloque 4:5 en escritorio con un marco de acento desplazado detrás que rompe la grilla; banda 4:3 en móvil. El cielo de la foto funciona como espacio negativo.
 

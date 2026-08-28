@@ -27,11 +27,22 @@ export type Proyecto = {
   anio?: string;
 };
 
+/** Una tecnología dentro del stack. */
+export type ItemStack = {
+  nombre: string;
+  /**
+   * Marca la herramienta como principal: se muestra con el color de acento
+   * para que se lea primero. Úsalo con moderación — si se resalta todo, deja
+   * de resaltarse nada.
+   */
+  principal?: boolean;
+};
+
 /** Una categoría del stack con sus tecnologías. */
 export type CategoriaStack = {
   id: string;
   titulo: Texto;
-  items: string[];
+  items: ItemStack[];
 };
 
 /** Un hito de la línea de tiempo de experiencia. */

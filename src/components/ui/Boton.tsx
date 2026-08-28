@@ -1,7 +1,13 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-type Variante = "primario" | "secundario";
+/**
+ * primario  — CTA sólido. Uno por sección como máximo.
+ * acento    — destacado sin llenar: borde y texto en acento sobre fondo
+ *             teñido. Para acciones importantes que no son EL CTA.
+ * secundario— neutro.
+ */
+type Variante = "primario" | "acento" | "secundario";
 
 type Props = {
   href: string;
@@ -24,8 +30,9 @@ const base =
   "focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-acento";
 
 const variantes: Record<Variante, string> = {
-  primario:
-    "bg-acento text-acentosobre hover:bg-acentohover",
+  primario: "bg-acento text-acentosobre hover:bg-acentohover",
+  acento:
+    "border border-acento/45 bg-acentotenue text-acento hover:border-acento hover:bg-acento hover:text-acentosobre",
   secundario:
     "border border-bordefuerte text-texto hover:border-acento hover:text-acento",
 };

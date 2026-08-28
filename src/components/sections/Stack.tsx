@@ -25,7 +25,13 @@ export function Stack({ idioma, t }: Props) {
               </h3>
               <ul className="mt-4 flex flex-wrap gap-2">
                 {categoria.items.map((item) => (
-                  <Chip key={item}>{item}</Chip>
+                  <Chip
+                    key={item.nombre}
+                    principal={item.principal}
+                    etiquetaPrincipal={t.stack.principal}
+                  >
+                    {item.nombre}
+                  </Chip>
                 ))}
               </ul>
             </div>
