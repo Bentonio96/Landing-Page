@@ -1,11 +1,6 @@
 import type { Hito } from "@/types";
 
-/**
- * Línea de tiempo, del hito más reciente al más antiguo.
- *
- * TODO (Benjamín): confirma los períodos exactos. Los de abajo son
- * consistentes con lo que me contaste, pero no me diste meses.
- */
+/** Línea de tiempo, del hito más reciente al más antiguo. Fechas según el CV. */
 export const experiencia: Hito[] = [
   {
     id: "tesis",
@@ -14,11 +9,14 @@ export const experiencia: Hito[] = [
       es: "Tesista · Ingeniería Civil en Informática",
       en: "Thesis student · Computer Engineering",
     },
-    periodo: { es: "2026 — Egreso noviembre 2026", en: "2026 — Graduating Nov 2026" },
+    periodo: {
+      es: "2026 — Egreso noviembre 2026",
+      en: "2026 — Graduating November 2026",
+    },
     lugar: "Santiago, Chile",
     descripcion: {
-      es: "Cursando el proyecto de título mientras tomo trabajo freelance de frontend.",
-      en: "Working on my thesis project while taking on freelance frontend work.",
+      es: "Triple Resolutive Approach: metaheurística TDHC adaptada a cinco problemas de optimización combinatoria, con un algoritmo genético memético en Python. Profesor guía: Gustavo Gatica. En paralelo, tomo proyectos freelance de frontend.",
+      en: "Triple Resolutive Approach: a TDHC metaheuristic adapted to five combinatorial optimisation problems, with a memetic genetic algorithm in Python. Supervisor: Gustavo Gatica. In parallel, I take on freelance frontend work.",
     },
     actual: true,
   },
@@ -26,25 +24,28 @@ export const experiencia: Hito[] = [
     id: "cmpc-ciberseguridad",
     organizacion: "CMPC",
     rol: {
-      es: "Práctica · Cybersecurity Operations TI/OT",
+      es: "Práctica profesional · Cybersecurity Operations TI/OT",
       en: "Internship · IT/OT Cybersecurity Operations",
     },
-    periodo: { es: "2025", en: "2025" },
-    lugar: "Santiago, Chile",
+    periodo: { es: "Enero — Junio 2026", en: "January — June 2026" },
+    lugar: "Santiago, Chile · Híbrido",
     descripcion: {
-      es: "Desarrollé un portal interno para el equipo de operaciones de ciberseguridad, que hoy sigue en uso. Trabajé sobre entornos TI y OT.",
-      en: "Built an internal portal for the cybersecurity operations team, still in use today. Worked across IT and OT environments.",
+      es: "Desarrollé el portal interno del área con Power Pages y Power Apps, desde el diseño de la interfaz hasta su puesta en marcha; hoy sigue en uso. Automaticé reportes en Power BI sobre los tickets de IBM BMC Helix, y monitoreé incidentes con CrowdStrike Falcon bajo marcos ITIL.",
+      en: "Built the team's internal portal with Power Pages and Power Apps, from interface design through to launch; it's still in use today. Automated Power BI reporting over IBM BMC Helix tickets, and monitored incidents with CrowdStrike Falcon under ITIL frameworks.",
     },
   },
   {
     id: "cmpc-datos",
     organizacion: "CMPC",
-    rol: { es: "Analista de datos", en: "Data analyst" },
-    periodo: { es: "2024 — 2025", en: "2024 — 2025" },
+    rol: {
+      es: "Analista de datos · Prácticas I y II",
+      en: "Data analyst · Internships I and II",
+    },
+    periodo: { es: "Enero 2025 — Enero 2026", en: "January 2025 — January 2026" },
     lugar: "Santiago, Chile",
     descripcion: {
-      es: "Procesamiento y análisis de datos operacionales, y reportería para equipos internos.",
-      en: "Processing and analysis of operational data, plus reporting for internal teams.",
+      es: "Dashboards y modelos de datos para End User Care TI y áreas transversales. Transformación de datos con Power Query y automatización de reportes con apoyo de IA, reemplazando un proceso manual de consolidación.",
+      en: "Dashboards and data models for End User Care IT and cross-functional teams. Data transformation with Power Query and AI-assisted report automation, replacing a manual consolidation process.",
     },
   },
   {
@@ -54,11 +55,11 @@ export const experiencia: Hito[] = [
       es: "Ingeniería Civil en Informática",
       en: "Computer Engineering",
     },
-    periodo: { es: "2021 — 2026", en: "2021 — 2026" },
+    periodo: { es: "2022 — 2026", en: "2022 — 2026" },
     lugar: "Santiago, Chile",
     descripcion: {
-      es: "Formación en desarrollo de software, bases de datos, redes y gestión de proyectos.",
-      en: "Training in software development, databases, networking and project management.",
+      es: "Desarrollo full stack (React, HTML/CSS, JavaScript, UX/UI, MVC, REST/SOAP), análisis de datos con Python y ciberseguridad aplicada.",
+      en: "Full stack development (React, HTML/CSS, JavaScript, UX/UI, MVC, REST/SOAP), data analysis with Python and applied cybersecurity.",
     },
   },
 ];

@@ -52,7 +52,7 @@ export function Pagina({ idioma }: Props) {
 
       <main id="contenido">
         <Hero t={t} />
-        <SobreMi t={t} />
+        <SobreMi idioma={idioma} t={t} />
         <Stack idioma={idioma} t={t} />
         <Proyectos idioma={idioma} t={t} />
         <Experiencia idioma={idioma} t={t} />

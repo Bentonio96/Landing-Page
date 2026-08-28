@@ -46,3 +46,16 @@ export type Hito = {
   /** Marca el hito como en curso (punto acentuado en la línea de tiempo). */
   actual?: boolean;
 };
+
+/** Una certificación obtenida, para la sección Sobre mí. */
+export type Certificacion = {
+  nombre: string;
+  emisor: string;
+  fecha: Texto;
+};
+
+/** Un idioma hablado y su nivel. */
+export type IdiomaHablado = {
+  nombre: Texto;
+  nivel: Texto;
+};

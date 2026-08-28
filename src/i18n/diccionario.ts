@@ -29,7 +29,7 @@ const diccionario = {
       rol: "Desarrollador Frontend",
       disponible: "Disponible para proyectos freelance",
       intro:
-        "Construyo interfaces rápidas y accesibles con React, Next.js y TypeScript. Vengo de datos y ciberseguridad, así que me importa que las cosas funcionen de verdad, no solo que se vean bien.",
+        "Construyo interfaces web y las llevo a producción. Trabajo con React, TypeScript y Tailwind, con foco en mobile first, componentes reutilizables y accesibilidad.",
       verProyectos: "Ver proyectos",
       escribirme: "Escríbeme",
       altFoto:
@@ -40,15 +40,17 @@ const diccionario = {
       titulo: "Quién soy",
       parrafos: [
         "Soy desarrollador frontend y estoy terminando Ingeniería Civil en Informática en la Universidad Andrés Bello. Egreso en noviembre de 2026 y hoy tomo proyectos freelance.",
-        "Antes de dedicarme al frontend pasé un año y medio en CMPC. Empecé como analista de datos y después hice mi práctica en Cybersecurity Operations TI/OT, donde construí un portal interno que el equipo sigue usando. De ahí me quedaron dos costumbres: entender el problema antes de escribir código, y tomarme en serio las herramientas que otras personas van a usar todos los días.",
-        "Me interesa el detalle: que una interfaz cargue rápido, que se pueda recorrer con el teclado, que aguante en un teléfono de gama media. Trabajo principalmente con React, Next.js y TypeScript.",
+        "Pasé un año y medio continuo en CMPC. Empecé como analista de datos armando tableros en Power BI, y después hice mi práctica en Cybersecurity Operations TI/OT, donde desarrollé el portal interno del área: definí la arquitectura de la interfaz, los flujos de navegación y la jerarquía visual de vistas con mucha densidad de información. Está en producción y el equipo lo usa a diario.",
+        "Entrego interfaces terminadas, no maquetas. Traduzco un diseño de Figma a una interfaz responsive y accesible, y defino la jerarquía visual cuando el diseño todavía no existe. Me importa el detalle: que cargue rápido, que se pueda recorrer con el teclado, que aguante en un teléfono de gama media.",
       ],
+      idiomas: "Idiomas",
+      certificaciones: "Certificaciones",
     },
     stack: {
       etiqueta: "Stack",
       titulo: "Con qué trabajo",
       bajada:
-        "Las herramientas que uso a diario, agrupadas por lo que resuelven.",
+        "Las herramientas que uso a diario, agrupadas por lo que resuelven. Lo que estoy sumando va aparte.",
     },
     proyectos: {
       etiqueta: "Proyectos",
@@ -57,8 +59,7 @@ const diccionario = {
       verSitio: "Ver sitio",
       verCodigo: "Ver código",
       enlaceExterno: "(se abre en una pestaña nueva)",
-      vacio:
-        "Todavía no hay proyectos publicados. Vuelve pronto.",
+      vacio: "Todavía no hay proyectos publicados. Vuelve pronto.",
       tecnologiasDe: "Tecnologías usadas en",
     },
     experiencia: {
@@ -75,6 +76,8 @@ const diccionario = {
       telefono: "Teléfono",
       ubicacion: "Ubicación",
       botonCorreo: "Enviar un correo",
+      descargarCV: "Descargar CV",
+      cvFormato: "(PDF)",
       asuntoCorreo: "Proyecto freelance",
       cuerpoCorreo:
         "Hola Benjamín,\n\nTe escribo porque me gustaría conversar sobre un proyecto.\n\n",
@@ -115,7 +118,7 @@ const diccionario = {
       rol: "Frontend Developer",
       disponible: "Available for freelance work",
       intro:
-        "I build fast, accessible interfaces with React, Next.js and TypeScript. I come from data and cybersecurity, so I care that things actually work — not just that they look good.",
+        "I build web interfaces and ship them to production. I work with React, TypeScript and Tailwind, focused on mobile first, reusable components and accessibility.",
       verProyectos: "View projects",
       escribirme: "Get in touch",
       altFoto:
@@ -126,14 +129,17 @@ const diccionario = {
       titulo: "Who I am",
       parrafos: [
         "I'm a frontend developer, currently finishing a Computer Engineering degree at Universidad Andrés Bello in Santiago. I graduate in November 2026 and I'm taking on freelance work.",
-        "Before moving into frontend I spent a year and a half at CMPC. I started as a data analyst and later did my internship in IT/OT Cybersecurity Operations, where I built an internal portal the team still uses today. That job left me with two habits: understanding the problem before writing any code, and taking seriously the tools other people depend on every day.",
-        "I care about the details — that an interface loads fast, that you can navigate it with a keyboard, that it holds up on a mid-range phone. I work mainly with React, Next.js and TypeScript.",
+        "I spent a year and a half at CMPC. I started as a data analyst building Power BI dashboards, then did my internship in IT/OT Cybersecurity Operations, where I built the team's internal portal: I defined the interface architecture, the navigation flows and the visual hierarchy for very information-dense views. It's in production and the team uses it every day.",
+        "I ship finished interfaces, not mockups. I turn a Figma design into a responsive, accessible interface — and define the visual hierarchy myself when the design doesn't exist yet. I care about the details: that it loads fast, that you can navigate it with a keyboard, that it holds up on a mid-range phone.",
       ],
+      idiomas: "Languages",
+      certificaciones: "Certifications",
     },
     stack: {
       etiqueta: "Stack",
       titulo: "What I work with",
-      bajada: "The tools I use day to day, grouped by what they solve.",
+      bajada:
+        "The tools I use day to day, grouped by what they solve. What I'm still picking up is listed separately.",
     },
     proyectos: {
       etiqueta: "Projects",
@@ -159,6 +165,8 @@ const diccionario = {
       telefono: "Phone",
       ubicacion: "Location",
       botonCorreo: "Send an email",
+      descargarCV: "Download CV",
+      cvFormato: "(PDF, in Spanish)",
       asuntoCorreo: "Freelance project",
       cuerpoCorreo:
         "Hi Benjamín,\n\nI'm reaching out because I'd like to talk about a project.\n\n",
