@@ -1,7 +1,9 @@
 @import "tailwindcss";
 
-/* Modo oscuro por clase, con persistencia manejada en lib/tema.ts */
-@custom-variant dark (&:where(.dark, .dark *));
+/* Modo oscuro por atributo data-tema, con persistencia en lib/tema.ts.
+   Va en un atributo y no en una clase porque React reaplica el className
+   de <html> al navegar entre idiomas, y borraba la clase. */
+@custom-variant dark (&:where([data-tema="dark"], [data-tema="dark"] *));
 
 /* ============================================================
    SISTEMA DE DISEÑO — "Cordillera Editorial"
@@ -28,7 +30,7 @@
   --c-sombra:        rgba(22, 24, 29, 0.07);
 }
 
-.dark {
+[data-tema="dark"] {
   color-scheme: dark;
 
   /* --- Color: modo oscuro --- */

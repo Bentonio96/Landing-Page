@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
-import { CLAVE_TEMA } from "@/lib/tema";
+import { ATRIBUTO_TEMA, CLAVE_TEMA } from "@/lib/tema";
 import type { Diccionario } from "@/i18n/diccionario";
 
 type Props = { t: Diccionario };
@@ -12,12 +12,18 @@ export function BotonTema({ t }: Props) {
   const [oscuro, setOscuro] = useState<boolean | null>(null);
 
   useEffect(() => {
-    setOscuro(document.documentElement.classList.contains("dark"));
+    setOscuro(
+      document.documentElement.getAttribute(ATRIBUTO_TEMA) === "dark",
+    );
   }, []);
 
   function alternar() {
-    const siguiente = !document.documentElement.classList.contains("dark");
-    document.documentElement.classList.toggle("dark", siguiente);
+    const siguiente =
+      document.documentElement.getAttribute(ATRIBUTO_TEMA) !== "dark";
+    document.documentElement.setAttribute(
+      ATRIBUTO_TEMA,
+      siguiente ? "dark" : "light",
+    );
     try {
       localStorage.setItem(CLAVE_TEMA, siguiente ? "dark" : "light");
     } catch {
