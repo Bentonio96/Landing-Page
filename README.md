@@ -3,7 +3,7 @@
 Sitio personal de **Benjamín Peña Díaz**, desarrollador frontend en Santiago de Chile.
 Español en `/`, inglés en `/en`, modo claro y oscuro, y todo el contenido en archivos de datos tipados.
 
-**Lighthouse:** 100 / 100 / 100 / 100 en escritorio · 96 / 100 / 100 / 100 en móvil
+**Lighthouse en producción:** 100 / 100 / 100 / 100 en escritorio · 96 / 100 / 100 / 100 en móvil
 **Accesibilidad:** 0 violaciones de axe-core (WCAG 2.1 AA) en las 5 pantallas auditadas
 
 ![Hero en modo claro](docs/capturas/hero-claro.png)
@@ -214,7 +214,7 @@ Auditado con axe-core sobre las reglas WCAG 2.1 A/AA + best-practices, en 5 pant
 
 ### El 404 lleva estilos embebidos
 
-Es la única rareza del proyecto y es deliberada. Con el root layout dentro del segmento dinámico `[idioma]` (necesario para que `lang` sea correcto en ambos idiomas), Next renderiza la página de *not-found* fuera del layout y no le adjunta la hoja de Tailwind. Antes que degradar el `lang` de todo el sitio inglés para arreglar una página que casi nadie ve, esa página se basta sola. Está comentado en el archivo.
+Es la única rareza del proyecto y es deliberada. Con el root layout dentro del segmento dinámico `[idioma]` (necesario para que `lang` sea correcto en ambos idiomas), Next renderiza la página de *not-found* fuera del layout: no le adjunta la hoja de Tailwind ni el `<html lang>`. Antes que degradar el `lang` de todo el sitio inglés para arreglar una página que casi nadie ve, esa página se basta sola: lleva sus estilos embebidos y fija el idioma con una línea de script. Los lectores de pantalla leen el DOM ya ejecutado, así que para ellos queda correcto, y la página es `noindex`. Todo está comentado en el archivo.
 
 ---
 

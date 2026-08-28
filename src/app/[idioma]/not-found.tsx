@@ -17,6 +17,12 @@ export const metadata = {
  * degradar el `lang` de todo el sitio inglés para arreglar una página que
  * casi nadie ve, esta página se basta sola.
  *
+ * Por la misma razón el <html> de esta página llega sin `lang`, y no hay
+ * forma de fijarlo desde aquí en el servidor. Se pone con una línea de
+ * script: los lectores de pantalla leen el DOM ya ejecutado, así que para
+ * ellos queda correcto, y la página es noindex, de modo que a los
+ * buscadores no les afecta.
+ *
  * Los valores replican los tokens de globals.css. Si cambias la paleta ahí,
  * actualiza también estos cinco colores.
  */
@@ -96,6 +102,11 @@ export default function NoEncontrado() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: estilos }} />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `document.documentElement.lang='${IDIOMA_POR_DEFECTO}'`,
+        }}
+      />
       <main id="contenido" className="e404-cuerpo">
         <div className="e404-caja">
           <p className="e404-etiqueta">Error 404</p>
