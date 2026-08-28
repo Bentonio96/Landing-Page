@@ -1,87 +1,72 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Check, Mail } from "lucide-react";
-import { Boton } from "./Boton";
+import { Mail } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useAvisos } from "./Avisos";
 
 type Props = {
-  href: string;
   email: string;
   texto: string;
+  /** Mensaje del aviso flotante tras copiar. */
   avisoCopiado: string;
+  /** Mensaje alternativo si el portapapeles no está disponible. */
+  avisoFallo: string;
   variante?: "primario" | "secundario";
   className?: string;
 };
 
+const base =
+  "group/boton inline-flex items-center justify-center gap-2 rounded-control " +
+  "px-5 py-3 font-mono text-etiqueta uppercase tracking-[0.12em] " +
+  "transition-colors duration-200 " +
+  "focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-acento";
+
+const variantes = {
+  primario: "bg-acento text-acentosobre hover:bg-acentohover",
+  secundario:
+    "border border-bordefuerte text-texto hover:border-acento hover:text-acento",
+} as const;
+
 /**
- * CTA de correo, con red de seguridad.
+ * Copia la dirección de correo y lo avisa.
  *
- * `mailto:` no hace absolutamente nada si quien visita no tiene un cliente de
- * correo configurado — muy común en Windows con Gmail en una pestaña. El clic
- * falla en silencio, que en la sección de contacto de un portafolio es el peor
- * lugar posible para un fallo silencioso.
+ * Es un <button> y no un enlace `mailto:` a propósito. `mailto:` depende de
+ * que quien visita tenga un cliente de correo configurado: si no lo tiene
+ * —muy común— el navegador abre una pestaña inútil o directamente no pasa
+ * nada. Copiar la dirección funciona siempre y en cualquier dispositivo.
  *
- * Al pulsar se copia además la dirección al portapapeles y se avisa, así que
- * si el cliente no se abre la dirección ya está lista para pegar. El enlace
- * sigue siendo un <a href="mailto:"> normal: funciona sin JavaScript y se
- * puede copiar con el botón derecho.
- *
- * El aviso se posiciona fuera del flujo a propósito: si empujara el contenido
- * de abajo al aparecer, movería la página bajo el dedo de quien acaba de
- * pulsar.
+ * Para quien sí prefiere abrir su cliente, la dirección de la ficha de
+ * contacto sigue siendo un enlace `mailto:` normal.
  */
 export function BotonCorreo({
-  href,
   email,
   texto,
   avisoCopiado,
+  avisoFallo,
   variante = "primario",
   className,
 }: Props) {
-  const [copiado, setCopiado] = useState(false);
-  const temporizador = useRef<number | undefined>(undefined);
+  const avisos = useAvisos();
 
-  useEffect(() => () => window.clearTimeout(temporizador.current), []);
-
-  async function alPulsar() {
+  async function copiar() {
     try {
       await navigator.clipboard.writeText(email);
-      setCopiado(true);
-      window.clearTimeout(temporizador.current);
-      temporizador.current = window.setTimeout(() => setCopiado(false), 6000);
+      avisos?.avisar(avisoCopiado);
     } catch {
-      // Sin permiso de portapapeles o sin soporte: el mailto sigue su curso
-      // y la dirección está visible más arriba, en la ficha de contacto.
+      // Sin permiso de portapapeles, en contexto inseguro o sin soporte:
+      // se muestra la dirección para que se pueda copiar a mano.
+      avisos?.avisar(`${avisoFallo} ${email}`);
     }
   }
 
   return (
-    <div className={`relative ${className ?? ""}`}>
-      <Boton
-        href={href}
-        variante={variante}
-        onClick={alPulsar}
-        className="w-full sm:w-auto"
-      >
-        <Mail aria-hidden="true" className="size-4" />
-        {texto}
-      </Boton>
-
-      {/* role="status" lo anuncia sin robar el foco */}
-      <p
-        role="status"
-        aria-live="polite"
-        className={`absolute left-0 top-full mt-3 flex w-max max-w-[min(20rem,80vw)] items-start gap-2 text-menor text-atenuado transition-opacity duration-300 ${
-          copiado ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
-      >
-        {copiado ? (
-          <>
-            <Check aria-hidden="true" className="size-4 shrink-0 text-acento" />
-            {avisoCopiado}
-          </>
-        ) : null}
-      </p>
-    </div>
+    <button
+      type="button"
+      onClick={copiar}
+      className={cn(base, variantes[variante], className)}
+    >
+      <Mail aria-hidden="true" className="size-4" />
+      {texto}
+    </button>
   );
 }

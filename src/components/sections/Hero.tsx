@@ -2,7 +2,6 @@ import Image from "next/image";
 import { ArrowDown } from "lucide-react";
 import type { Diccionario } from "@/i18n/diccionario";
 import { perfil } from "@/data/perfil";
-import { enlaceCorreo } from "@/lib/utils";
 import { Boton } from "@/components/ui/Boton";
 import { BotonCorreo } from "@/components/ui/BotonCorreo";
 import { BLUR_PERFIL } from "@/lib/blur";
@@ -59,14 +58,10 @@ export function Hero({ t }: Props) {
                 <ArrowDown aria-hidden="true" className="size-4" />
               </Boton>
               <BotonCorreo
-                href={enlaceCorreo(
-                  perfil.email,
-                  t.contacto.asuntoCorreo,
-                  t.contacto.cuerpoCorreo,
-                )}
                 email={perfil.email}
                 texto={t.hero.escribirme}
                 avisoCopiado={t.contacto.correoCopiado}
+                avisoFallo={t.contacto.correoFallo}
                 variante="secundario"
                 className="w-full sm:w-auto"
               />
@@ -76,6 +71,11 @@ export function Hero({ t }: Props) {
           {/* Foto: bloque editorial con marco de acento desplazado detrás */}
           <div className="md:col-span-5 lg:col-span-6 lg:pl-8">
             <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+              {/* Halo: cae en zona decorativa, sin texto pequeño encima */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -inset-x-16 -inset-y-20 -z-10 rounded-[50%] bg-[radial-gradient(closest-side,var(--c-halo),transparent)] blur-2xl"
+              />
               <div
                 aria-hidden="true"
                 className="absolute inset-0 translate-x-3 translate-y-3 border border-acento/35 sm:translate-x-4 sm:translate-y-4"

@@ -104,6 +104,12 @@ Regenerar las miniaturas de los proyectos capturando sus sitios en vivo:
 node scripts/capturar-proyectos.mjs
 ```
 
+Verificar el contraste real, con el sitio corriendo en `localhost:3001`:
+
+```bash
+node scripts/verificar-contraste.mjs
+```
+
 ---
 
 ## Capturas
@@ -218,7 +224,15 @@ Tres detalles que hacen que el vidrio se lea como material y no como transparenc
 - **Reflejo especular** en el canto superior (`box-shadow: inset 0 1px 0`), que es lo que da sensación de volumen.
 - **Opacidad al 80 %**, no menos. Con el desenfoque aplicado sigue leyéndose como vidrio, y si el desenfoque falla en algún navegador el encabezado sigue siendo legible en vez de dejar el texto de la sección anterior chocando con el del nav.
 
-Las **auras** son tres gradientes radiales muy tenues fijos detrás del contenido. Ambos tonos salen del mismo acento —uno tal cual y otro girado hacia el ámbar— para no romper la regla de un solo color. Son gradientes de fondo y no un filtro de desenfoque, así que no cuestan recomposición. Viven en una capa con `z-index` negativo, lo que obliga a que el color de fondo esté en `<html>` y no en `<body>`.
+### El contraste que las auditorías no ven
+
+Las auras del fondo destaparon un punto ciego que vale la pena documentar: **axe no las detecta**. Calcula el fondo de un texto recorriendo sus ancestros, y las auras viven en una capa fija con `z-index` negativo que no es ancestro de nada. Se puede subir su intensidad, seguir viendo *0 violaciones* y aun así dejar texto por debajo de AA.
+
+Pasó exactamente eso: con las auras centradas, axe daba 0 violaciones mientras el contraste real medido sobre los píxeles era de **4.46:1**. Por eso existe [`scripts/verificar-contraste.mjs`](scripts/verificar-contraste.mjs), que captura la pantalla, muestrea el color real justo encima de cada texto a lo largo de toda la página y sale con código 1 si algo baja de 4.5:1.
+
+La solución fue anclar las auras a los bordes —con parte del círculo fuera de pantalla— para que el color se vea intenso en los márgenes y caiga antes de llegar a la columna de texto, y oscurecer un punto el token `--c-tenue`. Peor caso actual: 4.76:1 en claro, 5.40:1 en oscuro.
+
+Las **auras** son tres gradientes radiales fijos detrás del contenido. Ambos tonos salen del mismo acento —uno tal cual y otro girado hacia el ámbar— para no romper la regla de un solo color. Son gradientes de fondo y no un filtro de desenfoque, así que no cuestan recomposición. Viven en una capa con `z-index` negativo, lo que obliga a que el color de fondo esté en `<html>` y no en `<body>`.
 
 ### Lo que se mueve, y por qué
 

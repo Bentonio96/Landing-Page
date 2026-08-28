@@ -31,7 +31,7 @@ const diccionario = {
       intro:
         "Construyo interfaces web y las llevo a producción. Trabajo con React, TypeScript y Tailwind, con foco en mobile first, componentes reutilizables y accesibilidad.",
       verProyectos: "Ver proyectos",
-      escribirme: "Escríbeme",
+      escribirme: "Copiar mi correo",
       altFoto:
         "Benjamín Peña Díaz, de perfil y con lentes de sol, frente a un cerro verde bajo un cielo despejado.",
     },
@@ -77,9 +77,9 @@ const diccionario = {
       email: "Correo",
       telefono: "Teléfono",
       ubicacion: "Ubicación",
-      botonCorreo: "Enviar un correo",
-      correoCopiado:
-        "Copiamos la dirección, por si no se abrió tu cliente de correo.",
+      botonCorreo: "Copiar mi correo",
+      correoCopiado: "Dirección de correo copiada al portapapeles.",
+      correoFallo: "No pudimos copiarla. Mi correo es:",
       descargarCV: "Descargar CV",
       cvFormato: "(PDF)",
       asuntoCorreo: "Proyecto freelance",
@@ -124,7 +124,7 @@ const diccionario = {
       intro:
         "I build web interfaces and ship them to production. I work with React, TypeScript and Tailwind, focused on mobile first, reusable components and accessibility.",
       verProyectos: "View projects",
-      escribirme: "Get in touch",
+      escribirme: "Copy my email",
       altFoto:
         "Benjamín Peña Díaz in profile, wearing sunglasses, standing in front of a green hillside under a clear sky.",
     },
@@ -170,9 +170,9 @@ const diccionario = {
       email: "Email",
       telefono: "Phone",
       ubicacion: "Location",
-      botonCorreo: "Send an email",
-      correoCopiado:
-        "Address copied, in case your mail client didn't open.",
+      botonCorreo: "Copy my email",
+      correoCopiado: "Email address copied to your clipboard.",
+      correoFallo: "Couldn't copy it. My address is:",
       descargarCV: "Download CV",
       cvFormato: "(PDF, in Spanish)",
       asuntoCorreo: "Freelance project",

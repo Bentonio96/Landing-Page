@@ -1,7 +1,6 @@
 import { Download, Github, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 import type { Diccionario } from "@/i18n/diccionario";
 import { perfil } from "@/data/perfil";
-import { enlaceCorreo } from "@/lib/utils";
 import { Boton } from "@/components/ui/Boton";
 import { BotonCorreo } from "@/components/ui/BotonCorreo";
 import { Reveal } from "@/components/ui/Reveal";
@@ -106,14 +105,10 @@ export function Contacto({ t }: Props) {
         <Reveal retardo={0.14}>
           <div className="flex flex-col gap-3 sm:flex-row">
             <BotonCorreo
-              href={enlaceCorreo(
-                perfil.email,
-                t.contacto.asuntoCorreo,
-                t.contacto.cuerpoCorreo,
-              )}
               email={perfil.email}
               texto={t.contacto.botonCorreo}
               avisoCopiado={t.contacto.correoCopiado}
+              avisoFallo={t.contacto.correoFallo}
               className="w-full sm:w-auto"
             />
 

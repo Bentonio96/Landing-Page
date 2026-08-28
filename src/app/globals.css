@@ -20,7 +20,10 @@
   --c-elevado:       #F4F2ED;
   --c-texto:         #16181D;  /* 16.4:1 sobre fondo */
   --c-atenuado:      #5C6069;  /*  5.6:1 sobre fondo — AA */
-  --c-tenue:         #6A6E77;  /*  4.9:1 sobre fondo, 5.1:1 sobre superficie — AA */
+  /* Algo más oscuro de lo que pediría el fondo puro: las auras lo tiñen y
+     el contraste REAL medido con scripts/verificar-contraste.mjs bajaba a
+     4.67:1. Con este valor queda en 4.95:1 sobre el fondo ya teñido. */
+  --c-tenue:         #616A78;
   --c-borde:         #E4E2DD;
   --c-borde-fuerte:  #CBC7BF;
   --c-acento:        #B04426;  /*  5.4:1 sobre fondo — AA */
@@ -32,8 +35,11 @@
   /* Auras: gradientes muy tenues que dan profundidad al fondo.
      Ambos tonos salen del acento — uno tal cual y otro girado hacia el
      ámbar — para no romper la regla de un solo acento. */
-  --c-aura-calida:   rgba(176, 68, 38, 0.07);
-  --c-aura-ambar:    rgba(198, 126, 42, 0.06);
+  --c-aura-calida:   rgba(176, 68, 38, 0.10);
+  --c-aura-ambar:    rgba(198, 126, 42, 0.09);
+  /* Halo del hero: más intenso porque cae en zona decorativa, detrás de la
+     foto, donde no hay texto pequeño que pueda perder contraste. */
+  --c-halo:          rgba(176, 68, 38, 0.20);
 
   /* Vidrio: superficies flotantes translúcidas. El borde superior claro
      imita el reflejo especular que da volumen al material. */
@@ -61,8 +67,9 @@
   --c-sombra:        rgba(0, 0, 0, 0.4);
 
   /* En oscuro las auras necesitan algo más de cuerpo para leerse */
-  --c-aura-calida:   rgba(240, 120, 78, 0.11);
-  --c-aura-ambar:    rgba(255, 176, 90, 0.07);
+  --c-aura-calida:   rgba(240, 120, 78, 0.20);
+  --c-aura-ambar:    rgba(255, 176, 90, 0.14);
+  --c-halo:          rgba(240, 120, 78, 0.30);
 
   --c-vidrio:        rgba(12, 14, 18, 0.80);
   --c-vidrio-brillo: rgba(255, 255, 255, 0.10);
@@ -221,11 +228,16 @@
     color: var(--c-tenue);
   }
 
-  /* Regla capilar editorial */
+  /* Regla capilar editorial, desvanecida hacia la derecha */
   .regla {
     height: 1px;
-    background-color: var(--c-borde);
     border: 0;
+    background-image: linear-gradient(
+      90deg,
+      var(--c-borde) 0%,
+      var(--c-borde) 62%,
+      transparent 100%
+    );
   }
 
   /* Enlace de texto con subrayado que crece desde la izquierda */
@@ -355,21 +367,25 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
+  /* Ancladas a los bordes, con parte del círculo fuera de pantalla: el
+     color se ve intenso en los márgenes y cae antes de llegar a la columna
+     de texto. Centradas teñían el fondo bajo los textos pequeños y el
+     contraste real bajaba a 4.46:1, aunque axe no lo detectara. */
   background:
     radial-gradient(
-      60rem 42rem at 82% -8%,
+      46rem 34rem at 104% -10%,
       var(--c-aura-calida),
-      transparent 62%
+      transparent 66%
     ),
     radial-gradient(
-      52rem 38rem at 4% 26%,
+      40rem 30rem at -6% 30%,
       var(--c-aura-ambar),
-      transparent 64%
+      transparent 66%
     ),
     radial-gradient(
-      48rem 36rem at 58% 104%,
+      52rem 32rem at 50% 112%,
       var(--c-aura-calida),
-      transparent 62%
+      transparent 64%
     );
 }
 

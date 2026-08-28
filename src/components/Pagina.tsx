@@ -12,6 +12,7 @@ import { Proyectos } from "@/components/sections/Proyectos";
 import { Experiencia } from "@/components/sections/Experiencia";
 import { Contacto } from "@/components/sections/Contacto";
 import { ProveedorTecnologia } from "@/components/ui/ContextoTecnologia";
+import { ProveedorAvisos } from "@/components/ui/Avisos";
 
 type Props = { idioma: Idioma };
 
@@ -53,6 +54,7 @@ export function Pagina({ idioma }: Props) {
       <ProgresoLectura />
       <Encabezado idioma={idioma} t={t} />
 
+      <ProveedorAvisos>
       <ProveedorTecnologia>
         <main id="contenido">
           <Hero t={t} />
@@ -63,6 +65,7 @@ export function Pagina({ idioma }: Props) {
           <Contacto t={t} />
         </main>
       </ProveedorTecnologia>
+      </ProveedorAvisos>
 
       <PieDePagina idioma={idioma} t={t} />
 
