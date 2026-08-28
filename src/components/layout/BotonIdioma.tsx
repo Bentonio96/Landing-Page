@@ -37,7 +37,7 @@ export function BotonIdioma({ idioma, t }: Props) {
       hrefLang={idiomaAlterno(idioma)}
       aria-label={t.idioma.etiqueta}
       title={t.idioma.etiqueta}
-      className="inline-flex h-10 items-center justify-center rounded-pieza border border-borde px-3 font-mono text-etiqueta tracking-[0.12em] text-atenuado transition-colors hover:border-acento hover:text-acento"
+      className="vidrio backdrop-blur-xl backdrop-saturate-150 inline-flex h-10 items-center justify-center rounded-full px-4 font-mono text-etiqueta tracking-[0.12em] text-atenuado transition-colors hover:text-acento"
     >
       {t.idioma.codigo}
     </a>

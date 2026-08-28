@@ -26,7 +26,7 @@ type Props = {
 };
 
 const base =
-  "group/boton inline-flex items-center justify-center gap-2 rounded-pieza " +
+  "group/boton inline-flex items-center justify-center gap-2 rounded-control " +
   "px-5 py-3 font-mono text-etiqueta uppercase tracking-[0.12em] " +
   "transition-colors duration-200 " +
   "focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-acento";

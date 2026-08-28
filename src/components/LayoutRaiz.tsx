@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { Idioma } from "@/types";
+import { Ambiente } from "@/components/layout/Ambiente";
 import { clasesFuentes } from "@/lib/fuentes";
 import { scriptTema } from "@/lib/tema";
 import "@/app/globals.css";
@@ -32,7 +33,10 @@ export function LayoutRaiz({ idioma, children }: Props) {
           <style>{".revelar{transform:none!important}"}</style>
         </noscript>
       </head>
-      <body className="min-h-dvh bg-fondo text-texto">{children}</body>
+      <body className="min-h-dvh text-texto">
+        <Ambiente />
+        {children}
+      </body>
     </html>
   );
 }

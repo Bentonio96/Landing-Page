@@ -78,7 +78,7 @@ export function Encabezado({ idioma, t }: Props) {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-colors duration-300",
         desplazado || abierto
-          ? "border-b border-borde bg-fondo/85 backdrop-blur-md"
+          ? "vidrio backdrop-blur-xl backdrop-saturate-150 border-x-0 border-t-0 border-b-[var(--c-vidrio-borde)]"
           : "border-b border-transparent",
       )}
     >
@@ -134,7 +134,7 @@ export function Encabezado({ idioma, t }: Props) {
             aria-expanded={abierto}
             aria-controls="menu-movil"
             aria-label={abierto ? t.nav.cerrarMenu : t.nav.abrirMenu}
-            className="inline-flex size-10 items-center justify-center rounded-pieza border border-borde text-atenuado transition-colors hover:border-acento hover:text-acento md:hidden"
+            className="vidrio backdrop-blur-xl backdrop-saturate-150 inline-flex size-10 items-center justify-center rounded-full text-atenuado transition-colors hover:text-acento md:hidden"
           >
             {abierto ? (
               <X aria-hidden="true" className="size-4" />

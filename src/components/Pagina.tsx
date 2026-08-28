@@ -4,6 +4,7 @@ import { perfil, SITIO_URL } from "@/data/perfil";
 import { Encabezado } from "@/components/layout/Encabezado";
 import { PieDePagina } from "@/components/layout/PieDePagina";
 import { SaltarAlContenido } from "@/components/layout/SaltarAlContenido";
+import { ProgresoLectura } from "@/components/layout/ProgresoLectura";
 import { Hero } from "@/components/sections/Hero";
 import { SobreMi } from "@/components/sections/SobreMi";
 import { Stack } from "@/components/sections/Stack";
@@ -49,6 +50,7 @@ export function Pagina({ idioma }: Props) {
   return (
     <>
       <SaltarAlContenido texto={t.saltarAlContenido} />
+      <ProgresoLectura />
       <Encabezado idioma={idioma} t={t} />
 
       <ProveedorTecnologia>

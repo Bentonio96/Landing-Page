@@ -91,7 +91,7 @@ export function BotonTema({ t }: Props) {
       onClick={alternar}
       aria-label={etiqueta}
       title={etiqueta}
-      className="inline-flex size-10 items-center justify-center rounded-pieza border border-borde text-atenuado transition-colors hover:border-acento hover:text-acento"
+      className="vidrio backdrop-blur-xl backdrop-saturate-150 inline-flex size-10 items-center justify-center rounded-full text-atenuado transition-colors hover:text-acento"
     >
       {/* Se alternan por CSS: correctos incluso antes de hidratar. */}
       <Sun aria-hidden="true" className="hidden size-4 dark:block" />

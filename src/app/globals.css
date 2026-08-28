@@ -28,6 +28,18 @@
   --c-acento-sobre:  #FFFFFF;  /*  5.7:1 sobre acento — AA */
   --c-acento-tenue:  rgba(176, 68, 38, 0.09);
   --c-sombra:        rgba(22, 24, 29, 0.07);
+
+  /* Auras: gradientes muy tenues que dan profundidad al fondo.
+     Ambos tonos salen del acento — uno tal cual y otro girado hacia el
+     ámbar — para no romper la regla de un solo acento. */
+  --c-aura-calida:   rgba(176, 68, 38, 0.07);
+  --c-aura-ambar:    rgba(198, 126, 42, 0.06);
+
+  /* Vidrio: superficies flotantes translúcidas. El borde superior claro
+     imita el reflejo especular que da volumen al material. */
+  --c-vidrio:        rgba(251, 250, 248, 0.80);
+  --c-vidrio-brillo: rgba(255, 255, 255, 0.85);
+  --c-vidrio-borde:  rgba(22, 24, 29, 0.08);
 }
 
 [data-tema="dark"] {
@@ -47,6 +59,14 @@
   --c-acento-sobre:  #14100E;  /*  6.6:1 sobre acento — AA */
   --c-acento-tenue:  rgba(240, 120, 78, 0.13);
   --c-sombra:        rgba(0, 0, 0, 0.4);
+
+  /* En oscuro las auras necesitan algo más de cuerpo para leerse */
+  --c-aura-calida:   rgba(240, 120, 78, 0.11);
+  --c-aura-ambar:    rgba(255, 176, 90, 0.07);
+
+  --c-vidrio:        rgba(12, 14, 18, 0.80);
+  --c-vidrio-brillo: rgba(255, 255, 255, 0.10);
+  --c-vidrio-borde:  rgba(255, 255, 255, 0.08);
 }
 
 @theme inline {
@@ -63,6 +83,8 @@
   --color-acentohover:  var(--c-acento-hover);
   --color-acentosobre:  var(--c-acento-sobre);
   --color-acentotenue:  var(--c-acento-tenue);
+  --color-vidrio:       var(--c-vidrio);
+  --color-vidrioborde:  var(--c-vidrio-borde);
 
   /* --- Tipografía --- */
   --font-display: var(--fuente-display), Georgia, "Times New Roman", serif;
@@ -94,8 +116,12 @@
   --container-lienzo:   77rem;  /* ancho máximo del contenido */
 
   /* --- Forma --- */
-  --radius-pieza: 2px;   /* casi recto: editorial, no burbuja */
-  --radius-chip:  3px;
+  /* Dos familias de forma, y la diferencia es intencional:
+     el contenido editorial va casi recto, y lo que es un control
+     flotante va redondeado. Así la forma comunica qué es pulsable. */
+  --radius-pieza:   2px;    /* tarjetas, reglas: editorial */
+  --radius-control: 10px;   /* botones */
+  --radius-chip:    7px;
 
   /* --- Movimiento --- */
   --ease-salida: cubic-bezier(0.16, 1, 0.3, 1);
@@ -117,8 +143,14 @@
     -webkit-text-size-adjust: 100%;
   }
 
-  body {
+  html {
+    /* El color vive aquí, no en <body>, para que la capa de auras pueda
+       colocarse detrás del contenido con z-index negativo. */
     background-color: var(--c-fondo);
+  }
+
+  body {
+    background-color: transparent;
     color: var(--c-texto);
     font-family: var(--font-sans);
     font-size: var(--text-cuerpo);
@@ -307,5 +339,111 @@
   ::view-transition-old(*),
   ::view-transition-new(*) {
     animation: none !important;
+  }
+}
+
+/* ============================================================
+   AURAS AMBIENTALES
+
+   Tres gradientes radiales muy tenues, fijos detrás del contenido.
+   Dan profundidad sin ruido y sin coste: son gradientes de fondo, no
+   un filtro de desenfoque, así que no obligan a la GPU a recomponer.
+   ============================================================ */
+
+.ambiente {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      60rem 42rem at 82% -8%,
+      var(--c-aura-calida),
+      transparent 62%
+    ),
+    radial-gradient(
+      52rem 38rem at 4% 26%,
+      var(--c-aura-ambar),
+      transparent 64%
+    ),
+    radial-gradient(
+      48rem 36rem at 58% 104%,
+      var(--c-aura-calida),
+      transparent 62%
+    );
+}
+
+/* ============================================================
+   PROGRESO DE LECTURA
+
+   Ligado al scroll de la raíz con CSS: cero JavaScript y fuera del
+   hilo principal. Sin soporte, la barra queda en scaleX(0), o sea
+   invisible, que es una ausencia limpia.
+   ============================================================ */
+
+@keyframes avanzar-lectura {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.progreso-lectura {
+  transform: scaleX(0);
+  transform-origin: left center;
+  background-image: linear-gradient(
+    90deg,
+    var(--c-acento) 0%,
+    var(--c-aura-ambar) 55%,
+    var(--c-acento) 100%
+  );
+}
+
+@supports (animation-timeline: scroll()) {
+  .progreso-lectura {
+    animation: avanzar-lectura linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progreso-lectura {
+    animation: none;
+    transform: scaleX(0);
+  }
+}
+
+/* ============================================================
+   VIDRIO
+
+   Superficies flotantes translúcidas, inspiradas de lejos en el
+   material de macOS Tahoe. Se reserva para controles y para el
+   encabezado: el contenido editorial sigue siendo opaco y recto,
+   de modo que el vidrio comunica "esto es un control".
+   ============================================================ */
+
+@layer components {
+  /*
+   * El desenfoque NO se declara aquí: se aplica con las utilidades
+   * `backdrop-blur-xl backdrop-saturate-150` junto a esta clase. Escrito a
+   * mano, el minificador dejaba solo la variante prefijada y sin el espacio
+   * obligatorio entre funciones —blur(16px)saturate(180%)—, con lo que la
+   * declaración quedaba inválida y el desenfoque no se aplicaba nunca.
+   */
+  .vidrio {
+    background-color: var(--c-vidrio);
+    border: 1px solid var(--c-vidrio-borde);
+    /* Reflejo especular en el canto superior: da volumen */
+    box-shadow: inset 0 1px 0 var(--c-vidrio-brillo);
+  }
+
+  /* Sin soporte de backdrop-filter, se cae a un fondo sólido para no
+     dejar texto sobre una superficie semitransparente ilegible. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .vidrio {
+      background-color: var(--c-superficie);
+    }
   }
 }

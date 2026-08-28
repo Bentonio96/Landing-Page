@@ -206,9 +206,26 @@ La estructura es un único root layout dentro de `src/app/[idioma]/`, que es lo 
 
 No se usó `next-intl` ni similar: para dos idiomas y un diccionario plano, un `Record<Idioma, string>` tipado hace lo mismo con cero kilobytes de runtime.
 
+### Vidrio y auras
+
+Hay una inspiración lejana en el material translúcido de macOS Tahoe, pero deliberadamente parcial: aplicarlo entero habría borrado el carácter editorial del sitio, que se apoya justamente en ser plano y recto.
+
+El criterio es que **la forma diga qué es cada cosa**. El contenido —tarjetas, reglas, secciones— sigue opaco y con radios de 2 px. Lo que flota y es pulsable —el encabezado, los controles de tema e idioma, el menú móvil— es vidrio translúcido y redondeado. Así el material comunica "esto es un control" en vez de ser decoración.
+
+Tres detalles que hacen que el vidrio se lea como material y no como transparencia:
+
+- **Saturación además de desenfoque.** Sin `backdrop-saturate`, el desenfoque apaga los colores de detrás y el resultado parece sucio.
+- **Reflejo especular** en el canto superior (`box-shadow: inset 0 1px 0`), que es lo que da sensación de volumen.
+- **Opacidad al 80 %**, no menos. Con el desenfoque aplicado sigue leyéndose como vidrio, y si el desenfoque falla en algún navegador el encabezado sigue siendo legible en vez de dejar el texto de la sección anterior chocando con el del nav.
+
+Las **auras** son tres gradientes radiales muy tenues fijos detrás del contenido. Ambos tonos salen del mismo acento —uno tal cual y otro girado hacia el ámbar— para no romper la regla de un solo color. Son gradientes de fondo y no un filtro de desenfoque, así que no cuestan recomposición. Viven en una capa con `z-index` negativo, lo que obliga a que el color de fondo esté en `<html>` y no en `<body>`.
+
 ### Lo que se mueve, y por qué
 
-Cuatro interacciones, todas respetando `prefers-reduced-motion` y ninguna a costa de las métricas:
+Cinco interacciones, todas respetando `prefers-reduced-motion` y ninguna a costa de las métricas:
+
+- **Progreso de lectura.** Una barra de 3 px en el borde superior, con degradado del acento al ámbar. Va con `animation-timeline: scroll(root)`: sin JavaScript, sin escuchas de scroll y fuera del hilo principal. Es decorativa —no aporta nada que la barra de desplazamiento no diga ya— así que se oculta a lectores de pantalla.
+
 
 - **Miniaturas de proyecto.** Cada tarjeta muestra una captura del sitio real, generada por [`scripts/capturar-proyectos.mjs`](scripts/capturar-proyectos.mjs) desde la demo en producción, así que no se desactualizan a mano. Se ven siempre, no al pasar el cursor: esconder la captura tras un hover dejaría fuera a quien entra desde un teléfono, y es justo lo que alguien quiere ver antes de decidir si abre el proyecto. Lo que reacciona es un acercamiento discreto. Las tres cargan en diferido — la sección queda bajo el pliegue en todos los tamaños, así que precargarlas solo le quitaría ancho de banda a la foto del hero, que sí es el elemento LCP.
 
