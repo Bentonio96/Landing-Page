@@ -51,10 +51,15 @@
   /* Bandas diagonales. En claro son forzosamente más suaves que en oscuro:
      el fondo ya es casi blanco, así que todo lo que se le añade lo oscurece
      y come contraste con el texto. La textura aquí la carga sobre todo el
-     grano, no el color. */
-  --c-banda-alta:    rgba(176, 68, 38, 0.115);
-  --c-banda-media:   rgba(198, 126, 42, 0.10);
-  --c-banda-honda:   rgba(150, 96, 72, 0.07);
+     grano, no el color.
+
+     Ojo con la intuición al ajustarlas: en oscuro, para que resalten menos
+     se bajan las crestas y se ahonda el valle. Aquí NO — oscurecerlas sobre
+     un fondo casi blanco las haría destacar más, que es lo contrario. Para
+     que resalten menos en claro, hay que atenuarlas. */
+  --c-banda-alta:    rgba(176, 68, 38, 0.072);
+  --c-banda-media:   rgba(198, 126, 42, 0.062);
+  --c-banda-honda:   rgba(150, 96, 72, 0.045);
 
   /* Vidrio: superficies flotantes translúcidas. El borde superior claro
      imita el reflejo especular que da volumen al material. */
@@ -90,16 +95,18 @@
   --c-aura-ambar:    rgba(255, 176, 90, 0.14);
   --c-halo:          rgba(240, 120, 78, 0.30);
 
-  /* Aquí sí se puede empujar: sobre tinta, subir el color aclara el fondo
-     desde 17:1 de contraste, así que hay margen de sobra. Es el tema donde
-     el degradado se parece de verdad a la referencia.
+  /* `honda` es casi negra, no un tono cálido: los valles tienen que quedar
+     MÁS oscuros que la base, y sin eso solo hay crestas sobre un fondo
+     plano. De paso, donde cae un valle el texto gana contraste.
 
-     `honda` es casi negra, no un tono cálido: en la referencia los valles
-     son MÁS oscuros que la base, y sin eso solo hay crestas sobre un fondo
-     plano. De paso, donde cae un valle el texto gana contraste. */
-  --c-banda-alta:    rgba(240, 120, 78, 0.23);
-  --c-banda-media:   rgba(255, 176, 90, 0.145);
-  --c-banda-honda:   rgba(6, 5, 9, 0.34);
+     El equilibrio entre las tres está calibrado a mano: hay margen técnico
+     para subir mucho más el color —sobre tinta se parte de 17:1— pero las
+     crestas cálidas llamaban demasiado la atención. Pesan poco y el valle
+     pesa bastante, así que el campo tira a oscuro y el relieve se intuye
+     en vez de imponerse. */
+  --c-banda-alta:    rgba(240, 120, 78, 0.135);
+  --c-banda-media:   rgba(255, 176, 90, 0.085);
+  --c-banda-honda:   rgba(6, 5, 9, 0.44);
 
   --c-vidrio:        rgba(12, 14, 18, 0.80);
   --c-vidrio-brillo: rgba(255, 255, 255, 0.10);
@@ -119,18 +126,18 @@
    ya es casi blanco. */
 @media (max-width: 47.99rem) {
   :root {
-    --c-banda-alta:  rgba(176, 68, 38, 0.058);
-    --c-banda-media: rgba(198, 126, 42, 0.05);
-    --c-banda-honda: rgba(150, 96, 72, 0.036);
+    --c-banda-alta:  rgba(176, 68, 38, 0.038);
+    --c-banda-media: rgba(198, 126, 42, 0.033);
+    --c-banda-honda: rgba(150, 96, 72, 0.024);
   }
 
   [data-tema="dark"] {
-    --c-banda-alta:  rgba(240, 120, 78, 0.10);
-    --c-banda-media: rgba(255, 176, 90, 0.065);
+    --c-banda-alta:  rgba(240, 120, 78, 0.062);
+    --c-banda-media: rgba(255, 176, 90, 0.04);
     /* Los valles suben en vez de bajar: al oscurecer el campo compensan las
        crestas y conservan el rango entre claro y oscuro, que es lo que hace
        que se lea como relieve y no como una mancha. */
-    --c-banda-honda: rgba(6, 5, 9, 0.44);
+    --c-banda-honda: rgba(6, 5, 9, 0.52);
   }
 }
 
