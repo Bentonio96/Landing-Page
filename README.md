@@ -195,7 +195,7 @@ Neutros fríos con un acento cálido. Todos los pares cumplen **WCAG AA** (verif
 | Fondo | `#FBFAF8` | `#0C0E12` | — |
 | Texto | `#16181D` | `#EDEDEB` | 16.4:1 / 17.1:1 |
 | Atenuado | `#5C6069` | `#9BA1AB` | 6.0:1 / 7.5:1 |
-| Tenue | `#6A6E77` | `#878D98` | 4.9:1 / 5.4:1 |
+| Tenue | `#5B6472` | `#8F95A0` | 5.0:1 / 4.8:1 sobre el fondo ya teñido |
 | **Acento** | `#B04426` | `#F0784E` | 5.4:1 / 6.9:1 |
 
 Los radios son de 2 px: casi rectos, editorial y no burbuja.
@@ -238,8 +238,8 @@ Peor caso actual, en los cuatro cruces de tema y ancho:
 
 | | Escritorio | Móvil |
 |---|---|---|
-| Claro | 4.80:1 | 4.60:1 |
-| Oscuro | 4.65:1 | 4.91:1 |
+| Claro | 4.80:1 | 4.80:1 |
+| Oscuro | 4.64:1 | 5.02:1 |
 
 Sobre las auras hay además **paralaje**: la capa se desplaza unos píxeles en sentido contrario al puntero, lo que da sensación de profundidad. Se aplica como `transform` sobre la capa entera —no moviendo los centros de los gradientes— para que lo resuelva el compositor sin repintar el fondo, y el valor se escribe directo sobre el nodo con una ref, sin estado de React, para no disparar un render por evento. Se desactiva en pantallas táctiles y con `prefers-reduced-motion`.
 
@@ -254,6 +254,7 @@ Sobre las auras van **bandas diagonales**, que es lo que da relieve —crestas y
 - **Dos capas cruzadas, no una.** Los degradados radiales de CSS son siempre paralelos a los ejes, así que la diagonal sale girando la capa entera. Con una sola capa el resultado son franjas paralelas, que se leen como un estampado de rayas; al superponer dos tramas en ángulos distintos (−18° y +26°) los máximos y mínimos se refuerzan en unos puntos y se cancelan en otros, y el recorrido acaba curvándose. Es lo más cerca que se llega de un *mesh gradient* sin salir de CSS ni pagar un filtro SVG a pantalla completa.
 - **Los valles son más oscuros que la base**, no solo hay crestas más claras. Sin eso solo se ven manchas sobre un fondo plano. En oscuro el token del valle es casi negro, así que donde cae, el texto *gana* contraste — por eso en móvil se sube el valle en lugar de bajarlo.
 - **Tamaños en porcentaje, no en `rem`.** Con medidas fijas, una elipse de 82rem cubre proporcionalmente mucho más de una pantalla de 390 px que de una de 1440, y la composición se descuadra justo donde hay menos margen.
+- **Caída larga.** El `transparent` de cada gradiente está al 88-92 % del radio, no al 56 %. Ahí estaba la diferencia entre bandas con borde visible —que se leen como un estampado— y un degradado que de verdad se difumina. Contraintuitivamente, difuminar más obliga a *bajar* la intensidad: al ensancharse, el tinte cubre más superficie aunque su pico sea menor.
 
 Las capas son `position: fixed`, así que se pintan una vez y no repintan al hacer scroll: **81 fps con la CPU a ×4**, sin coste de layout ni de recálculo de estilo.
 

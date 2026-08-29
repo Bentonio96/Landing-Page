@@ -20,10 +20,12 @@
   --c-elevado:       #F4F2ED;
   --c-texto:         #16181D;  /* 16.4:1 sobre fondo */
   --c-atenuado:      #5C6069;  /*  5.6:1 sobre fondo — AA */
-  /* Algo más oscuro de lo que pediría el fondo puro: las auras lo tiñen y
-     el contraste REAL medido con scripts/verificar-contraste.mjs bajaba a
-     4.67:1. Con este valor queda en 4.95:1 sobre el fondo ya teñido. */
-  --c-tenue:         #616A78;
+  /* Algo más oscuro de lo que pediría el fondo puro: las auras y las bandas
+     lo tiñen y el contraste REAL medido con verificar-contraste.mjs bajaba a
+     4.67:1. Se oscurece de nuevo al difuminar las bandas: al ensancharse
+     cubren más superficie aunque el pico sea menor, y en móvil dejaban la
+     metadata de certificaciones en 4.47:1. */
+  --c-tenue:         #5B6472;  /*  ~5:1 sobre el fondo ya teñido — AA */
   --c-borde:         #E4E2DD;
   --c-borde-fuerte:  #CBC7BF;
   --c-acento:        #B04426;  /*  5.4:1 sobre fondo — AA */
@@ -50,9 +52,9 @@
      el fondo ya es casi blanco, así que todo lo que se le añade lo oscurece
      y come contraste con el texto. La textura aquí la carga sobre todo el
      grano, no el color. */
-  --c-banda-alta:    rgba(176, 68, 38, 0.19);
-  --c-banda-media:   rgba(198, 126, 42, 0.165);
-  --c-banda-honda:   rgba(150, 96, 72, 0.115);
+  --c-banda-alta:    rgba(176, 68, 38, 0.115);
+  --c-banda-media:   rgba(198, 126, 42, 0.10);
+  --c-banda-honda:   rgba(150, 96, 72, 0.07);
 
   /* Vidrio: superficies flotantes translúcidas. El borde superior claro
      imita el reflejo especular que da volumen al material. */
@@ -95,9 +97,9 @@
      `honda` es casi negra, no un tono cálido: en la referencia los valles
      son MÁS oscuros que la base, y sin eso solo hay crestas sobre un fondo
      plano. De paso, donde cae un valle el texto gana contraste. */
-  --c-banda-alta:    rgba(240, 120, 78, 0.38);
-  --c-banda-media:   rgba(255, 176, 90, 0.24);
-  --c-banda-honda:   rgba(6, 5, 9, 0.50);
+  --c-banda-alta:    rgba(240, 120, 78, 0.23);
+  --c-banda-media:   rgba(255, 176, 90, 0.145);
+  --c-banda-honda:   rgba(6, 5, 9, 0.34);
 
   --c-vidrio:        rgba(12, 14, 18, 0.80);
   --c-vidrio-brillo: rgba(255, 255, 255, 0.10);
@@ -117,18 +119,18 @@
    ya es casi blanco. */
 @media (max-width: 47.99rem) {
   :root {
-    --c-banda-alta:  rgba(176, 68, 38, 0.125);
-    --c-banda-media: rgba(198, 126, 42, 0.11);
-    --c-banda-honda: rgba(150, 96, 72, 0.075);
+    --c-banda-alta:  rgba(176, 68, 38, 0.058);
+    --c-banda-media: rgba(198, 126, 42, 0.05);
+    --c-banda-honda: rgba(150, 96, 72, 0.036);
   }
 
   [data-tema="dark"] {
-    --c-banda-alta:  rgba(240, 120, 78, 0.15);
-    --c-banda-media: rgba(255, 176, 90, 0.095);
+    --c-banda-alta:  rgba(240, 120, 78, 0.10);
+    --c-banda-media: rgba(255, 176, 90, 0.065);
     /* Los valles suben en vez de bajar: al oscurecer el campo compensan las
        crestas y conservan el rango entre claro y oscuro, que es lo que hace
        que se lea como relieve y no como una mancha. */
-    --c-banda-honda: rgba(6, 5, 9, 0.62);
+    --c-banda-honda: rgba(6, 5, 9, 0.44);
   }
 }
 
@@ -476,29 +478,29 @@
   transform: rotate(-18deg);
   background:
     radial-gradient(
-      43% 10.5% at 28% 12%,
+      51% 14.5% at 28% 12%,
       var(--c-banda-alta),
-      transparent 58%
+      transparent 90%
     ),
     radial-gradient(
-      36.5% 8.8% at 74% 31%,
+      44% 12.5% at 74% 31%,
       var(--c-banda-media),
-      transparent 56%
+      transparent 88%
     ),
     radial-gradient(
-      45.8% 12% at 36% 52%,
+      54% 16.5% at 36% 52%,
       var(--c-banda-alta),
-      transparent 60%
+      transparent 92%
     ),
     radial-gradient(
-      34.4% 9.6% at 80% 71%,
+      42% 13.5% at 80% 71%,
       var(--c-banda-media),
-      transparent 56%
+      transparent 88%
     ),
     radial-gradient(
-      40.6% 11.2% at 40% 88%,
+      49% 15.5% at 40% 88%,
       var(--c-banda-honda),
-      transparent 58%
+      transparent 90%
     );
 }
 
@@ -506,24 +508,24 @@
   transform: rotate(26deg);
   background:
     radial-gradient(
-      38.5% 9.6% at 62% 20%,
+      46% 13.5% at 62% 20%,
       var(--c-banda-media),
-      transparent 56%
+      transparent 88%
     ),
     radial-gradient(
-      44.8% 11.2% at 30% 44%,
+      53% 15.5% at 30% 44%,
       var(--c-banda-honda),
-      transparent 58%
+      transparent 90%
     ),
     radial-gradient(
-      35.4% 8.8% at 70% 66%,
+      43% 12.5% at 70% 66%,
       var(--c-banda-alta),
-      transparent 56%
+      transparent 88%
     ),
     radial-gradient(
-      41.7% 10.4% at 34% 84%,
+      50% 14.5% at 34% 84%,
       var(--c-banda-media),
-      transparent 58%
+      transparent 90%
     );
 }
 
