@@ -50,16 +50,21 @@
 
   /* Bandas diagonales. En claro son forzosamente más suaves que en oscuro:
      el fondo ya es casi blanco, así que todo lo que se le añade lo oscurece
-     y come contraste con el texto. La textura aquí la carga sobre todo el
-     grano, no el color.
+     y come contraste con el texto.
+
+     A diferencia de las auras, estas NO salen del acento: son grises cálidos
+     casi neutros. Con el terracota saturado que tenían antes, a esta escala
+     el fondo se leía como una mancha rosada —color que llama la atención—
+     en vez de como sombra. Desaturar es lo que las hace pasar por relieve y
+     no por tinte. Las auras siguen siendo las que ponen el color.
 
      Ojo con la intuición al ajustarlas: en oscuro, para que resalten menos
      se bajan las crestas y se ahonda el valle. Aquí NO — oscurecerlas sobre
      un fondo casi blanco las haría destacar más, que es lo contrario. Para
      que resalten menos en claro, hay que atenuarlas. */
-  --c-banda-alta:    rgba(176, 68, 38, 0.072);
-  --c-banda-media:   rgba(198, 126, 42, 0.062);
-  --c-banda-honda:   rgba(150, 96, 72, 0.045);
+  --c-banda-alta:    rgba(122, 100, 92, 0.055);
+  --c-banda-media:   rgba(142, 122, 100, 0.046);
+  --c-banda-honda:   rgba(112, 100, 96, 0.036);
 
   /* Vidrio: superficies flotantes translúcidas. El borde superior claro
      imita el reflejo especular que da volumen al material. */
@@ -104,9 +109,9 @@
      crestas cálidas llamaban demasiado la atención. Pesan poco y el valle
      pesa bastante, así que el campo tira a oscuro y el relieve se intuye
      en vez de imponerse. */
-  --c-banda-alta:    rgba(240, 120, 78, 0.135);
-  --c-banda-media:   rgba(255, 176, 90, 0.085);
-  --c-banda-honda:   rgba(6, 5, 9, 0.44);
+  --c-banda-alta:    rgba(240, 120, 78, 0.082);
+  --c-banda-media:   rgba(255, 176, 90, 0.052);
+  --c-banda-honda:   rgba(6, 5, 9, 0.52);
 
   --c-vidrio:        rgba(12, 14, 18, 0.80);
   --c-vidrio-brillo: rgba(255, 255, 255, 0.10);
@@ -126,18 +131,18 @@
    ya es casi blanco. */
 @media (max-width: 47.99rem) {
   :root {
-    --c-banda-alta:  rgba(176, 68, 38, 0.038);
-    --c-banda-media: rgba(198, 126, 42, 0.033);
-    --c-banda-honda: rgba(150, 96, 72, 0.024);
+    --c-banda-alta:  rgba(122, 100, 92, 0.03);
+    --c-banda-media: rgba(142, 122, 100, 0.026);
+    --c-banda-honda: rgba(112, 100, 96, 0.02);
   }
 
   [data-tema="dark"] {
-    --c-banda-alta:  rgba(240, 120, 78, 0.062);
-    --c-banda-media: rgba(255, 176, 90, 0.04);
+    --c-banda-alta:  rgba(240, 120, 78, 0.04);
+    --c-banda-media: rgba(255, 176, 90, 0.026);
     /* Los valles suben en vez de bajar: al oscurecer el campo compensan las
        crestas y conservan el rango entre claro y oscuro, que es lo que hace
        que se lea como relieve y no como una mancha. */
-    --c-banda-honda: rgba(6, 5, 9, 0.52);
+    --c-banda-honda: rgba(6, 5, 9, 0.58);
   }
 }
 
@@ -553,15 +558,17 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.075;
-  /* El mosaico sube a 220 px y la frecuencia baja a 0.7: el grano se ve más
-     grueso, como el de la referencia, y a esta opacidad un mosaico de 160
-     empezaba a delatar la repetición. */
+  opacity: 0.05;
+  /* El mosaico es de 220 px y la frecuencia de 0.7: grano grueso, de foto.
+     La opacidad bajó de 7.5% a 5% (13% a 8.5% en oscuro) al mismo tiempo
+     que el color de las bandas: cuando el degradado es muy tenue, el grano
+     pasa a ser lo que más textura aporta, y sostenerlo alto dejaba el fondo
+     igual de presente aunque el color ya no estuviera. */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 [data-tema="dark"] .grano {
-  opacity: 0.13;
+  opacity: 0.085;
 }
 
 @media (prefers-reduced-motion: reduce) {

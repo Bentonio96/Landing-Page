@@ -239,19 +239,20 @@ Peor caso actual, en los cuatro cruces de tema y ancho:
 | | Escritorio | Móvil |
 |---|---|---|
 | Claro | 4.80:1 | 4.80:1 |
-| Oscuro | 5.18:1 | 5.20:1 |
+| Oscuro | 5.66:1 | 5.55:1 |
 
 Sobre las auras hay además **paralaje**: la capa se desplaza unos píxeles en sentido contrario al puntero, lo que da sensación de profundidad. Se aplica como `transform` sobre la capa entera —no moviendo los centros de los gradientes— para que lo resuelva el compositor sin repintar el fondo, y el valor se escribe directo sobre el nodo con una ref, sin estado de React, para no disparar un render por evento. Se desactiva en pantallas táctiles y con `prefers-reduced-motion`.
 
 A propósito **no** hay un halo que siga al cursor: pasaría por encima del texto y le bajaría el contraste justo donde se está leyendo. El paralaje mueve auras ancladas a los bordes, que nunca invaden la columna de texto.
 
-Encima de todo va una capa de **grano**: un SVG de 220×220 con `feTurbulence`, embebido y repetido, al 7,5 % de opacidad (13 % en oscuro). Es lo que separa un degradado "de diseño" de una banda de color plana — rompe el bandeado y da textura. Va en su propia capa, quieta, porque un grano que se moviera con el paralaje delataría el truco. El mosaico es de 220 y no de 160 porque a esta opacidad uno más pequeño empezaba a delatar la repetición.
+Encima de todo va una capa de **grano**: un SVG de 220×220 con `feTurbulence`, embebido y repetido, al 5 % de opacidad (8,5 % en oscuro). La opacidad bajó junto con el color de las bandas: cuando el degradado es muy tenue, el grano pasa a ser lo que más textura aporta, y dejarlo alto mantenía el fondo igual de presente aunque el color ya no estuviera. Es lo que separa un degradado "de diseño" de una banda de color plana — rompe el bandeado y da textura. Va en su propia capa, quieta, porque un grano que se moviera con el paralaje delataría el truco. El mosaico es de 220 y no de 160 porque a esta opacidad uno más pequeño empezaba a delatar la repetición.
 
 ### Las bandas del fondo
 
 Sobre las auras van **bandas diagonales**, que es lo que da relieve —crestas y valles— en vez de un degradado plano. Tres decisiones:
 
 - **Dos capas cruzadas, no una.** Los degradados radiales de CSS son siempre paralelos a los ejes, así que la diagonal sale girando la capa entera. Con una sola capa el resultado son franjas paralelas, que se leen como un estampado de rayas; al superponer dos tramas en ángulos distintos (−18° y +26°) los máximos y mínimos se refuerzan en unos puntos y se cancelan en otros, y el recorrido acaba curvándose. Es lo más cerca que se llega de un *mesh gradient* sin salir de CSS ni pagar un filtro SVG a pantalla completa.
+- **En claro las bandas no salen del acento.** Son grises cálidos casi neutros, a diferencia de las auras. Con terracota saturado, a esta escala el fondo se leía como una mancha rosada —color, que llama la atención— en lugar de como sombra. Desaturar es lo que las hace pasar por relieve. Las auras siguen poniendo el color.
 - **Ajustar la intensidad va al revés en cada tema.** Para que las bandas resalten menos, en oscuro se bajan las crestas y se ahonda el valle — más oscuras es más discretas. En claro no: sobre un fondo casi blanco, oscurecerlas las haría destacar más, así que ahí lo que toca es atenuarlas. Es el error fácil al tocar estos tokens.
 - **Los valles son más oscuros que la base**, no solo hay crestas más claras. Sin eso solo se ven manchas sobre un fondo plano. En oscuro el token del valle es casi negro, así que donde cae, el texto *gana* contraste — por eso en móvil se sube el valle en lugar de bajarlo.
 - **Tamaños en porcentaje, no en `rem`.** Con medidas fijas, una elipse de 82rem cubre proporcionalmente mucho más de una pantalla de 390 px que de una de 1440, y la composición se descuadra justo donde hay menos margen.
