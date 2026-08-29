@@ -29,7 +29,12 @@
   --c-acento:        #B04426;  /*  5.4:1 sobre fondo — AA */
   --c-acento-hover:  #8E3418;
   --c-acento-sobre:  #FFFFFF;  /*  5.7:1 sobre acento — AA */
-  --c-acento-tenue:  rgba(176, 68, 38, 0.09);
+  /* Opaco, no translúcido: es el mismo tono que salía de mezclar el acento
+     al 9 % sobre el fondo, pero ya resuelto. Translúcido dejaba pasar las
+     bandas del fondo y el texto del chip perdía contraste según por dónde
+     cayera la banda — 4.41:1 medido sobre píxel real. Un chip es contenido,
+     no un control flotante: no tiene por qué depender de lo que hay detrás. */
+  --c-acento-tenue:  #F4EAE5;  /*  4.8:1 con el acento — AA */
   --c-sombra:        rgba(22, 24, 29, 0.07);
 
   /* Auras: gradientes muy tenues que dan profundidad al fondo.
@@ -40,6 +45,14 @@
   /* Halo del hero: más intenso porque cae en zona decorativa, detrás de la
      foto, donde no hay texto pequeño que pueda perder contraste. */
   --c-halo:          rgba(176, 68, 38, 0.20);
+
+  /* Bandas diagonales. En claro son forzosamente más suaves que en oscuro:
+     el fondo ya es casi blanco, así que todo lo que se le añade lo oscurece
+     y come contraste con el texto. La textura aquí la carga sobre todo el
+     grano, no el color. */
+  --c-banda-alta:    rgba(176, 68, 38, 0.19);
+  --c-banda-media:   rgba(198, 126, 42, 0.165);
+  --c-banda-honda:   rgba(150, 96, 72, 0.115);
 
   /* Vidrio: superficies flotantes translúcidas. El borde superior claro
      imita el reflejo especular que da volumen al material. */
@@ -57,13 +70,17 @@
   --c-elevado:       #1B1F27;
   --c-texto:         #EDEDEB;  /* 17.1:1 sobre fondo */
   --c-atenuado:      #9BA1AB;  /*  7.5:1 sobre fondo — AA */
-  --c-tenue:         #878D98;  /*  5.4:1 sobre superficie — AA */
+  /* Estaba calibrado sobre `superficie`, no sobre el fondo con auras. En
+     móvil, donde el texto ocupa todo el ancho y el fondo teñido queda justo
+     detrás, la metadata de las certificaciones caía a 4.33:1 — y venía así
+     desde antes de las bandas: el script solo medía 1440px y no lo veía. */
+  --c-tenue:         #8F95A0;  /*  4.8:1 sobre el fondo ya teñido — AA */
   --c-borde:         #242830;
   --c-borde-fuerte:  #363C47;
   --c-acento:        #F0784E;  /*  6.9:1 sobre fondo — AA */
   --c-acento-hover:  #FF9670;
   --c-acento-sobre:  #14100E;  /*  6.6:1 sobre acento — AA */
-  --c-acento-tenue:  rgba(240, 120, 78, 0.13);
+  --c-acento-tenue:  #2A1C1A;  /*  5.9:1 con el acento — AA */
   --c-sombra:        rgba(0, 0, 0, 0.4);
 
   /* En oscuro las auras necesitan algo más de cuerpo para leerse */
@@ -71,9 +88,48 @@
   --c-aura-ambar:    rgba(255, 176, 90, 0.14);
   --c-halo:          rgba(240, 120, 78, 0.30);
 
+  /* Aquí sí se puede empujar: sobre tinta, subir el color aclara el fondo
+     desde 17:1 de contraste, así que hay margen de sobra. Es el tema donde
+     el degradado se parece de verdad a la referencia.
+
+     `honda` es casi negra, no un tono cálido: en la referencia los valles
+     son MÁS oscuros que la base, y sin eso solo hay crestas sobre un fondo
+     plano. De paso, donde cae un valle el texto gana contraste. */
+  --c-banda-alta:    rgba(240, 120, 78, 0.38);
+  --c-banda-media:   rgba(255, 176, 90, 0.24);
+  --c-banda-honda:   rgba(6, 5, 9, 0.50);
+
   --c-vidrio:        rgba(12, 14, 18, 0.80);
   --c-vidrio-brillo: rgba(255, 255, 255, 0.10);
   --c-vidrio-borde:  rgba(255, 255, 255, 0.08);
+}
+
+/* En móvil las bandas bajan de intensidad, y no es un capricho: en pantalla
+   ancha el texto vive en una columna con márgenes anchos, y las crestas
+   caben en ese vacío. Por debajo de 768px la columna ocupa todo el ancho,
+   así que TODO lo que haga el fondo ocurre debajo del texto. Con los mismos
+   valores que en escritorio, el texto tenue caía a 4.46:1 en claro y 4.04:1
+   en oscuro, medido sobre píxel real.
+
+   En oscuro se bajan solo las crestas: `honda` es casi negra, así que
+   oscurece el fondo y ahí el contraste MEJORA. Bajarla sería trabajar en
+   contra. En claro baja todo, porque cualquier tinte oscurece un fondo que
+   ya es casi blanco. */
+@media (max-width: 47.99rem) {
+  :root {
+    --c-banda-alta:  rgba(176, 68, 38, 0.125);
+    --c-banda-media: rgba(198, 126, 42, 0.11);
+    --c-banda-honda: rgba(150, 96, 72, 0.075);
+  }
+
+  [data-tema="dark"] {
+    --c-banda-alta:  rgba(240, 120, 78, 0.15);
+    --c-banda-media: rgba(255, 176, 90, 0.095);
+    /* Los valles suben en vez de bajar: al oscurecer el campo compensan las
+       crestas y conservan el rango entre claro y oscuro, que es lo que hace
+       que se lea como relieve y no como una mancha. */
+    --c-banda-honda: rgba(6, 5, 9, 0.62);
+  }
 }
 
 @theme inline {
@@ -370,10 +426,10 @@
   z-index: -1;
   pointer-events: none;
   will-change: transform;
-  /* Ancladas a los bordes, con parte del círculo fuera de pantalla: el
-     color se ve intenso en los márgenes y cae antes de llegar a la columna
-     de texto. Centradas teñían el fondo bajo los textos pequeños y el
-     contraste real bajaba a 4.46:1, aunque axe no lo detectara. */
+  /* Las auras ancladas a los bordes siguen siendo la base: el color se ve
+     intenso en los márgenes y cae antes de llegar a la columna de texto.
+     Centradas teñían el fondo bajo los textos pequeños y el contraste real
+     bajaba a 4.46:1, aunque axe no lo detectara. */
   background:
     radial-gradient(
       46rem 34rem at 104% -10%,
@@ -389,6 +445,85 @@
       52rem 32rem at 50% 112%,
       var(--c-aura-calida),
       transparent 64%
+    );
+}
+
+/* Bandas diagonales encima de las auras: es lo que convierte un degradado
+   plano en algo con relieve, crestas y valles.
+
+   Los degradados radiales de CSS son siempre paralelos a los ejes, así que
+   la diagonal se consigue girando la capa entera. Van sobredimensionadas un
+   50 % para que al rotar no asomen las esquinas.
+
+   Son DOS capas cruzadas en ángulos distintos (-18° y +26°) a propósito.
+   Con una sola salen franjas paralelas, que se leen como un estampado de
+   rayas; al superponer dos tramas que no coinciden, los máximos y mínimos
+   se refuerzan en unos puntos y se cancelan en otros, y el recorrido acaba
+   curvándose. Es lo más cerca que se llega de un mesh gradient sin salir de
+   CSS ni pagar un filtro SVG a pantalla completa.
+
+   Las elipses son muy anchas y bajas: estiradas así dejan de leerse como
+   manchas redondas y pasan a leerse como franjas. El corte a 56-60 % (y no
+   a 70 %) es lo que les da borde: más allá, todo se funde en una nube. */
+.ambiente::before,
+.ambiente::after {
+  content: "";
+  position: absolute;
+  inset: -50%;
+}
+
+.ambiente::before {
+  transform: rotate(-18deg);
+  background:
+    radial-gradient(
+      43% 10.5% at 28% 12%,
+      var(--c-banda-alta),
+      transparent 58%
+    ),
+    radial-gradient(
+      36.5% 8.8% at 74% 31%,
+      var(--c-banda-media),
+      transparent 56%
+    ),
+    radial-gradient(
+      45.8% 12% at 36% 52%,
+      var(--c-banda-alta),
+      transparent 60%
+    ),
+    radial-gradient(
+      34.4% 9.6% at 80% 71%,
+      var(--c-banda-media),
+      transparent 56%
+    ),
+    radial-gradient(
+      40.6% 11.2% at 40% 88%,
+      var(--c-banda-honda),
+      transparent 58%
+    );
+}
+
+.ambiente::after {
+  transform: rotate(26deg);
+  background:
+    radial-gradient(
+      38.5% 9.6% at 62% 20%,
+      var(--c-banda-media),
+      transparent 56%
+    ),
+    radial-gradient(
+      44.8% 11.2% at 30% 44%,
+      var(--c-banda-honda),
+      transparent 58%
+    ),
+    radial-gradient(
+      35.4% 8.8% at 70% 66%,
+      var(--c-banda-alta),
+      transparent 56%
+    ),
+    radial-gradient(
+      41.7% 10.4% at 34% 84%,
+      var(--c-banda-media),
+      transparent 58%
     );
 }
 
@@ -409,12 +544,15 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.075;
+  /* El mosaico sube a 220 px y la frecuencia baja a 0.7: el grano se ve más
+     grueso, como el de la referencia, y a esta opacidad un mosaico de 160
+     empezaba a delatar la repetición. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 [data-tema="dark"] .grano {
-  opacity: 0.05;
+  opacity: 0.13;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -38,9 +38,17 @@ const navegador = await puppeteer.launch({
 
 let fallo = false;
 
+/* Se miden los dos anchos: las bandas del fondo son relativas al viewport,
+   así que en móvil caen en otro sitio y bajo otros textos. */
+const VISTAS = [
+  { nombre: "escritorio", width: 1440, height: 900 },
+  { nombre: "móvil", width: 390, height: 844 },
+];
+
+for (const vista of VISTAS)
 for (const tema of ["light", "dark"]) {
   const p = await navegador.newPage();
-  await p.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
+  await p.setViewport({ ...vista, deviceScaleFactor: 1 });
   await p.emulateMediaFeatures([
     { name: "prefers-color-scheme", value: tema },
     { name: "prefers-reduced-motion", value: "reduce" },
@@ -55,7 +63,7 @@ for (const tema of ["light", "dark"]) {
   );
   await new Promise((r) => setTimeout(r, 600));
 
-  console.log(`\n===== ${tema.toUpperCase()} =====`);
+  console.log(`\n===== ${tema.toUpperCase()} · ${vista.nombre} =====`);
   let peor = 99;
   let peorDato = null;
   let muestras = 0;

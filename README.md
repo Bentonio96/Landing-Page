@@ -230,13 +230,34 @@ Las auras del fondo destaparon un punto ciego que vale la pena documentar: **axe
 
 Pasó exactamente eso: con las auras centradas, axe daba 0 violaciones mientras el contraste real medido sobre los píxeles era de **4.46:1**. Por eso existe [`scripts/verificar-contraste.mjs`](scripts/verificar-contraste.mjs), que captura la pantalla, muestrea el color real justo encima de cada texto a lo largo de toda la página y sale con código 1 si algo baja de 4.5:1.
 
-La solución fue anclar las auras a los bordes —con parte del círculo fuera de pantalla— para que el color se vea intenso en los márgenes y caiga antes de llegar a la columna de texto, y oscurecer un punto el token `--c-tenue`. Peor caso actual: 4.76:1 en claro, 5.40:1 en oscuro.
+La solución fue anclar las auras a los bordes —con parte del círculo fuera de pantalla— para que el color se vea intenso en los márgenes y caiga antes de llegar a la columna de texto, y oscurecer un punto el token `--c-tenue`.
+
+El script tuvo después una segunda lección: **solo medía 1440 px**, y ahí se le escapaba un fallo que ya existía. En escritorio el texto vive en una columna con márgenes anchos y las crestas del fondo caben en ese vacío; por debajo de 768 px la columna ocupa todo el ancho, así que *todo* lo que hace el fondo ocurre debajo del texto. Medido a 390 px, la metadata de las certificaciones daba **4.33:1 en oscuro** — y venía así de antes, no lo introdujeron las bandas. Ahora el script recorre los dos anchos.
+
+Peor caso actual, en los cuatro cruces de tema y ancho:
+
+| | Escritorio | Móvil |
+|---|---|---|
+| Claro | 4.80:1 | 4.60:1 |
+| Oscuro | 4.65:1 | 4.91:1 |
 
 Sobre las auras hay además **paralaje**: la capa se desplaza unos píxeles en sentido contrario al puntero, lo que da sensación de profundidad. Se aplica como `transform` sobre la capa entera —no moviendo los centros de los gradientes— para que lo resuelva el compositor sin repintar el fondo, y el valor se escribe directo sobre el nodo con una ref, sin estado de React, para no disparar un render por evento. Se desactiva en pantallas táctiles y con `prefers-reduced-motion`.
 
 A propósito **no** hay un halo que siga al cursor: pasaría por encima del texto y le bajaría el contraste justo donde se está leyendo. El paralaje mueve auras ancladas a los bordes, que nunca invaden la columna de texto.
 
-Encima de todo va una capa de **grano**: un SVG de 160×160 con `feTurbulence`, embebido y repetido, al 3,5 % de opacidad (5 % en oscuro). Es lo que separa un degradado "de diseño" de una banda de color plana — rompe el bandeado y da textura. Va en su propia capa, quieta, porque un grano que se moviera con el paralaje delataría el truco.
+Encima de todo va una capa de **grano**: un SVG de 220×220 con `feTurbulence`, embebido y repetido, al 7,5 % de opacidad (13 % en oscuro). Es lo que separa un degradado "de diseño" de una banda de color plana — rompe el bandeado y da textura. Va en su propia capa, quieta, porque un grano que se moviera con el paralaje delataría el truco. El mosaico es de 220 y no de 160 porque a esta opacidad uno más pequeño empezaba a delatar la repetición.
+
+### Las bandas del fondo
+
+Sobre las auras van **bandas diagonales**, que es lo que da relieve —crestas y valles— en vez de un degradado plano. Tres decisiones:
+
+- **Dos capas cruzadas, no una.** Los degradados radiales de CSS son siempre paralelos a los ejes, así que la diagonal sale girando la capa entera. Con una sola capa el resultado son franjas paralelas, que se leen como un estampado de rayas; al superponer dos tramas en ángulos distintos (−18° y +26°) los máximos y mínimos se refuerzan en unos puntos y se cancelan en otros, y el recorrido acaba curvándose. Es lo más cerca que se llega de un *mesh gradient* sin salir de CSS ni pagar un filtro SVG a pantalla completa.
+- **Los valles son más oscuros que la base**, no solo hay crestas más claras. Sin eso solo se ven manchas sobre un fondo plano. En oscuro el token del valle es casi negro, así que donde cae, el texto *gana* contraste — por eso en móvil se sube el valle en lugar de bajarlo.
+- **Tamaños en porcentaje, no en `rem`.** Con medidas fijas, una elipse de 82rem cubre proporcionalmente mucho más de una pantalla de 390 px que de una de 1440, y la composición se descuadra justo donde hay menos margen.
+
+Las capas son `position: fixed`, así que se pintan una vez y no repintan al hacer scroll: **81 fps con la CPU a ×4**, sin coste de layout ni de recálculo de estilo.
+
+Un efecto lateral que valía la pena: los chips del stack usaban un fondo translúcido (`--c-acento-tenue`) y las bandas se transparentaban a través de ellos, bajando el texto a 4.41:1. Ahora el token es **opaco** —el mismo tono ya resuelto—, de modo que un chip no depende de lo que pase por detrás. Es coherente con la regla de forma del sitio: un chip es contenido, no un control flotante.
 
 El `<h1>` lleva un **degradado recortado al texto**, de la tinta al acento en diagonal. El punto más claro del recorrido es el propio acento (5.4:1 en claro, 6.9:1 en oscuro), muy por encima del 3:1 que pide AA para texto grande. Si el navegador no sabe hacer `background-clip: text`, cae al color sólido en vez de dejar el titular invisible.
 
