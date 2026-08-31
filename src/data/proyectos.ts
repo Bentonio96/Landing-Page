@@ -36,25 +36,6 @@ export const proyectos: Proyecto[] = [
     repoUrl: "https://github.com/Bentonio96/Epicentro",
   },
   {
-    slug: "atacama",
-    nombre: "Atacama",
-    descripcion: {
-      es: "Ensayo visual sobre el cielo de Atacama y la astronomía que ocurre bajo él. Siete capítulos que avanzan con el scroll, y una versión sin animaciones que cuenta lo mismo.",
-      en: "Visual essay on the Atacama sky and the astronomy that happens under it. Seven scroll-driven chapters, and a reduced-motion build that tells the same story.",
-    },
-    tecnologias: [
-      "React 19",
-      "TypeScript",
-      "Tailwind CSS",
-      "GSAP ScrollTrigger",
-      "D3",
-    ],
-    anio: "2026",
-    imagen: "/proyectos/atacama.jpg",
-    demoUrl: "https://atacama-puce.vercel.app",
-    repoUrl: "https://github.com/Bentonio96/Atacama",
-  },
-  {
     slug: "turnera",
     nombre: "Turnera",
     descripcion: {
