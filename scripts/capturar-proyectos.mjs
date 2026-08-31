@@ -29,6 +29,15 @@ const SITIOS = [
     espera: 4500,
   },
   {
+    // Narrativa con scroll: la apertura es un campo de estrellas en canvas
+    // seguido de un amanecer, así que necesita más margen que el resto para
+    // que la captura no lo agarre a medio camino.
+    slug: "atacama",
+    url: "https://atacama-puce.vercel.app",
+    tema: "dark",
+    espera: 6000,
+  },
+  {
     slug: "turnera",
     url: "https://turnera-iota.vercel.app",
     tema: "dark",
