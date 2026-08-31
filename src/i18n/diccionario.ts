@@ -43,7 +43,7 @@ const diccionario = {
       parrafos: [
         "Soy desarrollador frontend y analista de datos. Estoy terminando Ingeniería Civil en Informática en la Universidad Andrés Bello, egreso en noviembre de 2026, y hoy tomo proyectos freelance.",
         "Pasé un año y medio continuo en CMPC. Empecé como analista de datos armando tableros en Power BI, y después hice mi práctica en Cybersecurity Operations TI/OT, donde desarrollé el portal interno del área: definí la arquitectura de la interfaz, los flujos de navegación y la jerarquía visual de vistas con mucha densidad de información. Está en producción y el equipo lo usa a diario.",
-        "Entrego interfaces terminadas, no maquetas. Traduzco un diseño de Figma a una interfaz responsive y accesible, y defino la jerarquía visual cuando el diseño todavía no existe. Pruebo lo que suele quedar sin probar: cómo carga con conexión lenta, cómo se navega sin mouse y cómo se comporta en un teléfono modesto.",
+        "Entrego interfaces terminadas, no maquetas. Traduzco un diseño de Figma a una interfaz responsive y accesible, y defino la jerarquía visual cuando el diseño todavía no existe. Me aseguro de que el producto final se vea bien y se sienta sólido, tanto en lo visual como en lo técnico.",
         "El frontend es mi foco, pero no es mi único terreno. Si el proyecto necesita un tablero en Power BI, una app interna en Power Apps o un script en Python que ordene los datos antes de mostrarlos, también lo tomo. Haber trabajado de los dos lados me ayuda a construir interfaces que entienden de dónde vienen los datos que muestran.",
       ],
       idiomas: "Idiomas",
@@ -138,7 +138,7 @@ const diccionario = {
       parrafos: [
         "I'm a frontend developer and data analyst. I'm finishing a Computer Engineering degree at Universidad Andrés Bello in Santiago, graduating in November 2026, and I'm currently taking on freelance work.",
         "I spent a year and a half at CMPC. I started as a data analyst building Power BI dashboards, then did my internship in IT/OT Cybersecurity Operations, where I built the team's internal portal: I defined the interface architecture, the navigation flows and the visual hierarchy for very information-dense views. It's in production and the team uses it every day.",
-        "I ship finished interfaces, not mockups. I turn a Figma design into a responsive, accessible interface — and define the visual hierarchy myself when the design doesn't exist yet. I test what usually goes untested: how it loads on a slow connection, how it works without a mouse, and how it behaves on a modest phone.",
+        "I ship finished interfaces, not mockups. I turn a Figma design into a responsive, accessible interface — and define the visual hierarchy myself when the design doesn't exist yet. I make sure the final product looks good and feels solid, both visually and technically.",
         "Frontend is my focus, but it isn't my only ground. If a project needs a Power BI dashboard, an internal Power Apps tool, or a Python script to sort the data before it's displayed, I'll take that on too. Having worked on both sides helps me build interfaces that understand where their data comes from.",
       ],
       idiomas: "Languages",
