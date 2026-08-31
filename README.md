@@ -6,7 +6,7 @@ Español en `/`, inglés en `/en`, modo claro y oscuro, y todo el contenido en a
 **Lighthouse en producción:** 100 / 100 / 100 / 100 en escritorio · 96 / 100 / 100 / 100 en móvil
 **Accesibilidad:** 0 violaciones de axe-core (WCAG 2.1 AA) en las 5 pantallas auditadas
 
-![Hero en modo claro](docs/capturas/hero-claro.png)
+![Hero en modo claro](docs/capturas/hero-claro.jpg)
 
 ---
 
@@ -104,6 +104,12 @@ Regenerar las miniaturas de los proyectos capturando sus sitios en vivo:
 node scripts/capturar-proyectos.mjs
 ```
 
+Regenerar las capturas del README, con el sitio corriendo en `localhost:3001`:
+
+```bash
+node scripts/capturar-readme.mjs
+```
+
 Verificar el contraste real, con el sitio corriendo en `localhost:3001`:
 
 ```bash
@@ -116,37 +122,37 @@ node scripts/verificar-contraste.mjs
 
 | Claro | Oscuro |
 |---|---|
-| ![Hero claro](docs/capturas/hero-claro.png) | ![Hero oscuro](docs/capturas/hero-oscuro.png) |
+| ![Hero claro](docs/capturas/hero-claro.jpg) | ![Hero oscuro](docs/capturas/hero-oscuro.jpg) |
 
 **Sobre mí** — biografía, idiomas y certificaciones
 
-![Sobre mí](docs/capturas/sobre-mi.png)
+![Sobre mí](docs/capturas/sobre-mi.jpg)
 
 **Stack** — las herramientas principales van en acento; el resto, en neutro
 
-![Stack](docs/capturas/stack.png)
+![Stack](docs/capturas/stack.jpg)
 
 **Proyectos** — tarjetas con los dos enlaces, numeración editorial y chips de tecnología
 
-![Proyectos](docs/capturas/proyectos.png)
+![Proyectos](docs/capturas/proyectos.jpg)
 
 **Experiencia** — línea de tiempo con el hito actual acentuado
 
-![Experiencia](docs/capturas/experiencia.png)
+![Experiencia](docs/capturas/experiencia.jpg)
 
 **Inglés** (`/en`) — misma composición, `lang="en"`, hreflang cruzado
 
-![Versión en inglés](docs/capturas/ingles.png)
+![Versión en inglés](docs/capturas/ingles.jpg)
 
 **Contacto** — el CTA de correo sólido, el CV en variante de acento
 
-![Contacto](docs/capturas/contacto.png)
+![Contacto](docs/capturas/contacto.jpg)
 
 **Móvil** — 390 px, navegación en panel desplegable
 
 | Claro | Oscuro |
 |---|---|
-| ![Móvil claro](docs/capturas/movil-claro.png) | ![Móvil oscuro](docs/capturas/movil-oscuro.png) |
+| ![Móvil claro](docs/capturas/movil-claro.jpg) | ![Móvil oscuro](docs/capturas/movil-oscuro.jpg) |
 
 ---
 
