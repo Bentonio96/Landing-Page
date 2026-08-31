@@ -224,6 +224,10 @@ Tres detalles que hacen que el vidrio se lea como material y no como transparenc
 - **Reflejo especular** en el canto superior (`box-shadow: inset 0 1px 0`), que es lo que da sensación de volumen.
 - **Opacidad al 80 %**, no menos. Con el desenfoque aplicado sigue leyéndose como vidrio, y si el desenfoque falla en algún navegador el encabezado sigue siendo legible en vez de dejar el texto de la sección anterior chocando con el del nav.
 
+Las **auras** del fondo —tres gradientes radiales fijos detrás del contenido— son **grises neutros**. Empezaron saliendo del acento, pero a la escala a la que se extienden el terracota no se leía como sombra sino como una mancha de color, y el color llama la atención. En gris dan la misma profundidad sin teñir la página.
+
+El único color que queda en el fondo es el halo del hero, detrás de la foto. Al ser el único punto cálido refuerza la regla de un solo acento en vez de romperla, y cae en zona decorativa donde no hay texto pequeño que pueda perder contraste.
+
 ### El contraste que las auditorías no ven
 
 Las auras del fondo destaparon un punto ciego que vale la pena documentar: **axe no las detecta**. Calcula el fondo de un texto recorriendo sus ancestros, y las auras viven en una capa fija con `z-index` negativo que no es ancestro de nada. Se puede subir su intensidad, seguir viendo *0 violaciones* y aun así dejar texto por debajo de AA.
@@ -232,48 +236,32 @@ Pasó exactamente eso: con las auras centradas, axe daba 0 violaciones mientras 
 
 La solución fue anclar las auras a los bordes —con parte del círculo fuera de pantalla— para que el color se vea intenso en los márgenes y caiga antes de llegar a la columna de texto, y oscurecer un punto el token `--c-tenue`.
 
-El script tuvo después una segunda lección: **solo medía 1440 px**, y ahí se le escapaba un fallo que ya existía. En escritorio el texto vive en una columna con márgenes anchos y las crestas del fondo caben en ese vacío; por debajo de 768 px la columna ocupa todo el ancho, así que *todo* lo que hace el fondo ocurre debajo del texto. Medido a 390 px, la metadata de las certificaciones daba **4.33:1 en oscuro** — y venía así de antes, no lo introdujeron las bandas. Ahora el script recorre los dos anchos.
+El script tuvo después una segunda lección: **solo medía 1440 px**, y ahí se le escapaba un fallo que ya existía. En escritorio el texto vive en una columna con márgenes anchos y el fondo teñido cae sobre todo en ese vacío; por debajo de 768 px la columna ocupa todo el ancho, así que *todo* lo que hace el fondo ocurre debajo del texto. Medido a 390 px, la metadata de las certificaciones daba **4.33:1 en oscuro**. Ahora el script recorre los dos anchos, y `--c-tenue` está calibrado sobre el fondo con auras y no sobre `superficie`.
 
 Peor caso actual, en los cuatro cruces de tema y ancho:
 
 | | Escritorio | Móvil |
 |---|---|---|
 | Claro | 4.80:1 | 4.80:1 |
-| Oscuro | 5.66:1 | 5.55:1 |
+| Oscuro | 5.84:1 | 5.53:1 |
 
 Sobre las auras hay además **paralaje**: la capa se desplaza unos píxeles en sentido contrario al puntero, lo que da sensación de profundidad. Se aplica como `transform` sobre la capa entera —no moviendo los centros de los gradientes— para que lo resuelva el compositor sin repintar el fondo, y el valor se escribe directo sobre el nodo con una ref, sin estado de React, para no disparar un render por evento. Se desactiva en pantallas táctiles y con `prefers-reduced-motion`.
 
 A propósito **no** hay un halo que siga al cursor: pasaría por encima del texto y le bajaría el contraste justo donde se está leyendo. El paralaje mueve auras ancladas a los bordes, que nunca invaden la columna de texto.
 
-Encima de todo va una capa de **grano**: un SVG de 220×220 con `feTurbulence`, embebido y repetido, al 5 % de opacidad (8,5 % en oscuro). La opacidad bajó junto con el color de las bandas: cuando el degradado es muy tenue, el grano pasa a ser lo que más textura aporta, y dejarlo alto mantenía el fondo igual de presente aunque el color ya no estuviera. Es lo que separa un degradado "de diseño" de una banda de color plana — rompe el bandeado y da textura. Va en su propia capa, quieta, porque un grano que se moviera con el paralaje delataría el truco. El mosaico es de 220 y no de 160 porque a esta opacidad uno más pequeño empezaba a delatar la repetición.
+### El grano
 
-### Las bandas del fondo
+Encima de las auras va una capa de **grano**: un SVG de 300×300 con `feTurbulence`, embebido y repetido, al 7 % de opacidad (11 % en oscuro). Es lo que separa un degradado "de diseño" de una banda de color plana — rompe el bandeado y da textura.
 
-Sobre las auras van **bandas diagonales**, que es lo que da relieve —crestas y valles— en vez de un degradado plano. Tres decisiones:
+La frecuencia es baja (`0.42`) y usa 3 octavas, así que el ruido tiene grumos grandes en vez de polvo fino: con el fondo reducido a dos auras grises, el grano es lo que aporta casi toda la textura. El mosaico es de 300 px justamente por eso — con grumos grandes, uno pequeño delata la repetición.
 
-- **Dos capas cruzadas, no una.** Los degradados radiales de CSS son siempre paralelos a los ejes, así que la diagonal sale girando la capa entera. Con una sola capa el resultado son franjas paralelas, que se leen como un estampado de rayas; al superponer dos tramas en ángulos distintos (−18° y +26°) los máximos y mínimos se refuerzan en unos puntos y se cancelan en otros, y el recorrido acaba curvándose. Es lo más cerca que se llega de un *mesh gradient* sin salir de CSS ni pagar un filtro SVG a pantalla completa.
-- **En claro las bandas no salen del acento.** Son grises cálidos casi neutros, a diferencia de las auras. Con terracota saturado, a esta escala el fondo se leía como una mancha rosada —color, que llama la atención— en lugar de como sombra. Desaturar es lo que las hace pasar por relieve. Las auras siguen poniendo el color.
-- **Ajustar la intensidad va al revés en cada tema.** Para que las bandas resalten menos, en oscuro se bajan las crestas y se ahonda el valle — más oscuras es más discretas. En claro no: sobre un fondo casi blanco, oscurecerlas las haría destacar más, así que ahí lo que toca es atenuarlas. Es el error fácil al tocar estos tokens.
-- **Los valles son más oscuros que la base**, no solo hay crestas más claras. Sin eso solo se ven manchas sobre un fondo plano. En oscuro el token del valle es casi negro, así que donde cae, el texto *gana* contraste — por eso en móvil se sube el valle en lugar de bajarlo.
-- **Tamaños en porcentaje, no en `rem`.** Con medidas fijas, una elipse de 82rem cubre proporcionalmente mucho más de una pantalla de 390 px que de una de 1440, y la composición se descuadra justo donde hay menos margen.
-- **Caída larga.** El `transparent` de cada gradiente está al 88-92 % del radio, no al 56 %. Ahí estaba la diferencia entre bandas con borde visible —que se leen como un estampado— y un degradado que de verdad se difumina. Contraintuitivamente, difuminar más obliga a *bajar* la intensidad: al ensancharse, el tinte cubre más superficie aunque su pico sea menor.
-
-Las capas son `position: fixed`, así que se pintan una vez y no repintan al hacer scroll: **81 fps con la CPU a ×4**, sin coste de layout ni de recálculo de estilo.
-
-Un efecto lateral que valía la pena: los chips del stack usaban un fondo translúcido (`--c-acento-tenue`) y las bandas se transparentaban a través de ellos, bajando el texto a 4.41:1. Ahora el token es **opaco** —el mismo tono ya resuelto—, de modo que un chip no depende de lo que pase por detrás. Es coherente con la regla de forma del sitio: un chip es contenido, no un control flotante.
-
-El `<h1>` lleva un **degradado recortado al texto**, de la tinta al acento en diagonal. El punto más claro del recorrido es el propio acento (5.4:1 en claro, 6.9:1 en oscuro), muy por encima del 3:1 que pide AA para texto grande. Si el navegador no sabe hacer `background-clip: text`, cae al color sólido en vez de dejar el titular invisible.
-
-Las **tarjetas de proyecto** tienen borde degradado: dos fondos superpuestos —el color de la superficie recortado a la caja de relleno y un degradado cónico recortado a la del borde— con el ángulo registrado vía `@property` para que el navegador sepa interpolarlo. Gira al pasar el cursor **y al recibir foco**, así que también aparece navegando con teclado.
-
-Las **auras** son tres gradientes radiales fijos detrás del contenido. Ambos tonos salen del mismo acento —uno tal cual y otro girado hacia el ámbar— para no romper la regla de un solo color. Son gradientes de fondo y no un filtro de desenfoque, así que no cuestan recomposición. Viven en una capa con `z-index` negativo, lo que obliga a que el color de fondo esté en `<html>` y no en `<body>`.
+Va en su propia capa, quieta, porque un grano que se moviera con el paralaje delataría el truco.
 
 ### Lo que se mueve, y por qué
 
 Cinco interacciones, todas respetando `prefers-reduced-motion` y ninguna a costa de las métricas:
 
 - **Progreso de lectura.** Una barra de 3 px en el borde superior, con degradado del acento al ámbar. Va con `animation-timeline: scroll(root)`: sin JavaScript, sin escuchas de scroll y fuera del hilo principal. Es decorativa —no aporta nada que la barra de desplazamiento no diga ya— así que se oculta a lectores de pantalla.
-
 
 - **Miniaturas de proyecto.** Cada tarjeta muestra una captura del sitio real, generada por [`scripts/capturar-proyectos.mjs`](scripts/capturar-proyectos.mjs) desde la demo en producción, así que no se desactualizan a mano. Se ven siempre, no al pasar el cursor: esconder la captura tras un hover dejaría fuera a quien entra desde un teléfono, y es justo lo que alguien quiere ver antes de decidir si abre el proyecto. Lo que reacciona es un acercamiento discreto. Las tres cargan en diferido — la sección queda bajo el pliegue en todos los tamaños, así que precargarlas solo le quitaría ancho de banda a la foto del hero, que sí es el elemento LCP.
 
