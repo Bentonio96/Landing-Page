@@ -20,8 +20,8 @@ export const proyectos: Proyecto[] = [
     slug: "epicentro",
     nombre: "Epicentro",
     descripcion: {
-      es: "Rastreador de sismos en Chile en tiempo casi real con datos del USGS. El mapa es el hero: MapLibre a pantalla completa sincronizado con un listado recorrible por teclado.",
-      en: "Near real-time earthquake tracker for Chile using USGS data. The map is the hero: full-screen MapLibre synced with a keyboard-navigable listing.",
+      es: "Rastreador de sismos en Chile en tiempo real con datos del USGS. Mapa, estadísticas de los últimos 30 días y un listado que funciona entero con teclado y lector de pantalla.",
+      en: "Real-time earthquake tracker for Chile using USGS data. A map, thirty-day statistics, and a listing that works end to end with a keyboard and a screen reader.",
     },
     tecnologias: [
       "Next.js 15",
