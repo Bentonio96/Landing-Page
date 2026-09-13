@@ -30,8 +30,8 @@ export const experiencia: Hito[] = [
     periodo: { es: "Enero — Junio 2026", en: "January — June 2026" },
     lugar: "Santiago, Chile · Híbrido",
     descripcion: {
-      es: "Desarrollé el portal interno del área con Power Pages y Power Apps, desde el diseño de la interfaz hasta su puesta en marcha; hoy sigue en uso. Automaticé reportes en Power BI sobre los tickets de IBM BMC Helix, y monitoreé incidentes con CrowdStrike Falcon bajo marcos ITIL.",
-      en: "Built the team's internal portal with Power Pages and Power Apps, from interface design through to launch; it's still in use today. Automated Power BI reporting over IBM BMC Helix tickets, and monitored incidents with CrowdStrike Falcon under ITIL frameworks.",
+      es: "Desarrollé el portal interno del área con Power Pages y Power Apps, desde el diseño de la interfaz hasta su puesta en marcha. Automaticé reportes en Power BI sobre los tickets de IBM BMC Helix, y monitoreé incidentes con CrowdStrike Falcon bajo marcos ITIL.",
+      en: "Built the team's internal portal with Power Pages and Power Apps, from interface design through to launch. Automated Power BI reporting over IBM BMC Helix tickets, and monitored incidents with CrowdStrike Falcon under ITIL frameworks.",
     },
   },
   {

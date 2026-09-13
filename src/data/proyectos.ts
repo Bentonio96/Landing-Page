@@ -80,8 +80,8 @@ export const proyectos: Proyecto[] = [
     slug: "portal-ciberoperaciones",
     nombre: "Portal de Ciberoperaciones",
     descripcion: {
-      es: "Portal interno de CMPC que centraliza la operación diaria del área y funciona como catálogo de servicios para incidentes de TI y OT. En uso desde 2026.",
-      en: "Internal CMPC portal that centralises the team's daily operation and works as a service catalogue for IT and OT incidents. In production since 2026.",
+      es: "Portal interno de CMPC que centraliza la operación diaria del área y funciona como catálogo de servicios para incidentes de TI y OT.",
+      en: "Internal CMPC portal that centralises the team's daily operation and works as a service catalogue for IT and OT incidents.",
     },
     tecnologias: [
       "Power Pages",
