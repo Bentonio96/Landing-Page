@@ -1,7 +1,6 @@
 import type { Idioma } from "@/types";
 import type { Diccionario } from "@/i18n/diccionario";
 import { proyectos } from "@/data/proyectos";
-import { Reveal } from "@/components/ui/Reveal";
 import { Seccion } from "@/components/ui/Seccion";
 import { TarjetaProyecto } from "@/components/ui/TarjetaProyecto";
 import { ResaltableProyecto } from "@/components/ui/ResaltableProyecto";
@@ -20,20 +19,17 @@ export function Proyectos({ idioma, t }: Props) {
       {proyectos.length === 0 ? (
         <p className="text-guia text-atenuado">{t.proyectos.vacio}</p>
       ) : (
-        <ul className="border-t border-borde">
+        <ul data-trazo="" className="trazo-superior">
           {proyectos.map((proyecto, i) => (
-            <li key={proyecto.slug} className="border-b border-borde">
-              <Reveal>
-                <ResaltableProyecto tecnologias={proyecto.tecnologias}>
-                  <TarjetaProyecto
-                    proyecto={proyecto}
-                    idioma={idioma}
-                    t={t}
-                    indice={String(i + 1).padStart(2, "0")}
-                    invertida={i % 2 === 1}
-                  />
-                </ResaltableProyecto>
-              </Reveal>
+            <li key={proyecto.slug} data-trazo="" className="trazo-inferior">
+              <ResaltableProyecto tecnologias={proyecto.tecnologias}>
+                <TarjetaProyecto
+                  proyecto={proyecto}
+                  idioma={idioma}
+                  t={t}
+                  invertida={i % 2 === 1}
+                />
+              </ResaltableProyecto>
             </li>
           ))}
         </ul>

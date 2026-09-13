@@ -28,7 +28,7 @@ Paleta tomada del CV, titulares de cartel, scroll suave con Lenis y animaciones 
 ## Cómo agregar un proyecto
 
 Se edita **un solo archivo**: [`src/data/proyectos.ts`](src/data/proyectos.ts).
-Nada más. La grilla, la numeración, las animaciones y los enlaces se ajustan solos.
+Nada más. La grilla, las animaciones y los enlaces se ajustan solos.
 
 ```ts
 {
@@ -39,7 +39,7 @@ Nada más. La grilla, la numeración, las animaciones y los enlaces se ajustan s
     en: "Near real-time earthquake tracker for Chile using USGS data.",
   },
   tecnologias: ["Next.js 15", "TypeScript", "Tailwind CSS", "MapLibre"],
-  anio: "2026",
+  fecha: { es: "Agosto 2026", en: "August 2026" },   // mes y año
   demoUrl: "https://epicentro-sigma.vercel.app",         // ← opcional
   repoUrl: "https://github.com/Bentonio96/Epicentro",    // ← opcional
 }
@@ -203,7 +203,7 @@ Todos los pares cumplen **WCAG AA**, calculados sobre los valores exactos y medi
 | Fondo | `#F6F7F9` | `#0E1117` | — |
 | Texto | `#0E1117` | `#F1F3F7` | 17.6:1 / 17.0:1 |
 | Atenuado | `#414A58` | `#AFB7C4` | 8.4:1 / 9.4:1 |
-| Tenue | `#5D6675` | `#8B94A3` | 5.4:1 / 6.2:1 |
+| Tenue | `#555E6C` | `#8B94A3` | 6.1:1 / 6.2:1 |
 | **Acento** (texto) | `#4335C9` | `#A79BFF` | 7.6:1 / 7.9:1 |
 | Acento vivo (rellenos) | `#6C5CFF` | `#6C5CFF` | solo decorativo |
 
@@ -233,6 +233,8 @@ Todo lo que se mueve con el scroll vive en [`src/components/Movimiento.tsx`](src
 - **Cita** cuyas palabras pasan de gris a su color al ritmo de la lectura: una custom property `--p` que GSAP lleva de 0 a 1, con los dos extremos dentro de AA.
 - **Capturas de proyecto en 3D**: llegan tumbadas hacia atrás y giradas hacia el texto, y se enderezan al subir; con ratón, además se inclinan hacia el cursor con un brillo que lo sigue. Son tres capas —perspectiva, giro de scroll, giro de puntero— porque cada una tiene su propio dueño del `transform`.
 - **Píldoras del stack** que caen en cascada.
+- **Reglas capilares que se dibujan** de izquierda a derecha al entrar, y **subrayado de la cita** que se traza con el scroll, línea por línea. Son fondos de 1 px movidos por una custom property `--trazo` y no bordes: un borde no se puede dibujar a medias.
+- **Filas que entran escalonadas**: en proyectos (fecha, nombre, descripción, tecnologías, enlaces), en experiencia (dónde, cuándo, qué) y en contacto, desde la izquierda.
 
 Cuatro reglas que conviene no deshacer:
 
@@ -272,6 +274,8 @@ Sobre el fondo va una capa de **grano**: un SVG de 300×300 con `feTurbulence`, 
 - **Cruce entre Stack y Proyectos.** Apuntar una tecnología del stack enmarca en violeta las capturas de los proyectos que la usan; apuntar o **enfocar** un proyecto resalta sus tecnologías. El resalte suma en vez de atenuar el resto, que bajaría el contraste.
 - **Capturas en grises** que recuperan el color al apuntar la fila, solo con puntero fino: en un teléfono no hay hover y dejarlas grises escondería lo que se viene a ver. Las genera [`scripts/capturar-proyectos.mjs`](scripts/capturar-proyectos.mjs) desde cada demo en producción.
 - **Transición de tema.** El tema nuevo se abre en círculo desde el botón, con la View Transitions API.
+- **Barrido en los botones.** Al apuntar, el color del botón entra de izquierda a derecha y el texto pasa al color contrario; al salir, se va por la derecha. Es CSS puro (`.boton-barrido`) y va fuera de `@layer`: las utilidades de Tailwind viven en una capa que le gana a `components` sin importar la especificidad.
+- **El correo copia en escritorio.** Un `mailto:` sin app de correo configurada —lo normal en Windows— abre una pestaña en blanco. Con ratón, la fila de correo copia la dirección y avisa; en el teléfono sigue abriendo la app de correo. El icono y el texto para lectores de pantalla cambian con la misma media query (`pointer: fine`).
 
 ### Rendimiento
 

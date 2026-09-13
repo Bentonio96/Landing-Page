@@ -11,8 +11,6 @@ type Props = {
   proyecto: Proyecto;
   idioma: Idioma;
   t: Diccionario;
-  /** Número editorial mostrado junto al año, p.ej. "01". */
-  indice: string;
   /** Pone la captura a la derecha en escritorio, para alternar filas. */
   invertida?: boolean;
 };
@@ -38,10 +36,9 @@ export function TarjetaProyecto({
   proyecto,
   idioma,
   t,
-  indice,
   invertida = false,
 }: Props) {
-  const { nombre, descripcion, tecnologias, demoUrl, repoUrl, anio, imagen } =
+  const { nombre, descripcion, tecnologias, demoUrl, repoUrl, fecha, imagen } =
     proyecto;
   const idTitulo = `proyecto-${proyecto.slug}-titulo`;
   const tieneEnlaces = Boolean(demoUrl ?? repoUrl);
@@ -100,7 +97,10 @@ export function TarjetaProyecto({
         </div>
       ) : null}
 
+      {/* Los hijos de esta columna entran uno detrás de otro (Movimiento.tsx,
+          data-escalonar): fecha, nombre, descripción, tecnologías, enlaces. */}
       <div
+        data-escalonar=""
         className={cn(
           soloTexto
             ? "mx-auto max-w-2xl"
@@ -110,15 +110,7 @@ export function TarjetaProyecto({
               ),
         )}
       >
-        <p
-          className={cn(
-            "etiqueta flex items-baseline gap-3",
-            soloTexto && "justify-center",
-          )}
-        >
-          <span aria-hidden="true">{indice}</span>
-          {anio ? <span>{anio}</span> : null}
-        </p>
+        {fecha ? <p className="etiqueta">{fecha[idioma]}</p> : null}
 
         <h3 id={idTitulo} className="mt-5 font-display text-t2 font-normal uppercase">
           {nombre}
@@ -145,10 +137,13 @@ export function TarjetaProyecto({
         ) : null}
 
         {tieneEnlaces ? (
+          // Margen negativo del mismo tamaño que el relleno de los enlaces:
+          // el barrido de color necesita aire alrededor del texto, pero el
+          // texto tiene que seguir alineado con la descripción de arriba.
           <div
             className={cn(
-              "mt-8 flex flex-wrap gap-x-8 gap-y-3",
-              soloTexto && "justify-center",
+              "mt-8 flex flex-wrap gap-x-4 gap-y-3",
+              soloTexto ? "justify-center" : "-mx-3",
             )}
           >
             {demoUrl ? (

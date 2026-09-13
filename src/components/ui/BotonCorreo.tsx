@@ -17,15 +17,15 @@ type Props = {
 
 // Mismas clases que Boton: los dos conviven lado a lado y deben medir igual.
 const base =
-  "group/boton inline-flex items-center justify-center gap-2 rounded-control " +
+  "boton-barrido group/boton inline-flex items-center justify-center gap-2 rounded-control " +
   "border px-6 py-3.5 font-mono text-etiqueta uppercase tracking-[0.12em] " +
-  "transition-colors duration-200 " +
   "focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-acento";
 
 const variantes = {
   primario:
-    "border-texto bg-texto text-fondo hover:border-acento hover:bg-acento hover:text-acentosobre",
-  secundario: "border-bordefuerte text-texto hover:border-texto",
+    "border-texto bg-texto text-fondo [--barrido:var(--c-acento)] [--barrido-texto:var(--c-acento-sobre)]",
+  secundario:
+    "border-bordefuerte text-texto [--barrido:var(--c-texto)] [--barrido-texto:var(--c-fondo)]",
 } as const;
 
 /**

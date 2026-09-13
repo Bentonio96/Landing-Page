@@ -1,12 +1,20 @@
 import type { LucideIcon } from "lucide-react";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Copy } from "lucide-react";
 import type { Diccionario } from "@/i18n/diccionario";
 import { perfil } from "@/data/perfil";
 import { BotonCorreo } from "@/components/ui/BotonCorreo";
+import { EnlaceCorreo } from "@/components/ui/EnlaceCorreo";
 import { Reveal } from "@/components/ui/Reveal";
 import { Seccion } from "@/components/ui/Seccion";
 
 type Props = { t: Diccionario };
+
+const claseFila =
+  "group grid grid-cols-[4.5rem_1fr_auto] items-center gap-4 py-5 transition-colors sm:grid-cols-[6.5rem_1fr_auto]";
+const claseValor =
+  "break-words text-base text-texto transition-colors group-hover:text-acento sm:text-lg";
+const claseIcono =
+  "size-4 text-tenue transition-[color,transform] duration-200 group-hover:text-acento group-hover:translate-x-0.5 group-hover:-translate-y-0.5";
 
 type Fila = {
   id: string;
@@ -87,32 +95,52 @@ export function Contacto({ t }: Props) {
         {/* Filas enteras pulsables, como un índice: la etiqueta a la
             izquierda, el dato y la flecha que indica qué pasa al pulsar. */}
         <Reveal retardo={0.08} className="md:col-span-6 md:col-start-7">
-          <ul className="border-t border-borde">
+          <ul data-trazo="" data-escalonar="x" className="trazo-superior">
             {filas.map(
               ({ id, etiqueta, valor, href, icono: Icono, externo, descargar }) => (
-                <li key={id} className="border-b border-borde">
-                  <a
-                    href={href}
-                    {...(externo
-                      ? { target: "_blank", rel: "noopener noreferrer" }
-                      : {})}
-                    {...(descargar ? { download: "" } : {})}
-                    className="group grid grid-cols-[4.5rem_1fr_auto] items-center gap-4 py-5 transition-colors sm:grid-cols-[6.5rem_1fr_auto]"
-                  >
-                    <span className="etiqueta">{etiqueta}</span>
-                    <span className="break-words text-base text-texto transition-colors group-hover:text-acento sm:text-lg">
-                      {valor}
-                    </span>
-                    <Icono
-                      aria-hidden="true"
-                      className="size-4 text-tenue transition-[color,transform] duration-200 group-hover:text-acento group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    />
-                    {externo ? (
-                      <span className="sr-only">
-                        {t.proyectos.enlaceExterno}
+                <li key={id} data-trazo="" className="trazo-inferior">
+                  {id === "email" ? (
+                    // En escritorio copia en vez de abrir un mailto: que sin
+                    // app de correo deja una pestaña en blanco (EnlaceCorreo).
+                    <EnlaceCorreo
+                      email={perfil.email}
+                      avisoCopiado={t.contacto.correoCopiado}
+                      avisoFallo={t.contacto.correoFallo}
+                      className={claseFila}
+                    >
+                      <span className="etiqueta">{etiqueta}</span>
+                      <span className={claseValor}>{valor}</span>
+                      <Copy
+                        aria-hidden="true"
+                        className={`${claseIcono} hidden pointer-fine:block`}
+                      />
+                      <Icono
+                        aria-hidden="true"
+                        className={`${claseIcono} pointer-fine:hidden`}
+                      />
+                      <span className="sr-only hidden pointer-fine:inline">
+                        {t.contacto.correoFilaCopia}
                       </span>
-                    ) : null}
-                  </a>
+                    </EnlaceCorreo>
+                  ) : (
+                    <a
+                      href={href}
+                      {...(externo
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
+                      {...(descargar ? { download: "" } : {})}
+                      className={claseFila}
+                    >
+                      <span className="etiqueta">{etiqueta}</span>
+                      <span className={claseValor}>{valor}</span>
+                      <Icono aria-hidden="true" className={claseIcono} />
+                      {externo ? (
+                        <span className="sr-only">
+                          {t.proyectos.enlaceExterno}
+                        </span>
+                      ) : null}
+                    </a>
+                  )}
                 </li>
               ),
             )}

@@ -23,8 +23,11 @@ export type Proyecto = {
   demoUrl?: string;
   /** URL del repositorio. Si falta, no se muestra el botón "Ver código". */
   repoUrl?: string;
-  /** Año o rango, se muestra como metadato discreto. */
-  anio?: string;
+  /**
+   * Cuándo se hizo, como mes y año ("Agosto 2026") o rango de meses. Va por
+   * idioma porque el mes se traduce. Se muestra como metadato discreto.
+   */
+  fecha?: Texto;
   /**
    * Miniatura del proyecto, relativa a /public. La genera
    * scripts/capturar-proyectos.mjs desde el sitio en vivo. Si falta, la

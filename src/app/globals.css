@@ -30,7 +30,9 @@
   --c-elevado:       #ECEEF2;
   --c-texto:         #0E1117;  /* 17.6:1 sobre fondo */
   --c-atenuado:      #414A58;  /*  8.4:1 sobre fondo — AA */
-  --c-tenue:         #5D6675;  /*  5.4:1 sobre fondo — AA */
+  /* Más oscuro que el gris del CV (#5D6675): en la banda alterna del stack,
+     con el grano encima, ese gris bajaba a 4.49:1 medido sobre píxel real. */
+  --c-tenue:         #555E6C;  /*  6.1:1 sobre fondo — AA */
   --c-cita:          #1B212B;
   --c-borde:         #E0E3E9;
   --c-borde-fuerte:  #C6CDD8;
@@ -266,16 +268,90 @@
     background-size: 100% 1px;
   }
 
-  /* Subrayado grueso de la cita. Es un text-decoration y no un borde: así
-     sigue a cada línea cuando la frase resaltada se parte en dos. */
+  /* Subrayado grueso de la cita, dibujado con un fondo y no con
+     text-decoration: un subrayado nativo no se puede recortar, y este se
+     traza de izquierda a derecha con el scroll (--trazo, de 0 a 1).
+
+     Va con box-decoration-break en `slice`, el valor por defecto: el fondo
+     se calcula como si las líneas de la frase fueran una sola tira, así que
+     el trazo recorre la primera línea entera antes de empezar la segunda,
+     como una mano que subraya. Con `clone` las dos se dibujarían a la vez.
+     Sin JavaScript --trazo vale 1 y el subrayado está completo. */
   .subrayado-cita {
     color: var(--c-texto);
-    text-decoration-line: underline;
-    text-decoration-color: var(--c-acento-vivo);
-    text-decoration-thickness: 0.07em;
-    text-underline-offset: 0.1em;
-    text-decoration-skip-ink: none;
+    background-image: linear-gradient(var(--c-acento-vivo), var(--c-acento-vivo));
+    background-repeat: no-repeat;
+    background-position: 0 88%;
+    background-size: calc(var(--trazo, 1) * 100%) 0.07em;
   }
+
+  /* Reglas capilares que se dibujan al entrar (Movimiento.tsx lleva
+     --trazo de 0 a 1). Son fondos de 1 px y no bordes por lo mismo que el
+     subrayado: un borde no se puede dibujar a medias. */
+  .trazo-superior,
+  .trazo-inferior {
+    background-image: linear-gradient(var(--c-borde), var(--c-borde));
+    background-repeat: no-repeat;
+    background-size: calc(var(--trazo, 1) * 100%) 1px;
+  }
+
+  .trazo-superior {
+    background-position: 0 0;
+  }
+
+  .trazo-inferior {
+    background-position: 0 100%;
+  }
+}
+
+/* ============================================================
+   BARRIDO EN LOS BOTONES
+
+   Al apuntar, el color del botón entra de izquierda a derecha y el texto
+   pasa al color contrario. Al salir, el barrido se va por la derecha en vez
+   de deshacerse hacia atrás: se lee como un gesto que atraviesa el botón.
+
+   Cada variante define --barrido (el color que entra) y --barrido-texto
+   (el color del texto encima). Ambos pares cumplen AA: tinta sobre papel y
+   el violeta de texto con su color de contraste.
+
+   Va fuera de @layer a propósito. Las utilidades de Tailwind (text-fondo,
+   border-…) viven en la capa utilities, que le gana a components sin
+   importar la especificidad; solo el CSS sin capa les gana a ellas.
+   ============================================================ */
+
+.boton-barrido {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    color 0.45s var(--ease-salida),
+    border-color 0.45s var(--ease-salida);
+}
+
+/* El barrido va con z-index -1 dentro del contexto que crea isolation: así
+   queda encima del fondo propio del botón y debajo del texto. */
+.boton-barrido::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--barrido);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.55s var(--ease-salida);
+}
+
+.boton-barrido:hover,
+.boton-barrido:focus-visible {
+  color: var(--barrido-texto);
+  border-color: var(--barrido);
+}
+
+.boton-barrido:hover::before,
+.boton-barrido:focus-visible::before {
+  transform: scaleX(1);
+  transform-origin: left center;
 }
 
 /* ============================================================

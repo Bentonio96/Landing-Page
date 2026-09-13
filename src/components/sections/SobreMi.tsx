@@ -55,7 +55,9 @@ export function SobreMi({ idioma, t }: Props) {
             spans, así que la frase se lee y se copia entera. */}
         <p data-cita-scroll="" className="font-display text-t1 uppercase text-cita">
           {enPalabras(cita.antes)}
-          <span className="subrayado-cita">{enPalabras(cita.resaltado)}</span>
+          <span data-subrayado="" className="subrayado-cita">
+            {enPalabras(cita.resaltado)}
+          </span>
           {enPalabras(cita.despues)}
         </p>
         <p className="etiqueta mt-8">{cita.pie}</p>
@@ -74,11 +76,12 @@ export function SobreMi({ idioma, t }: Props) {
         >
           <div>
             <h3 className="etiqueta text-texto">{t.sobreMi.idiomas}</h3>
-            <dl className="mt-5 border-t border-borde">
+            <dl data-trazo="" className="trazo-superior mt-5">
               {idiomasHablados.map((item) => (
                 <div
                   key={item.nombre.es}
-                  className="flex items-baseline justify-between gap-4 border-b border-borde py-4"
+                  data-trazo=""
+                  className="trazo-inferior flex items-baseline justify-between gap-4 py-4"
                 >
                   <dt className="text-lg font-light">{item.nombre[idioma]}</dt>
                   <dd className="font-mono text-etiqueta text-tenue">
@@ -91,9 +94,9 @@ export function SobreMi({ idioma, t }: Props) {
 
           <div>
             <h3 className="etiqueta text-texto">{t.sobreMi.certificaciones}</h3>
-            <ul className="mt-5 border-t border-borde">
+            <ul data-trazo="" className="trazo-superior mt-5">
               {certificaciones.map((cert) => (
-                <li key={cert.nombre} className="border-b border-borde py-4">
+                <li key={cert.nombre} data-trazo="" className="trazo-inferior py-4">
                   <span className="block text-lg font-light">{cert.nombre}</span>
                   <span className="mt-1 block font-mono text-etiqueta text-tenue">
                     {cert.emisor} · {cert.fecha[idioma]}

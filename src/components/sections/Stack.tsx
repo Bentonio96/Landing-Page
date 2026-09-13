@@ -19,10 +19,13 @@ export function Stack({ idioma, t }: Props) {
     >
       {/* Una fila por categoría separada por reglas capilares, con el nombre
           a la izquierda y las tecnologías a la derecha. */}
-      <div className="border-t border-borde">
+      <div data-trazo="" className="trazo-superior">
         {stack.map((categoria, i) => (
           <Reveal key={categoria.id} retardo={i * 0.06}>
-            <div className="grid gap-5 border-b border-borde py-8 md:grid-cols-12 md:gap-x-canal md:py-10">
+            <div
+              data-trazo=""
+              className="trazo-inferior grid gap-5 py-8 md:grid-cols-12 md:gap-x-canal md:py-10"
+            >
               <h3 className="flex items-baseline gap-4 text-t3 md:col-span-4">
                 <span aria-hidden="true" className="font-mono text-etiqueta text-tenue">
                   {String(i + 1).padStart(2, "0")}

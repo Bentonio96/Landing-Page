@@ -85,6 +85,45 @@ export function Movimiento() {
           });
         });
 
+        // --- Hijos que entran uno detrás de otro ------------------------
+        // data-escalonar="x" los trae desde la izquierda; vacío, desde abajo.
+        gsap.utils.toArray<HTMLElement>("[data-escalonar]").forEach((grupo) => {
+          const horizontal = grupo.dataset.escalonar === "x";
+          gsap.from(grupo.children, {
+            ...(horizontal ? { x: -40 } : { y: 40 }),
+            duration: 1.1,
+            ease: "expo.out",
+            stagger: 0.09,
+            scrollTrigger: { trigger: grupo, start: "top 88%", once: true },
+          });
+        });
+
+        // --- Reglas capilares que se dibujan ----------------------------
+        // Mueven --trazo, que es el ancho del fondo de 1 px que hace de
+        // línea (ver .trazo-superior en globals.css).
+        gsap.utils.toArray<HTMLElement>("[data-trazo]").forEach((linea) => {
+          gsap.fromTo(
+            linea,
+            { "--trazo": 0 },
+            {
+              "--trazo": 1,
+              duration: 1.6,
+              ease: "expo.inOut",
+              scrollTrigger: { trigger: linea, start: "top 92%", once: true },
+            },
+          );
+        });
+
+        gsap.utils.toArray<HTMLElement>("[data-regla]").forEach((regla) => {
+          gsap.from(regla, {
+            scaleX: 0,
+            duration: 1.2,
+            ease: "expo.out",
+            delay: 0.2,
+            scrollTrigger: { trigger: regla, start: "top 90%", once: true },
+          });
+        });
+
         // --- Titulares de sección: palabras que giran en 3D -------------
         gsap.utils.toArray<HTMLElement>("[data-titular-3d]").forEach((titular) => {
           gsap.from(titular.querySelectorAll(".palabra"), {
@@ -129,6 +168,21 @@ export function Movimiento() {
               scrollTrigger: { trigger: cita, start: "top 82%", end: "bottom 50%", scrub: 0.4 },
             },
           );
+
+          // El subrayado se traza detrás de las palabras, cuando la frase
+          // ya está casi encendida: primero se lee, después se subraya.
+          const subrayado = cita.querySelector("[data-subrayado]");
+          if (subrayado) {
+            gsap.fromTo(
+              subrayado,
+              { "--trazo": 0 },
+              {
+                "--trazo": 1,
+                ease: "none",
+                scrollTrigger: { trigger: cita, start: "top 60%", end: "bottom 40%", scrub: 0.5 },
+              },
+            );
+          }
         }
 
         // --- Stack: las píldoras caen en cascada ------------------------

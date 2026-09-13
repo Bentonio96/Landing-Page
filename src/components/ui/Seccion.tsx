@@ -48,7 +48,12 @@ export function Seccion({
             <span aria-hidden="true">{numero}</span>
             <span>{etiqueta}</span>
           </p>
-          <span aria-hidden="true" className="mt-4 block h-px w-8 bg-acentovivo" />
+          {/* Se estira desde la izquierda al entrar (Movimiento.tsx). */}
+          <span
+            aria-hidden="true"
+            data-regla=""
+            className="mt-4 block h-px w-8 origin-left bg-acentovivo"
+          />
         </Reveal>
 
         {/* Las palabras se parten aquí, en el servidor, y no con SplitText

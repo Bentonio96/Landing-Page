@@ -90,6 +90,8 @@ const diccionario = {
       botonCorreo: "Copiar mi correo",
       correoCopiado: "Dirección de correo copiada al portapapeles.",
       correoFallo: "No pudimos copiarla. Mi correo es:",
+      /** Solo para lectores de pantalla, en escritorio: ahí la fila copia. */
+      correoFilaCopia: "(copia la dirección al portapapeles)",
       descargarCV: "Descargar CV",
       cvFormato: "(PDF)",
       asuntoCorreo: "Proyecto freelance",
@@ -191,6 +193,7 @@ const diccionario = {
       botonCorreo: "Copy my email",
       correoCopiado: "Email address copied to your clipboard.",
       correoFallo: "Couldn't copy it. My address is:",
+      correoFilaCopia: "(copies the address to the clipboard)",
       descargarCV: "Download CV",
       cvFormato: "(PDF, in Spanish)",
       asuntoCorreo: "Freelance project",

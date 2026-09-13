@@ -5,8 +5,8 @@ import type { Proyecto } from "@/types";
  *  ÚNICO ARCHIVO QUE HAY QUE EDITAR PARA AGREGAR UN PROYECTO.
  * ─────────────────────────────────────────────────────────────
  *
- * Copia un bloque, cámbiale los datos y listo: la grilla, la numeración,
- * las animaciones y los enlaces se ajustan solos.
+ * Copia un bloque, cámbiale los datos y listo: la grilla, las animaciones
+ * y los enlaces se ajustan solos.
  *
  * Sobre los enlaces:
  *   • `demoUrl` y `repoUrl` son OPCIONALES.
@@ -30,7 +30,7 @@ export const proyectos: Proyecto[] = [
       "MapLibre",
       "Recharts",
     ],
-    anio: "2026",
+    fecha: { es: "Agosto 2026", en: "August 2026" },
     imagen: "/proyectos/epicentro.jpg",
     demoUrl: "https://epicentro-sigma.vercel.app",
     repoUrl: "https://github.com/Bentonio96/Epicentro",
@@ -49,7 +49,7 @@ export const proyectos: Proyecto[] = [
       "Framer Motion",
       "Vite",
     ],
-    anio: "2026",
+    fecha: { es: "Agosto 2026", en: "August 2026" },
     imagen: "/proyectos/turnera.jpg",
     demoUrl: "https://turnera-iota.vercel.app",
     repoUrl: "https://github.com/Bentonio96/Turnera",
@@ -68,7 +68,7 @@ export const proyectos: Proyecto[] = [
       "Recharts",
       "Vite",
     ],
-    anio: "2026",
+    fecha: { es: "Agosto 2026", en: "August 2026" },
     imagen: "/proyectos/centinela.jpg",
     demoUrl: "https://centinela-rho.vercel.app",
     repoUrl: "https://github.com/Bentonio96/Centinela",
@@ -90,7 +90,8 @@ export const proyectos: Proyecto[] = [
       "Chatbot IA",
       "UX/UI",
     ],
-    anio: "2026",
+    // Periodo de la práctica en CMPC, donde se diseñó y puso en marcha.
+    fecha: { es: "Enero — Junio 2026", en: "January — June 2026" },
     // Sin demoUrl ni repoUrl: es un sistema interno.
   },
 ];
