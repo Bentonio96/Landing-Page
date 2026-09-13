@@ -38,7 +38,7 @@ export function Experiencia({ idioma, t }: Props) {
                   {hito.actual ? (
                     <span
                       aria-hidden="true"
-                      className="mt-1 size-1.5 shrink-0 rounded-full bg-acento"
+                      className="mt-1 size-1.5 shrink-0 rounded-full bg-acentovivo"
                     />
                   ) : null}
                   <span className={hito.actual ? "text-texto" : undefined}>

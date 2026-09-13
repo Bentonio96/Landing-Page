@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./Reveal";
@@ -47,16 +48,29 @@ export function Seccion({
             <span aria-hidden="true">{numero}</span>
             <span>{etiqueta}</span>
           </p>
-          <span aria-hidden="true" className="mt-4 block h-px w-8 bg-bordefuerte" />
-
-          <h2 id={idTitulo} className="mt-10 text-t1 text-texto">
-            {titulo}
-          </h2>
-
-          {bajada ? (
-            <p className="mt-8 max-w-[46ch] text-guia text-atenuado">{bajada}</p>
-          ) : null}
+          <span aria-hidden="true" className="mt-4 block h-px w-8 bg-acentovivo" />
         </Reveal>
+
+        {/* Las palabras se parten aquí, en el servidor, y no con SplitText
+            en el cliente: GSAP no toca la estructura que React hidrató, solo
+            anima transformaciones. Separadas por espacios de texto normales,
+            así que se leen y se seleccionan como una frase. */}
+        <h2 id={idTitulo} data-titular-3d="" className="mt-10 text-t1 text-texto">
+          {titulo.split(" ").map((palabra, i) => (
+            <Fragment key={`${palabra}-${i}`}>
+              {i > 0 ? " " : null}
+              <span className="palabra-mascara">
+                <span className="palabra">{palabra}</span>
+              </span>
+            </Fragment>
+          ))}
+        </h2>
+
+        {bajada ? (
+          <Reveal>
+            <p className="mt-8 max-w-[46ch] text-guia text-atenuado">{bajada}</p>
+          </Reveal>
+        ) : null}
 
         <div className="mt-16 md:mt-24">{children}</div>
       </div>

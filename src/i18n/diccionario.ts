@@ -73,7 +73,6 @@ const diccionario = {
       vacio: "Todavía no hay proyectos publicados. Vuelve pronto.",
       tecnologiasDe: "Tecnologías usadas en",
       captura: "Captura del sitio de",
-      sinCaptura: "Sistema interno · sin captura pública",
     },
     experiencia: {
       etiqueta: "Experiencia",
@@ -174,7 +173,6 @@ const diccionario = {
       enlaceExterno: "(opens in a new tab)",
       vacio: "No projects published yet. Check back soon.",
       tecnologiasDe: "Technologies used in",
-      sinCaptura: "Internal system · no public screenshot",
       captura: "Screenshot of the site for",
     },
     experiencia: {

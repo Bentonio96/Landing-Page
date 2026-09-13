@@ -27,7 +27,8 @@ type Props = {
  *
  * La captura se muestra siempre. En escritorio va en grises y recupera el
  * color al apuntar la fila; en pantallas táctiles va en color desde el
- * principio (ver .captura-proyecto en globals.css).
+ * principio (ver .captura-proyecto en globals.css). Los proyectos sin
+ * captura pública se componen como una fila de solo texto, centrada.
  *
  * Las imágenes se cargan en diferido: la sección queda bajo el pliegue en
  * todos los tamaños, así que precargarlas solo le quitaría ancho de banda a
@@ -45,53 +46,76 @@ export function TarjetaProyecto({
   const idTitulo = `proyecto-${proyecto.slug}-titulo`;
   const tieneEnlaces = Boolean(demoUrl ?? repoUrl);
 
+  // Sin captura (sistemas internos) la fila no reserva hueco para imagen:
+  // el texto va solo y centrado, como un intermedio entre filas.
+  const soloTexto = !imagen;
+
   return (
     <article
       aria-labelledby={idTitulo}
-      className="fila-proyecto grid items-center gap-x-canal gap-y-8 py-12 md:grid-cols-12 md:py-20"
+      className={cn(
+        "fila-proyecto py-12 md:py-20",
+        soloTexto
+          ? "text-center md:py-28"
+          : "grid items-center gap-x-canal gap-y-8 md:grid-cols-12",
+      )}
     >
-      <div
-        className={cn(
-          "marco-captura md:col-span-7",
-          invertida && "md:order-last md:col-start-6",
-        )}
-      >
-        {imagen ? (
-          <div className="relative aspect-[16/10] overflow-hidden bg-elevado">
-            <Image
-              src={imagen}
-              alt={`${t.proyectos.captura} ${nombre}`}
-              fill
-              sizes="(max-width: 768px) 92vw, 56vw"
-              loading="lazy"
-              placeholder={BLUR_PROYECTOS[proyecto.slug] ? "blur" : "empty"}
-              blurDataURL={BLUR_PROYECTOS[proyecto.slug]}
-              className="captura-proyecto object-cover object-top"
-            />
-          </div>
-        ) : (
-          // Sin captura (sistemas internos) se reserva igual el hueco, con
-          // el número en contorno: la alternancia de filas no se rompe y no
-          // queda media fila vacía.
-          <div className="flex aspect-[16/10] flex-col justify-between border border-borde p-6 sm:p-8">
-            <p className="etiqueta">{t.proyectos.sinCaptura}</p>
-            <span
-              aria-hidden="true"
-              className="numero-contorno self-end font-display text-[clamp(7rem,3rem+14vw,17rem)] leading-[0.78]"
+      {imagen ? (
+        // Tres capas para el 3D (Movimiento.tsx): el marco fija la
+        // perspectiva y lleva el contorno del cruce con el stack; la capa
+        // de scroll se endereza al entrar en pantalla; la de puntero se
+        // inclina hacia el cursor. Separadas porque cada una tiene su propio
+        // dueño del transform.
+        <div
+          data-escena-3d=""
+          data-invertida={invertida ? "" : undefined}
+          className={cn(
+            "marco-captura escena-3d md:col-span-7",
+            invertida && "md:order-last md:col-start-6",
+          )}
+        >
+          <div data-capa-scroll="" className="capa-3d">
+            <div
+              data-capa-puntero=""
+              className="capa-3d relative shadow-[0_48px_90px_-48px_var(--c-sombra)]"
             >
-              {indice}
-            </span>
+              <div className="relative aspect-[16/10] overflow-hidden bg-elevado">
+                <Image
+                  src={imagen}
+                  alt={`${t.proyectos.captura} ${nombre}`}
+                  fill
+                  sizes="(max-width: 768px) 92vw, 56vw"
+                  loading="lazy"
+                  placeholder={BLUR_PROYECTOS[proyecto.slug] ? "blur" : "empty"}
+                  blurDataURL={BLUR_PROYECTOS[proyecto.slug]}
+                  className="captura-proyecto object-cover object-top"
+                />
+              </div>
+              <div
+                aria-hidden="true"
+                className="brillo-3d pointer-events-none absolute inset-0"
+              />
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      ) : null}
 
       <div
         className={cn(
-          "md:col-span-5",
-          invertida ? "md:col-start-1 md:row-start-1" : "md:col-start-8",
+          soloTexto
+            ? "mx-auto max-w-2xl"
+            : cn(
+                "md:col-span-5",
+                invertida ? "md:col-start-1 md:row-start-1" : "md:col-start-8",
+              ),
         )}
       >
-        <p className="etiqueta flex items-baseline gap-3">
+        <p
+          className={cn(
+            "etiqueta flex items-baseline gap-3",
+            soloTexto && "justify-center",
+          )}
+        >
           <span aria-hidden="true">{indice}</span>
           {anio ? <span>{anio}</span> : null}
         </p>
@@ -107,7 +131,10 @@ export function TarjetaProyecto({
         {tecnologias.length > 0 ? (
           <ul
             aria-label={`${t.proyectos.tecnologiasDe} ${nombre}`}
-            className="mt-6 flex flex-wrap gap-2"
+            className={cn(
+              "mt-6 flex flex-wrap gap-2",
+              soloTexto && "justify-center",
+            )}
           >
             {tecnologias.map((tec) => (
               <Chip key={tec} origen="proyecto">
@@ -118,7 +145,12 @@ export function TarjetaProyecto({
         ) : null}
 
         {tieneEnlaces ? (
-          <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3">
+          <div
+            className={cn(
+              "mt-8 flex flex-wrap gap-x-8 gap-y-3",
+              soloTexto && "justify-center",
+            )}
+          >
             {demoUrl ? (
               <Boton
                 href={demoUrl}

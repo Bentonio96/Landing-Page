@@ -73,17 +73,20 @@ for (const t of TOMAS) {
   await p.setViewport({ width: t.ancho, height: 900, deviceScaleFactor: 2 });
   await p.emulateMediaFeatures([
     { name: "prefers-color-scheme", value: t.tema },
-    // Sin esto la captura puede caer a mitad de una transición de entrada.
+    // Sin esto la captura puede caer a mitad de una animación: con movimiento
+    // reducido Movimiento.tsx no crea ninguna y todo está en su sitio final.
     { name: "prefers-reduced-motion", value: "reduce" },
   ]);
   await p.goto(BASE + t.ruta, { waitUntil: "networkidle2", timeout: 60000 });
   await p.evaluate(() => document.fonts.ready);
 
   await p.evaluate((oculta) => {
-    document
-      .querySelectorAll(".revelar")
-      .forEach((n) => n.setAttribute("data-visible", ""));
     if (oculta) {
+      // El hero mide min-h-svh: al agrandar la ventana al alto de la
+      // sección crecería con ella y empujaría todo miles de píxeles hacia
+      // abajo. Se congela con el alto que tiene a 900 px.
+      const hero = document.querySelector("#inicio");
+      if (hero) hero.style.minHeight = `${hero.offsetHeight}px`;
       for (const sel of ["header", ".progreso-lectura"]) {
         const el = document.querySelector(sel);
         if (el) el.style.display = "none";
@@ -92,7 +95,7 @@ for (const t of TOMAS) {
   }, !esHero);
 
   // La ventana se ajusta al alto real de la sección para que la capa fija
-  // de auras cubra todo lo que se va a capturar.
+  // de grano cubra todo lo que se va a capturar.
   const alto = await p.evaluate((sel) => {
     const el = document.querySelector(sel);
     return el ? Math.ceil(el.getBoundingClientRect().height) : 900;

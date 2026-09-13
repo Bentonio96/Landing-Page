@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import { ArrowDown } from "lucide-react";
 import type { Diccionario } from "@/i18n/diccionario";
@@ -5,8 +7,20 @@ import { perfil } from "@/data/perfil";
 import { Boton } from "@/components/ui/Boton";
 import { BotonCorreo } from "@/components/ui/BotonCorreo";
 import { BLUR_PERFIL } from "@/lib/blur";
+import { cn } from "@/lib/utils";
 
 type Props = { t: Diccionario };
+
+/** El nombre en líneas y palabras, tal como se compone en el titular. */
+const NOMBRE = [["Benjamín"], ["Peña", "Díaz"]];
+
+/** Posición de una letra contando desde el principio, para escalonar. */
+function indiceLetra(linea: number, palabra: number, letra: number) {
+  let previas = 0;
+  for (let i = 0; i < linea; i++) previas += NOMBRE[i].join("").length;
+  for (let j = 0; j < palabra; j++) previas += NOMBRE[linea][j].length;
+  return previas + letra;
+}
 
 export function Hero({ t }: Props) {
   return (
@@ -21,16 +35,21 @@ export function Hero({ t }: Props) {
           derecha y el nombre entra sobre el lado que no tiene rostro.
           Los velos (ver .velo-hero) la funden con el fondo en ambos temas. */}
       <div className="relative -z-10 h-[62svh] max-h-[36rem] w-full overflow-hidden md:absolute md:inset-y-0 md:right-0 md:h-auto md:max-h-none md:w-[74%] lg:w-[70%]">
-        <Image
-          src="/benjamin-pena.jpg"
-          alt={t.hero.altFoto}
-          fill
-          priority
-          placeholder="blur"
-          blurDataURL={BLUR_PERFIL}
-          sizes="(max-width: 768px) 100vw, 74vw"
-          className="foto-hero object-cover object-[52%_28%] md:object-[58%_30%]"
-        />
+        {/* Capa que mueve el parallax (Movimiento.tsx). Va aparte de la
+            imagen porque la imagen ya tiene su propia animación de entrada
+            en transform, y dos dueños del mismo transform se pisan. */}
+        <div data-parallax-foto className="absolute inset-0">
+          <Image
+            src="/benjamin-pena.jpg"
+            alt={t.hero.altFoto}
+            fill
+            priority
+            placeholder="blur"
+            blurDataURL={BLUR_PERFIL}
+            sizes="(max-width: 768px) 100vw, 74vw"
+            className="foto-hero object-cover object-[52%_28%] md:object-[58%_30%]"
+          />
+        </div>
         <div aria-hidden="true" className="velo-hero absolute inset-0" />
         {/* La foto tapa el grano fijo del fondo. Sin repetirlo encima, el
             borde del contenedor se veía como un corte: fuera había ruido y
@@ -38,24 +57,47 @@ export function Hero({ t }: Props) {
         <div aria-hidden="true" className="textura absolute inset-0" />
       </div>
 
-      <div className="lienzo -mt-24 md:mt-0">
+      <div data-parallax-texto className="lienzo -mt-24 md:mt-0">
         <p className="flex items-center gap-2.5">
           <span aria-hidden="true" className="relative flex size-2 shrink-0">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-acento opacity-60" />
-            <span className="relative inline-flex size-2 rounded-full bg-acento" />
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-acentovivo opacity-60" />
+            <span className="relative inline-flex size-2 rounded-full bg-acentovivo" />
           </span>
           <span className="etiqueta text-texto">{t.hero.disponible}</span>
         </p>
 
-        {/* Cada línea sube desde su propia máscara al cargar. Solo se anima
-            el desplazamiento: el texto nunca pasa por transparente. */}
+        {/* Cada letra gira en 3D al cargar (ver .letra). Es CSS y no GSAP a
+            propósito: GSAP llega en un import diferido, y esperarlo dejaría
+            ver el nombre quieto y luego saltar. El nombre para lectores de
+            pantalla va entero en un span oculto, porque las letras sueltas
+            se leerían deletreadas; es más fiable que un aria-label en un
+            encabezado. El apellido en violeta, igual que en el CV. */}
         <h1 id="hero-titulo" className="mt-6 text-gigante text-texto">
-          <span className="linea-titular">
-            <span>Benjamín</span>
-          </span>
-          <span className="linea-titular">
-            <span>Peña Díaz</span>
-          </span>
+          <span className="sr-only">{NOMBRE.flat().join(" ")}</span>
+          {NOMBRE.map((palabras, linea) => (
+            <span
+              key={linea}
+              aria-hidden="true"
+              className={cn("linea-titular", linea === 1 && "text-acento")}
+            >
+              {palabras.map((palabra, p) => (
+                <Fragment key={palabra}>
+                  {p > 0 ? " " : null}
+                  <span className="palabra-titular">
+                    {Array.from(palabra).map((letra, l) => (
+                      <span
+                        key={l}
+                        className="letra"
+                        style={{ "--i": indiceLetra(linea, p, l) } as CSSProperties}
+                      >
+                        {letra}
+                      </span>
+                    ))}
+                  </span>
+                </Fragment>
+              ))}
+            </span>
+          ))}
         </h1>
 
         <div className="mt-10 grid gap-10 md:grid-cols-12 md:items-end md:gap-x-canal">

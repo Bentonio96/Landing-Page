@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import type { Idioma } from "@/types";
 import { Ambiente } from "@/components/layout/Ambiente";
-import { clasesFuentes } from "@/lib/fuentes";
+import { clasesFuentes, scriptFuentes } from "@/lib/fuentes";
 import { scriptTema } from "@/lib/tema";
 import "@/app/globals.css";
 
@@ -28,10 +28,7 @@ export function LayoutRaiz({ idioma, children }: Props) {
       {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <script dangerouslySetInnerHTML={{ __html: scriptTema }} />
-        <noscript>
-          {/* Sin JS no hay animación de entrada: todo visible desde el inicio. */}
-          <style>{".revelar{transform:none!important}"}</style>
-        </noscript>
+        <script dangerouslySetInnerHTML={{ __html: scriptFuentes }} />
       </head>
       <body className="min-h-dvh text-texto">
         <Ambiente />

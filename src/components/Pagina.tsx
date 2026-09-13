@@ -13,6 +13,7 @@ import { Experiencia } from "@/components/sections/Experiencia";
 import { Contacto } from "@/components/sections/Contacto";
 import { ProveedorTecnologia } from "@/components/ui/ContextoTecnologia";
 import { ProveedorAvisos } from "@/components/ui/Avisos";
+import { Movimiento } from "@/components/Movimiento";
 
 type Props = { idioma: Idioma };
 
@@ -84,6 +85,7 @@ export function Pagina({ idioma }: Props) {
       </ProveedorAvisos>
 
       <PieDePagina idioma={idioma} t={t} />
+      <Movimiento />
 
       <script
         type="application/ld+json"

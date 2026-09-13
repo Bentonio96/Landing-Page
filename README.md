@@ -3,8 +3,9 @@
 Sitio personal de **Benjamín Peña Díaz**, desarrollador frontend en Santiago de Chile.
 Español en `/`, inglés en `/en`, modo claro y oscuro, y todo el contenido en archivos de datos tipados.
 
-**Lighthouse en producción:** 100 / 100 / 100 / 100 en escritorio · 96 / 100 / 100 / 100 en móvil
-**Accesibilidad:** 0 violaciones de axe-core (WCAG 2.1 AA) en las 5 pantallas auditadas
+Paleta tomada del CV, titulares de cartel, scroll suave con Lenis y animaciones 3D con GSAP.
+
+**Accesibilidad:** 0 violaciones de axe-core (WCAG 2.1 AA) en las 9 pantallas auditadas · contraste AA medido sobre píxel real · CLS ≤ 0.0004
 
 ![Hero en modo claro](docs/capturas/hero-claro.jpg)
 
@@ -61,11 +62,11 @@ El tipo `Proyecto` está en [`src/types/index.ts`](src/types/index.ts), así que
 
 ### Resaltar una tecnología del stack
 
-En [`src/data/stack.ts`](src/data/stack.ts), `principal: true` pinta la tecnología con el color de acento:
+En [`src/data/stack.ts`](src/data/stack.ts), `principal: true` pone la tecnología a tinta plena y con un punto violeta:
 
 ```ts
-{ nombre: "React", principal: true },   // en naranja
-{ nombre: "HTML semántico" },           // en neutro
+{ nombre: "React", principal: true },   // tinta plena + punto violeta
+{ nombre: "HTML semántico" },           // gris, sin punto
 ```
 
 Úsalo con moderación: hoy son 8 de 34. El resalte funciona porque es minoría.
@@ -124,19 +125,19 @@ node scripts/verificar-contraste.mjs
 |---|---|
 | ![Hero claro](docs/capturas/hero-claro.jpg) | ![Hero oscuro](docs/capturas/hero-oscuro.jpg) |
 
-**Sobre mí** — biografía, idiomas y certificaciones
+**Sobre mí** — biografía, cita de cartel que se enciende al leerla, idiomas y certificaciones
 
 ![Sobre mí](docs/capturas/sobre-mi.jpg)
 
-**Stack** — las herramientas principales van en acento; el resto, en neutro
+**Stack** — filas por categoría; las herramientas principales llevan el punto violeta
 
 ![Stack](docs/capturas/stack.jpg)
 
-**Proyectos** — tarjetas con los dos enlaces, numeración editorial y chips de tecnología
+**Proyectos** — filas alternas con capturas en 3D; los sistemas internos van como fila de solo texto
 
 ![Proyectos](docs/capturas/proyectos.jpg)
 
-**Experiencia** — línea de tiempo con el hito actual acentuado
+**Experiencia** — tabla editorial: dónde y qué, cuándo, detalle
 
 ![Experiencia](docs/capturas/experiencia.jpg)
 
@@ -144,11 +145,11 @@ node scripts/verificar-contraste.mjs
 
 ![Versión en inglés](docs/capturas/ingles.jpg)
 
-**Contacto** — el CTA de correo sólido, el CV en variante de acento
+**Contacto** — índice de filas pulsables: correo, teléfono, LinkedIn, GitHub y CV
 
 ![Contacto](docs/capturas/contacto.jpg)
 
-**Móvil** — 390 px, navegación en panel desplegable
+**Móvil** — 390 px, la foto en el flujo para que el nombre no le tape la cara
 
 | Claro | Oscuro |
 |---|---|
@@ -161,50 +162,54 @@ node scripts/verificar-contraste.mjs
 - **Next.js 15** con App Router
 - **TypeScript** en modo estricto
 - **Tailwind CSS v4** — los tokens viven en `@theme`, dentro de `src/app/globals.css`
+- **GSAP 3** + **ScrollTrigger** — animaciones ligadas al scroll y efectos 3D
+- **Lenis** — scroll suave, sincronizado con el reloj de GSAP
 - **lucide-react** para íconos
-- **next/font** — Fraunces, Inter Tight y JetBrains Mono, autoalojadas
+- **next/font** — Bebas Neue, Inter Tight y JetBrains Mono, autoalojadas
 - **next/image** — AVIF y WebP automáticos
-- Sin dependencias de runtime más allá de React, Next y lucide
+
+GSAP y Lenis se cargan con `import()` diferido, después de hidratar: no entran en el JavaScript inicial (First Load JS 114 kB).
 
 ---
 
 ## Decisiones de diseño
 
-### Concepto: "Cordillera Editorial"
+### Concepto: "Obsidiana"
 
-La idea era que no pareciera plantilla de portafolio. Tres reglas sostienen todo:
+Inspirado en una plantilla editorial de fotografía: casi todo el impacto sale de la **escala tipográfica** y de la **foto a sangre**, no de efectos. Cuatro reglas sostienen el sistema:
 
-1. **Grilla editorial visible.** Secciones numeradas en monoespaciada (`01 — SOBRE MÍ`), reglas capilares de 1 px, columnas asimétricas donde el título queda fijo (`sticky`) mientras el contenido se desplaza. Se lee como algo compuesto, no como bloques apilados.
+1. **Titulares de cartel.** Una grotesca condensada de un solo peso, en versales, con interlineado por debajo de 1. El nombre del hero llega a 176 px y cada sección abre con su título a ancho completo. En el diccionario se escriben normal y se versalizan con CSS, así que los lectores de pantalla no deletrean.
 
-2. **Un solo acento, con disciplina.** El naranja quemado aparece en: el CTA primario, el botón de descarga del CV, las herramientas principales del stack, el indicador de sección activa del nav, el anillo de foco, el punto de "disponible", el hito actual de la línea de tiempo y el hover de enlaces. En ningún otro lugar, y todo lo demás vive en neutros.
+2. **La marca del CV.** La paleta sale del propio PDF del CV —sus operadores de color, no una captura—: tinta azulada, grises fríos y un único violeta. El sitio y el documento se leen como una sola marca, y el apellido va en violeta en los dos.
 
-   La disciplina está en la proporción, no en la lista: en el stack solo 8 de 34 tecnologías van en acento. Si se resaltara la mitad, el resalte dejaría de significar algo. Y hay tres pesos, no dos: relleno sólido para el CTA principal, borde y texto en acento sobre fondo teñido para lo importante-pero-secundario (el CV, los chips principales), y neutro para el resto.
+3. **Un solo acento, con disciplina.** El violeta aparece en el apellido, el subrayado de la cita, la barra de progreso, los puntos de las herramientas principales y del hito actual, el foco y los hover. En ningún otro sitio. En el stack solo 8 de 34 tecnologías llevan el punto.
 
-3. **La foto como pieza, no como avatar.** Bloque 4:5 en escritorio con un marco de acento desplazado detrás que rompe la grilla; banda 4:3 en móvil. El cielo de la foto funciona como espacio negativo.
+4. **Foto en blanco y negro, fundida con la página.** Tres velos del color de fondo —arriba, abajo y a la izquierda— la integran en los dos temas, y el nombre entra sobre el lado que no tiene rostro. En móvil la foto va en el flujo y el texto solo pisa su borde inferior.
 
 ### Tipografía
 
 | Rol | Fuente | Por qué |
 |---|---|---|
-| Titulares | **Fraunces** 400/500 | Serif de alto contraste con carácter propio, sin caer en decorativa |
-| Cuerpo | **Inter Tight** 400 | Neutra y estrecha, aguanta bien párrafos largos |
+| Titulares | **Bebas Neue** 400 | Condensada: a tamaño de cartel pesa, y al ser estrecha el nombre enorme cabe en un teléfono |
+| Cuerpo | **Inter Tight** 300/400 | Neutra y estrecha; el 300 da los subtítulos grandes y ligeros de las filas |
 | Etiquetas y chips | **JetBrains Mono** 400 | Da el tono técnico de los metadatos sin gritar |
-
-Escala modular de 1.25, fluida con `clamp()` en los tamaños grandes.
 
 ### Color
 
-Neutros fríos con un acento cálido. Todos los pares cumplen **WCAG AA** (verificado con axe-core, no a ojo):
+Todos los pares cumplen **WCAG AA**, calculados sobre los valores exactos y medidos después sobre píxel real:
 
-| Token | Claro | Oscuro | Contraste |
+| Token | Claro | Oscuro | Contraste sobre fondo |
 |---|---|---|---|
-| Fondo | `#FBFAF8` | `#0C0E12` | — |
-| Texto | `#16181D` | `#EDEDEB` | 16.4:1 / 17.1:1 |
-| Atenuado | `#5C6069` | `#9BA1AB` | 6.0:1 / 7.5:1 |
-| Tenue | `#5B6472` | `#8F95A0` | 5.0:1 / 4.8:1 sobre el fondo ya teñido |
-| **Acento** | `#B04426` | `#F0784E` | 5.4:1 / 6.9:1 |
+| Fondo | `#F6F7F9` | `#0E1117` | — |
+| Texto | `#0E1117` | `#F1F3F7` | 17.6:1 / 17.0:1 |
+| Atenuado | `#414A58` | `#AFB7C4` | 8.4:1 / 9.4:1 |
+| Tenue | `#5D6675` | `#8B94A3` | 5.4:1 / 6.2:1 |
+| **Acento** (texto) | `#4335C9` | `#A79BFF` | 7.6:1 / 7.9:1 |
+| Acento vivo (rellenos) | `#6C5CFF` | `#6C5CFF` | solo decorativo |
 
-Los radios son de 2 px: casi rectos, editorial y no burbuja.
+El violeta vivo del CV da 4.3:1 sobre claro y 4.2:1 sobre oscuro: por debajo de AA para texto normal. Por eso hay dos tokens de acento, uno para texto y otro para rellenos, en vez de forzar un único violeta que no cumpla en alguno de los dos usos.
+
+Casi todo va recto (radio 0–2 px), como una página impresa. Lo único redondo son las píldoras de tecnología y los controles del encabezado: la forma distingue etiqueta y control de contenido.
 
 ---
 
@@ -218,84 +223,65 @@ La estructura es un único root layout dentro de `src/app/[idioma]/`, que es lo 
 
 No se usó `next-intl` ni similar: para dos idiomas y un diccionario plano, un `Record<Idioma, string>` tipado hace lo mismo con cero kilobytes de runtime.
 
-### Vidrio y auras
+### Movimiento: GSAP y Lenis en un solo componente
 
-Hay una inspiración lejana en el material translúcido de macOS Tahoe, pero deliberadamente parcial: aplicarlo entero habría borrado el carácter editorial del sitio, que se apoya justamente en ser plano y recto.
+Todo lo que se mueve con el scroll vive en [`src/components/Movimiento.tsx`](src/components/Movimiento.tsx):
 
-El criterio es que **la forma diga qué es cada cosa**. El contenido —tarjetas, reglas, secciones— sigue opaco y con radios de 2 px. Lo que flota y es pulsable —el encabezado, los controles de tema e idioma, el menú móvil— es vidrio translúcido y redondeado. Así el material comunica "esto es un control" en vez de ser decoración.
+- **Scroll suave** con Lenis, movido por el `ticker` de GSAP. Un único `requestAnimationFrame` para los dos: con uno cada uno, ScrollTrigger lee posiciones con un fotograma de retraso y los efectos atados al scroll tiemblan. Las anclas del menú usan el mismo scroll suave; el enlace para saltar al contenido se deja nativo, porque debe mover el foco del teclado y un scroll programático no lo mueve.
+- **Titulares de sección** cuyas palabras giran en 3D al entrar, cada una con su propio punto de fuga.
+- **Hero con profundidad**: al salir, la foto baja más lenta que la página y el texto sube más rápido.
+- **Cita** cuyas palabras pasan de gris a su color al ritmo de la lectura: una custom property `--p` que GSAP lleva de 0 a 1, con los dos extremos dentro de AA.
+- **Capturas de proyecto en 3D**: llegan tumbadas hacia atrás y giradas hacia el texto, y se enderezan al subir; con ratón, además se inclinan hacia el cursor con un brillo que lo sigue. Son tres capas —perspectiva, giro de scroll, giro de puntero— porque cada una tiene su propio dueño del `transform`.
+- **Píldoras del stack** que caen en cascada.
 
-Tres detalles que hacen que el vidrio se lea como material y no como transparencia:
+Cuatro reglas que conviene no deshacer:
 
-- **Saturación además de desenfoque.** Sin `backdrop-saturate`, el desenfoque apaga los colores de detrás y el resultado parece sucio.
-- **Reflejo especular** en el canto superior (`box-shadow: inset 0 1px 0`), que es lo que da sensación de volumen.
-- **Opacidad al 80 %**, no menos. Con el desenfoque aplicado sigue leyéndose como vidrio, y si el desenfoque falla en algún navegador el encabezado sigue siendo legible en vez de dejar el texto de la sección anterior chocando con el del nav.
+1. **Carga diferida.** GSAP, ScrollTrigger y Lenis entran con `import()` dentro del efecto: no compiten con la foto del hero, que es el LCP. Por eso la única animación de carga —las letras del nombre girando en 3D— es CSS: esperar a GSAP dejaría ver el nombre quieto y luego saltar.
+2. **Nada anima la opacidad.** Solo desplazamientos, giros y escalas. Con `opacity: 0` en lo que espera al scroll, las auditorías lo leen como texto sin contraste (la primera versión del sitio marcaba 35 nodos en Lighthouse por eso).
+3. **Todo dentro de `gsap.matchMedia`** con `prefers-reduced-motion: no-preference`. Si el sistema pide menos movimiento no se crea ni Lenis ni una animación; sin JavaScript, igual. No hay ningún estado oculto que haya que desbloquear.
+4. **GSAP no toca la estructura del DOM.** Las palabras y letras se parten en el servidor; el cliente solo escribe transformaciones en línea, que React no gestiona y no pisa al re-renderizar.
 
-Las **auras** del fondo —tres gradientes radiales fijos detrás del contenido— son **grises neutros**. Empezaron saliendo del acento, pero a la escala a la que se extienden el terracota no se leía como sombra sino como una mancha de color, y el color llama la atención. En gris dan la misma profundidad sin teñir la página.
+Un tropiezo que quedó comentado en el código: `gsap.quickTo` necesita el nombre canónico de la propiedad (`rotationX`), no el alias `rotateX`. Con el alias crea el tween, pero cada actualización busca una propiedad que no existe y la capa nunca se mueve, sin ningún error.
 
-El único color que queda en el fondo es el halo del hero, detrás de la foto. Al ser el único punto cálido refuerza la regla de un solo acento en vez de romperla, y cae en zona decorativa donde no hay texto pequeño que pueda perder contraste.
+### Las letras del nombre y el CLS
 
-### El contraste que las auditorías no ven
+Partir el nombre en letras para girarlas en 3D subió el CLS de 0.002 a **0.03**. Cada letra es su propia caja, la fuente de respaldo es más ancha que Bebas Neue, y al llegar la real todas se recolocaban de golpe, hasta 130 px.
 
-Las auras del fondo destaparon un punto ciego que vale la pena documentar: **axe no las detecta**. Calcula el fondo de un texto recorriendo sus ancestros, y las auras viven en una capa fija con `z-index` negativo que no es ancestro de nada. Se puede subir su intensidad, seguir viendo *0 violaciones* y aun así dejar texto por debajo de AA.
+Un script de `<head>` ([`src/lib/fuentes.ts`](src/lib/fuentes.ts)) retiene la entrada hasta que carga la condensada, con un tope de 2 s. Dejar las letras de canto no bastaba: giradas conservan una caja de unos píxeles de alto y Chrome las sigue contando. Ocultas con `visibility` no cuentan, y el nombre accesible vive en su propio span, que no se oculta. Resultado: **CLS ≤ 0.0004**, por debajo del de antes del rediseño.
 
-Pasó exactamente eso: con las auras centradas, axe daba 0 violaciones mientras el contraste real medido sobre los píxeles era de **4.46:1**. Por eso existe [`scripts/verificar-contraste.mjs`](scripts/verificar-contraste.mjs), que captura la pantalla, muestrea el color real justo encima de cada texto a lo largo de toda la página y sale con código 1 si algo baja de 4.5:1.
+### El contraste sobre una foto
 
-La solución fue anclar las auras a los bordes —con parte del círculo fuera de pantalla— para que el color se vea intenso en los márgenes y caiga antes de llegar a la columna de texto, y oscurecer un punto el token `--c-tenue`.
+[`scripts/verificar-contraste.mjs`](scripts/verificar-contraste.mjs) mide contra los píxeles realmente renderizados, porque axe calcula el fondo recorriendo ancestros y no ve capas fijas ni imágenes detrás del texto.
 
-El script tuvo después una segunda lección: **solo medía 1440 px**, y ahí se le escapaba un fallo que ya existía. En escritorio el texto vive en una columna con márgenes anchos y el fondo teñido cae sobre todo en ese vacío; por debajo de 768 px la columna ocupa todo el ancho, así que *todo* lo que hace el fondo ocurre debajo del texto. Medido a 390 px, la metadata de las certificaciones daba **4.33:1 en oscuro**. Ahora el script recorre los dos anchos, y `--c-tenue` está calibrado sobre el fondo con auras y no sobre `superficie`.
+La primera versión muestreaba un píxel justo encima de cada texto, y con la foto del hero dejó de servir por dos lados: un punto no representa un fondo que cambia a lo largo de la línea, y con titulares a 0.86 de interlineado las letras sobresalen de su caja, así que el píxel "de encima" era la propia letra. Ahora el script **oculta todo el texto**, captura, y muestrea una rejilla de puntos sobre las **cajas de línea reales** (`Range.getClientRects`, no la caja del elemento: un span en bloque mide todo el ancho y muestrearía fondo que ninguna letra toca). Aplica 3:1 al texto grande y 4.5:1 al resto, en claro y oscuro, a 1440 y 390 px.
 
-Peor caso actual, en los cuatro cruces de tema y ancho:
+Peor caso actual:
 
 | | Escritorio | Móvil |
 |---|---|---|
-| Claro | 4.80:1 | 4.80:1 |
-| Oscuro | 5.84:1 | 5.53:1 |
-
-Sobre las auras hay además **paralaje**: la capa se desplaza unos píxeles en sentido contrario al puntero, lo que da sensación de profundidad. Se aplica como `transform` sobre la capa entera —no moviendo los centros de los gradientes— para que lo resuelva el compositor sin repintar el fondo, y el valor se escribe directo sobre el nodo con una ref, sin estado de React, para no disparar un render por evento. Se desactiva en pantallas táctiles y con `prefers-reduced-motion`.
-
-A propósito **no** hay un halo que siga al cursor: pasaría por encima del texto y le bajaría el contraste justo donde se está leyendo. El paralaje mueve auras ancladas a los bordes, que nunca invaden la columna de texto.
+| Claro | 4.84:1 | 4.85:1 |
+| Oscuro | 5.34:1 | 5.41:1 |
 
 ### El grano
 
-Encima de las auras va una capa de **grano**: un SVG de 300×300 con `feTurbulence`, embebido y repetido, al 7 % de opacidad (11 % en oscuro). Es lo que separa un degradado "de diseño" de una banda de color plana — rompe el bandeado y da textura.
+Sobre el fondo va una capa de **grano**: un SVG de 300×300 con `feTurbulence`, embebido y repetido, al 7 % de opacidad (7.5 % en oscuro). Sobre una tinta casi plana es lo que la hace leerse como papel y no como pantalla apagada. La foto del hero tapa esa capa fija, así que repite el grano encima: sin eso, el borde de la foto se veía como un corte entre ruido y liso.
 
-La frecuencia es baja (`0.42`) y usa 3 octavas, así que el ruido tiene grumos grandes en vez de polvo fino: con el fondo reducido a dos auras grises, el grano es lo que aporta casi toda la textura. El mosaico es de 300 px justamente por eso — con grumos grandes, uno pequeño delata la repetición.
+### Otras interacciones
 
-Va en su propia capa, quieta, porque un grano que se moviera con el paralaje delataría el truco.
-
-### Lo que se mueve, y por qué
-
-Cinco interacciones, todas respetando `prefers-reduced-motion` y ninguna a costa de las métricas:
-
-- **Progreso de lectura.** Una barra de 3 px en el borde superior, con degradado del acento al ámbar. Va con `animation-timeline: scroll(root)`: sin JavaScript, sin escuchas de scroll y fuera del hilo principal. Es decorativa —no aporta nada que la barra de desplazamiento no diga ya— así que se oculta a lectores de pantalla.
-
-- **Miniaturas de proyecto.** Cada tarjeta muestra una captura del sitio real, generada por [`scripts/capturar-proyectos.mjs`](scripts/capturar-proyectos.mjs) desde la demo en producción, así que no se desactualizan a mano. Se ven siempre, no al pasar el cursor: esconder la captura tras un hover dejaría fuera a quien entra desde un teléfono, y es justo lo que alguien quiere ver antes de decidir si abre el proyecto. Lo que reacciona es un acercamiento discreto. Las tres cargan en diferido — la sección queda bajo el pliegue en todos los tamaños, así que precargarlas solo le quitaría ancho de banda a la foto del hero, que sí es el elemento LCP.
-
-- **Cruce entre Stack y Proyectos.** Apuntar una tecnología del stack resalta los proyectos que la usan; apuntar o **enfocar** un proyecto resalta sus tecnologías en el stack. "React" y "React 19" se reconocen como la misma cosa. El resalte suma un anillo de acento en vez de atenuar el resto: bajar la opacidad de lo no coincidente reduciría el contraste del texto. Es una mejora progresiva — la relación ya está escrita en la página, cada tarjeta lista sus tecnologías — así que no añade paradas de tabulación, y quien navega con teclado igual obtiene la dirección proyecto → stack vía foco.
-
-- **Transición de tema.** El tema nuevo se abre en círculo desde el propio botón, con la View Transitions API. Sin soporte o con movimiento reducido, cambia al instante.
-
-- **Línea de tiempo que se llena.** La regla vertical de Experiencia se rellena en acento a medida que bajas, con animaciones ligadas al scroll de CSS: cero JavaScript y fuera del hilo principal. Donde no hay soporte, queda la regla gris de base.
-
-### Animaciones en CSS, no en JavaScript
-
-Las apariciones al hacer scroll son transiciones CSS de `transform` controladas por un `IntersectionObserver` propio ([`src/components/ui/Reveal.tsx`](src/components/ui/Reveal.tsx)).
-
-**No se anima la opacidad, y es deliberado.** En una página larga todo lo que está bajo el pliegue espera al scroll; si ese estado fuera `opacity: 0`, el texto quedaría transparente para cualquier auditoría automática, que lo reporta como fallo de contraste. Con la primera versión Lighthouse marcaba 35 nodos —incluidos títulos que en aislado dan 16:1— y la puntuación de accesibilidad oscilaba entre 96 y 100 según el momento del muestreo. Animando solo el desplazamiento el contraste es siempre el final, y la puntuación quedó en 100 de forma determinista (verificado en tres corridas seguidas).
-
-El plan original era Framer Motion, pero en la combinación **framer-motion 12.43 + React 19.2** las animaciones no se aplicaban: fallaron tanto `whileInView` como `animate`, y el `ref` sobre `motion.div` tampoco llegaba al DOM. Eso dejaba todas las secciones en `opacity: 0` — el sitio se veía vacío. Se reemplazó por CSS, que además sacó **39 kB** del bundle (154 → 115 kB de First Load JS).
-
-El componente tiene tres redes de seguridad para que una sección **nunca** quede invisible: si no hay `IntersectionObserver` se muestra de inmediato, hay un temporizador de respaldo por si el observador no dispara, y una regla `<noscript>` fuerza todo visible sin JavaScript.
+- **Progreso de lectura.** Barra de 3 px en violeta con `animation-timeline: scroll(root)`: sin JavaScript y fuera del hilo principal.
+- **Cruce entre Stack y Proyectos.** Apuntar una tecnología del stack enmarca en violeta las capturas de los proyectos que la usan; apuntar o **enfocar** un proyecto resalta sus tecnologías. El resalte suma en vez de atenuar el resto, que bajaría el contraste.
+- **Capturas en grises** que recuperan el color al apuntar la fila, solo con puntero fino: en un teléfono no hay hover y dejarlas grises escondería lo que se viene a ver. Las genera [`scripts/capturar-proyectos.mjs`](scripts/capturar-proyectos.mjs) desde cada demo en producción.
+- **Transición de tema.** El tema nuevo se abre en círculo desde el botón, con la View Transitions API.
 
 ### Rendimiento
 
 Qué movió la aguja, medido y no supuesto:
 
 - **CLS 0.168 → 0.019.** La fila de CTAs del hero medía 96 px con la fuente de respaldo (envuelta en dos líneas) y colapsaba a 43 px al cargar la monoespaciada, arrastrando todo lo de abajo. Se apilan a ancho completo en móvil: altura determinista.
-- **CLS 0.032 → 0.000 en móvil**, cambiando el respaldo de la monoespaciada. `next/font` lo genera solo, y para JetBrains Mono eligió `local("Arial")` con `size-adjust: 134.59%`: ajusta las métricas verticales, pero Arial es proporcional y estirarla un 35 % deja cada carácter casi un 30 % más ancho que la fuente real. Las líneas largas de versales del hero envolvían con el respaldo y se recolocaban al llegar la real. Con `adjustFontFallback: false` y una lista de monoespaciadas de verdad (`ui-monospace`, `Consolas`, `Menlo`), el avance coincide y los bloques miden igual con una fuente y con la otra. Se pierde el ajuste vertical automático, pero todo lo que usa la mono declara su propio `line-height`.
-- **Fuentes 202 → 79 kB.** Fraunces descargaba los ejes `SOFT`, `WONK` y `opsz` sin que ninguna regla los usara, y se pedían pesos 500 que solo hacían falta en los titulares.
-- **Móvil 81 → 96** en el score de rendimiento.
-- **Accesibilidad 96 → 100 estable**, quitando la opacidad del reveal (ver arriba).
+- **CLS 0.032 → 0.000 en móvil**, cambiando el respaldo de la monoespaciada. `next/font` lo genera solo, y para JetBrains Mono eligió `local("Arial")` con `size-adjust: 134.59%`: Arial es proporcional y estirarla deja cada carácter casi un 30 % más ancho que la fuente real. Con `adjustFontFallback: false` y monoespaciadas de verdad como respaldo, los bloques miden igual con una fuente y con la otra.
+- **CLS 0.03 → 0.0004** con las letras 3D del nombre (ver arriba).
+- **GSAP y Lenis fuera de la ruta crítica** con `import()` diferido.
+- **axe: 0 violaciones** en 9 pantallas (español e inglés, claro y oscuro, escritorio y móvil, y el 404), con las animaciones activas.
 
 ### Tema claro/oscuro
 
@@ -305,7 +291,7 @@ El tema vive en un atributo `data-tema` sobre `<html>`, no en una clase, y **el 
 
 ### Accesibilidad
 
-Auditado con axe-core sobre las reglas WCAG 2.1 A/AA + best-practices, en 5 pantallas (español claro y oscuro, inglés, móvil y 404): **0 violaciones**.
+Auditado con axe-core sobre las reglas WCAG 2.1 A/AA + best-practices, en 9 pantallas (español e inglés, claro y oscuro, escritorio y móvil, y el 404): **0 violaciones**.
 
 - Skip link como primer elemento enfocable
 - Foco visible de 2 px en todo el sitio, nunca eliminado
@@ -336,9 +322,10 @@ src/
 ├─ components/
 │  ├─ Pagina.tsx           composición única, compartida por ambos idiomas
 │  ├─ LayoutRaiz.tsx       cascarón <html>/<body>
+│  ├─ Movimiento.tsx       Lenis + GSAP: todo lo que se mueve con el scroll
 │  ├─ layout/              Encabezado · PieDePagina · BotonTema · BotonIdioma · SaltarAlContenido
 │  ├─ sections/            Hero · SobreMi · Stack · Proyectos · Experiencia · Contacto
-│  └─ ui/                  Seccion · TarjetaProyecto · Boton · Chip · Reveal
+│  └─ ui/                  Seccion · TarjetaProyecto · Boton · Chip · Reveal (marca [data-revelar])
 │
 ├─ data/
 │  ├─ proyectos.ts         ← el archivo que vas a editar

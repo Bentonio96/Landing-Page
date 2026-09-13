@@ -62,3 +62,49 @@ export const fuenteMono = JetBrains_Mono({
 });
 
 export const clasesFuentes = `${fuenteDisplay.variable} ${fuenteSans.variable} ${fuenteMono.variable}`;
+
+/**
+ * Script bloqueante de <head> que retiene la entrada 3D del nombre hasta que
+ * carga la condensada.
+ *
+ * Cada letra del hero es su propia caja. Con la fuente de respaldo (más
+ * ancha) ocupan otro sitio, y al llegar Bebas Neue todas se recolocaban de
+ * golpe: el CLS subía de 0.002 a 0.03. Mientras dura la espera las letras
+ * están de canto (el primer fotograma de la animación, en pausa), así que
+ * no se ven ni cuentan como desplazamiento visible.
+ *
+ * Tres redes: sin JavaScript el atributo nunca se pone y la animación corre
+ * sola; si la fuente falla o tarda, a los 2 s se suelta igual; y va en un
+ * atributo data-* y no en una clase, porque React gestiona el className de
+ * <html> (ver lib/tema.ts).
+ *
+ * `document.fonts.load` se llama en DOMContentLoaded y no antes: hasta que
+ * el CSS está aplicado el @font-face no existe y la promesa se resolvería al
+ * instante, sin esperar nada. Debe ser ES5.
+ */
+export const scriptFuentes = `
+(function () {
+  try {
+    var h = document.documentElement;
+    if (!document.fonts || !document.fonts.load) return;
+    h.setAttribute('data-fuentes', 'pendientes');
+    var hecho = false;
+    var listo = function () {
+      if (hecho) return;
+      hecho = true;
+      h.removeAttribute('data-fuentes');
+    };
+    setTimeout(listo, 2000);
+    var cargar = function () {
+      document.fonts.load('1em ' + ${JSON.stringify(fuenteDisplay.style.fontFamily)})
+        .then(function () { return document.fonts.ready; })
+        .then(listo, listo);
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', cargar);
+    } else {
+      cargar();
+    }
+  } catch (e) {}
+})();
+`.trim();

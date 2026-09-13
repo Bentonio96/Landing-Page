@@ -9,10 +9,14 @@
  *
  * Uso:  node scripts/generar-assets.mjs
  *       node scripts/generar-assets.mjs --solo-og
+ *       node scripts/generar-assets.mjs --marca
  *
  * Con --solo-og se regeneran solo las tarjetas sociales. Sirve cuando cambia
  * el texto del titular pero no la foto: el paso 1 vuelve a codificar el JPEG
  * de origen, y repetirlo sin necesidad solo le quita calidad.
+ *
+ * Con --marca se regeneran iconos y tarjetas sociales, también sin tocar la
+ * foto. Es el caso de un cambio de paleta.
  */
 import { Buffer } from "node:buffer";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
@@ -23,10 +27,12 @@ const RAIZ = process.cwd();
 const PUBLICO = path.join(RAIZ, "public");
 const ORIGEN = path.join(PUBLICO, "benjamin-pena.jpg");
 
-const TINTA = "#0C0E12";
-const ACENTO = "#F0784E";
-const HUESO = "#EDEDEB";
-const ATENUADO = "#9BA1AB";
+// Paleta del CV, la misma que los tokens de globals.css.
+const TINTA = "#0E1117";
+const ACENTO = "#6C5CFF"; // violeta vivo: relleno de la marca
+const ACENTO_TEXTO = "#A79BFF"; // violeta claro: texto sobre tinta
+const HUESO = "#F1F3F7";
+const ATENUADO = "#AFB7C4";
 
 const marcaSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <rect width="64" height="64" rx="14" fill="${TINTA}"/>
@@ -89,29 +95,32 @@ function ogSvg({ rol, sitio }) {
 
   ${rol
     .map(
-      (linea, i) => `<text x="80" y="${158 + i * 42}"
-        font-family="Georgia, 'Times New Roman', serif"
-        font-size="30" letter-spacing="7" fill="${ACENTO}">${escapar(
+      (linea, i) => `<text x="80" y="${158 + i * 40}"
+        font-family="Consolas, 'Courier New', monospace"
+        font-size="26" letter-spacing="5" fill="${ACENTO_TEXTO}">${escapar(
           linea.toUpperCase(),
         )}</text>`,
     )
     .join("\n  ")}
 
-  <text x="76" y="316" font-family="Georgia, 'Times New Roman', serif"
-        font-size="104" fill="${HUESO}">Benjamín</text>
-  <text x="76" y="420" font-family="Georgia, 'Times New Roman', serif"
-        font-size="104" fill="${HUESO}">Peña Díaz</text>
+  <!-- Condensada de sistema (Impact) en versales: la Bebas Neue del sitio
+       no está instalada donde corre librsvg, y es lo más parecido. -->
+  <text x="76" y="336" font-family="Impact, 'Arial Narrow', sans-serif"
+        font-size="124" fill="${HUESO}">BENJAMÍN</text>
+  <text x="76" y="456" font-family="Impact, 'Arial Narrow', sans-serif"
+        font-size="124" fill="${ACENTO_TEXTO}">PEÑA DÍAZ</text>
 
-  <rect x="80" y="484" width="380" height="1" fill="#333944"/>
+  <rect x="80" y="500" width="380" height="1" fill="#3A4353"/>
 
-  <text x="80" y="536" font-family="Georgia, 'Times New Roman', serif"
-        font-size="26" letter-spacing="2" fill="${ATENUADO}">${escapar(
+  <text x="80" y="548" font-family="Consolas, 'Courier New', monospace"
+        font-size="24" letter-spacing="3" fill="${ATENUADO}">${escapar(
           sitio,
         )}</text>
 </svg>`;
 }
 
 const soloOg = process.argv.includes("--solo-og");
+const soloMarca = process.argv.includes("--marca");
 
 async function limpiarFoto() {
   // 1 · Foto limpia (sin EXIF) y en sRGB.
@@ -134,14 +143,16 @@ async function limpiarFoto() {
 async function main() {
   await mkdir(PUBLICO, { recursive: true });
 
-  const limpia = soloOg ? await readFile(ORIGEN) : await limpiarFoto();
-  if (soloOg) console.log("foto        se reutiliza la ya procesada");
+  const reusar = soloOg || soloMarca;
+  const limpia = reusar ? await readFile(ORIGEN) : await limpiarFoto();
+  if (reusar) console.log("foto        se reutiliza la ya procesada");
 
-  if (!soloOg) await pasosDerivados(limpia);
+  if (!reusar) await placeholder(limpia);
+  if (!soloOg) await iconos();
   await tarjetasSociales(limpia);
 }
 
-async function pasosDerivados(limpia) {
+async function placeholder(limpia) {
   // 2 · Placeholder difuminado para next/image.
   const blur = await sharp(limpia).resize(16).jpeg({ quality: 55 }).toBuffer();
   await writeFile(
@@ -152,7 +163,9 @@ async function pasosDerivados(limpia) {
       )}";\n`,
   );
   console.log(`blur        ${blur.length} bytes`);
+}
 
+async function iconos() {
   // 3 · Iconos.
   await writeFile(path.join(PUBLICO, "icon.svg"), marcaSvg);
   const marca = Buffer.from(marcaSvg);
@@ -173,13 +186,15 @@ async function pasosDerivados(limpia) {
 
 async function tarjetasSociales(limpia) {
   // 4 · Open Graph por idioma.
+  // En blanco y negro, como la foto del hero.
   const retrato = await sharp(limpia)
     .resize(520, 630, { fit: "cover", position: "attention" })
+    .grayscale()
     .toBuffer();
 
   // El titular va partido en dos líneas: entero no cabe antes de la foto,
-  // que empieza en x=680. Georgia en versales con este tracking anda por los
-  // 28 px por carácter, así que el corte es obligado, no estético.
+  // que empieza en x=680. La mono en versales con este tracking anda por los
+  // 19 px por carácter, así que el corte es obligado, no estético.
   const textos = {
     es: {
       rol: ["Desarrollador Frontend", "& Data Analyst"],

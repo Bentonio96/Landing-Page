@@ -6,6 +6,19 @@ import { Seccion } from "@/components/ui/Seccion";
 
 type Props = { idioma: Idioma; t: Diccionario };
 
+/** Envuelve cada palabra en un span y deja los espacios como texto. */
+function enPalabras(texto: string) {
+  return texto.split(/(\s+)/).map((trozo, i) =>
+    trozo.trim() ? (
+      <span key={i} className="palabra-cita">
+        {trozo}
+      </span>
+    ) : (
+      trozo
+    ),
+  );
+}
+
 export function SobreMi({ idioma, t }: Props) {
   const [entrada, ...resto] = t.sobreMi.parrafos;
   const trayectoria = resto.slice(0, -1);
@@ -37,10 +50,13 @@ export function SobreMi({ idioma, t }: Props) {
           sacada de él y puesta a tamaño de cartel. Por eso es un párrafo
           normal y no va oculta a lectores de pantalla. */}
       <Reveal className="my-24 md:my-40">
-        <p className="font-display text-t1 uppercase text-cita">
-          {cita.antes}
-          <span className="subrayado-cita">{cita.resaltado}</span>
-          {cita.despues}
+        {/* Cada palabra se enciende al ritmo del scroll (ver .palabra-cita y
+            Movimiento.tsx). Los espacios quedan como texto normal entre
+            spans, así que la frase se lee y se copia entera. */}
+        <p data-cita-scroll="" className="font-display text-t1 uppercase text-cita">
+          {enPalabras(cita.antes)}
+          <span className="subrayado-cita">{enPalabras(cita.resaltado)}</span>
+          {enPalabras(cita.despues)}
         </p>
         <p className="etiqueta mt-8">{cita.pie}</p>
       </Reveal>

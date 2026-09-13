@@ -56,11 +56,8 @@ for (const tema of ["light", "dark"]) {
   // networkidle2 y un margen amplio: contra un sitio remoto la red puede no
   // quedarse nunca del todo quieta.
   await p.goto(BASE, { waitUntil: "networkidle2", timeout: 60000 });
-  await p.evaluate(() =>
-    document
-      .querySelectorAll(".revelar")
-      .forEach((n) => n.setAttribute("data-visible", "")),
-  );
+  // Con movimiento reducido emulado (arriba) Movimiento.tsx no crea ninguna
+  // animación: todo está ya en su estado final, que es el que se mide.
   await new Promise((r) => setTimeout(r, 600));
 
   console.log(`\n===== ${tema.toUpperCase()} · ${vista.nombre} =====`);
@@ -87,8 +84,11 @@ for (const tema of ["light", "dark"]) {
           (n) => n.nodeType === 3 && n.textContent.trim(),
         );
         if (nodos.length === 0) continue;
-        // Lo decorativo oculto a lectores de pantalla no es texto que leer.
-        if (el.closest("[aria-hidden='true']")) continue;
+        // Se miden también los aria-hidden: las letras sueltas del nombre lo
+        // son (el nombre accesible va aparte) y son lo que se VE. Lo que se
+        // salta es lo contrario: texto solo para lectores de pantalla,
+        // recortado a 1 px, cuyas cajas de línea caen en cualquier parte.
+        if (el.closest(".sr-only")) continue;
         const cs = getComputedStyle(el);
         if (cs.visibility === "hidden" || Number(cs.opacity) === 0) continue;
         const tam = parseFloat(cs.fontSize);
