@@ -343,7 +343,7 @@ Para cambiar la paleta, la tipografía o el espaciado: **`src/app/globals.css`**
 
 Para cambiar textos de interfaz: **`src/i18n/diccionario.ts`**, en ambos idiomas.
 
-El CV en PDF vive en `public/CV-Benjamin-Pena.pdf` y se enlaza desde el hero y desde Contacto con el atributo `download`. La ruta está en `perfil.cv`, dentro de [`src/data/perfil.ts`](src/data/perfil.ts), junto con los idiomas.
+El CV en PDF vive en `public/CV-Benjamin-Pena.pdf` y se enlaza desde el hero y desde Contacto con el atributo `download`, y se guarda como `CV-Benjamín-Peña.pdf` (el nombre está en `perfil.cvArchivo` y en la cabecera `Content-Disposition` de `next.config.ts`; si cambias uno, cambia el otro). La ruta está en `perfil.cv`, dentro de [`src/data/perfil.ts`](src/data/perfil.ts), junto con los idiomas.
 
 ---
 

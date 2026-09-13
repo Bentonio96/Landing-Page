@@ -22,8 +22,11 @@ type Props = {
   variante?: Variante;
   /** Abre en pestaña nueva y añade el aviso para lectores de pantalla. */
   externo?: boolean;
-  /** Fuerza la descarga en vez de abrir el archivo en el navegador. */
-  descargar?: boolean;
+  /**
+   * Fuerza la descarga en vez de abrir el archivo en el navegador, guardándolo
+   * con este nombre.
+   */
+  descargar?: string;
   /** Texto accesible completo, si el visible no basta por sí solo. */
   etiquetaAccesible?: string;
   avisoExterno?: string;
@@ -54,7 +57,7 @@ export function Boton({
   children,
   variante = "primario",
   externo = false,
-  descargar = false,
+  descargar,
   etiquetaAccesible,
   avisoExterno,
   onClick,
@@ -66,7 +69,7 @@ export function Boton({
       onClick={onClick}
       aria-label={etiquetaAccesible}
       {...(externo ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      {...(descargar ? { download: "" } : {})}
+      {...(descargar ? { download: descargar } : {})}
       className={cn(base, variantes[variante], className)}
     >
       {children}

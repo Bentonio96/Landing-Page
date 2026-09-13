@@ -23,7 +23,8 @@ type Fila = {
   href: string;
   icono: LucideIcon;
   externo?: boolean;
-  descargar?: boolean;
+  /** Nombre con el que se guarda el archivo; si falta, el enlace navega. */
+  descargar?: string;
 };
 
 export function Contacto({ t }: Props) {
@@ -64,7 +65,7 @@ export function Contacto({ t }: Props) {
       valor: `${t.contacto.descargarCV} ${t.contacto.cvFormato}`,
       href: perfil.cv,
       icono: ArrowDown,
-      descargar: true,
+      descargar: perfil.cvArchivo,
     },
   ];
 
@@ -128,7 +129,7 @@ export function Contacto({ t }: Props) {
                       {...(externo
                         ? { target: "_blank", rel: "noopener noreferrer" }
                         : {})}
-                      {...(descargar ? { download: "" } : {})}
+                      {...(descargar ? { download: descargar } : {})}
                       className={claseFila}
                     >
                       <span className="etiqueta">{etiqueta}</span>

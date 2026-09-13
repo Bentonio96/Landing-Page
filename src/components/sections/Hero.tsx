@@ -134,7 +134,7 @@ export function Hero({ t }: Props) {
             <Boton
               href={perfil.cv}
               variante="secundario"
-              descargar
+              descargar={perfil.cvArchivo}
               className="w-full sm:w-auto"
             >
               <Download aria-hidden="true" className="size-4" />

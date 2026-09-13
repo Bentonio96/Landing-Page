@@ -55,6 +55,13 @@ export const perfil = {
   linkedinVisible: "linkedin.com/in/benjamín-peña",
   /** Vive en /public. Sin tildes en el nombre para no ensuciar la URL. */
   cv: "/CV-Benjamin-Pena.pdf",
+  /**
+   * Nombre con el que se guarda al descargarlo, con tildes y ñ. Va en el
+   * atributo `download` de los enlaces y, para quien abra la URL directa, en
+   * la cabecera Content-Disposition (next.config.ts). Si lo cambias, cambia
+   * los dos.
+   */
+  cvArchivo: "CV-Benjamín-Peña.pdf",
 } as const;
 
 export const idiomasHablados: IdiomaHablado[] = [
