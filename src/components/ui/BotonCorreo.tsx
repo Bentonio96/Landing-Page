@@ -15,16 +15,17 @@ type Props = {
   className?: string;
 };
 
+// Mismas clases que Boton: los dos conviven lado a lado y deben medir igual.
 const base =
   "group/boton inline-flex items-center justify-center gap-2 rounded-control " +
-  "px-5 py-3 font-mono text-etiqueta uppercase tracking-[0.12em] " +
+  "border px-6 py-3.5 font-mono text-etiqueta uppercase tracking-[0.12em] " +
   "transition-colors duration-200 " +
   "focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-acento";
 
 const variantes = {
-  primario: "bg-acento text-acentosobre hover:bg-acentohover",
-  secundario:
-    "border border-bordefuerte text-texto hover:border-acento hover:text-acento",
+  primario:
+    "border-texto bg-texto text-fondo hover:border-acento hover:bg-acento hover:text-acentosobre",
+  secundario: "border-bordefuerte text-texto hover:border-texto",
 } as const;
 
 /**

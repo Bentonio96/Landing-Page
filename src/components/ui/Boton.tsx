@@ -2,12 +2,14 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * primario  — CTA sólido. Uno por sección como máximo.
- * acento    — destacado sin llenar: borde y texto en acento sobre fondo
- *             teñido. Para acciones importantes que no son EL CTA.
+ * primario  — CTA sólido, tinta sobre papel (o al revés en oscuro). Pasa al
+ *             acento al apuntarlo. Uno por sección como máximo.
+ * acento    — destacado sin llenar: borde y texto en acento. Para acciones
+ *             importantes que no son EL CTA.
  * secundario— neutro.
+ * enlace    — texto subrayado sin caja, para las filas editoriales.
  */
-type Variante = "primario" | "acento" | "secundario";
+type Variante = "primario" | "acento" | "secundario" | "enlace";
 
 type Props = {
   href: string;
@@ -25,18 +27,22 @@ type Props = {
   className?: string;
 };
 
+// El relleno va en cada variante y no aquí: `cn` solo concatena, no resuelve
+// conflictos, así que un px-5 en la base le ganaría al px-0 del enlace.
 const base =
   "group/boton inline-flex items-center justify-center gap-2 rounded-control " +
-  "px-5 py-3 font-mono text-etiqueta uppercase tracking-[0.12em] " +
+  "font-mono text-etiqueta uppercase tracking-[0.12em] " +
   "transition-colors duration-200 " +
   "focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-acento";
 
+const caja = "border px-6 py-3.5";
+
 const variantes: Record<Variante, string> = {
-  primario: "bg-acento text-acentosobre hover:bg-acentohover",
-  acento:
-    "border border-acento/45 bg-acentotenue text-acento hover:border-acento hover:bg-acento hover:text-acentosobre",
-  secundario:
-    "border border-bordefuerte text-texto hover:border-acento hover:text-acento",
+  primario: `${caja} border-texto bg-texto text-fondo hover:border-acento hover:bg-acento hover:text-acentosobre`,
+  acento: `${caja} border-acento text-acento hover:bg-acento hover:text-acentosobre`,
+  secundario: `${caja} border-bordefuerte text-texto hover:border-texto`,
+  enlace:
+    "rounded-none border-b border-bordefuerte py-2 text-texto hover:border-acento hover:text-acento",
 };
 
 export function Boton({

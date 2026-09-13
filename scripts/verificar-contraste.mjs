@@ -38,8 +38,8 @@ const navegador = await puppeteer.launch({
 
 let fallo = false;
 
-/* Se miden los dos anchos: las bandas del fondo son relativas al viewport,
-   así que en móvil caen en otro sitio y bajo otros textos. */
+/* Se miden los dos anchos: la foto del hero y sus velos cambian de sitio
+   entre escritorio y móvil, y caen bajo textos distintos. */
 const VISTAS = [
   { nombre: "escritorio", width: 1440, height: 900 },
   { nombre: "móvil", width: 390, height: 844 },
@@ -76,39 +76,71 @@ for (const tema of ["light", "dark"]) {
     await p.evaluate((v) => window.scrollTo(0, v), y);
     await new Promise((r) => setTimeout(r, 250));
 
+    // Todo elemento con texto propio visible en pantalla. Se guarda su
+    // color y una rejilla de puntos que cubre la caja entera: sobre la foto
+    // del hero o un velo en degradado, el fondo cambia dentro de una misma
+    // línea, y un solo punto no lo representa.
     const objetivos = await p.evaluate(() => {
-      const selectores = [
-        ".etiqueta",
-        ".text-tenue",
-        "p.text-guia",
-        "#stack li",
-        "#contacto dd",
-        "h2",
-        "h3",
-        "p",
-      ];
       const vistos = [];
-      for (const sel of selectores) {
-        for (const el of Array.from(document.querySelectorAll(sel)).slice(0, 6)) {
-          const r = el.getBoundingClientRect();
-          if (r.width < 8 || r.height < 8) continue;
-          if (r.top < 4 || r.bottom > window.innerHeight - 4) continue;
-          vistos.push({
-            sel,
-            color: getComputedStyle(el).color,
-            texto: el.textContent.trim().slice(0, 20),
-            // se muestrea justo encima del texto: fondo puro, sin glifos
-            x: Math.round(r.left + r.width / 2),
-            y: Math.round(r.top + 2),
-          });
+      for (const el of document.body.querySelectorAll("*")) {
+        const nodos = Array.from(el.childNodes).filter(
+          (n) => n.nodeType === 3 && n.textContent.trim(),
+        );
+        if (nodos.length === 0) continue;
+        // Lo decorativo oculto a lectores de pantalla no es texto que leer.
+        if (el.closest("[aria-hidden='true']")) continue;
+        const cs = getComputedStyle(el);
+        if (cs.visibility === "hidden" || Number(cs.opacity) === 0) continue;
+        const tam = parseFloat(cs.fontSize);
+        const negrita = Number(cs.fontWeight) >= 700;
+        // WCAG: texto grande (≥24px, o ≥18.66px en negrita) pide 3:1.
+        const minimo = tam >= 24 || (negrita && tam >= 18.66) ? 3 : 4.5;
+        // Las cajas de LÍNEA del texto, no la del elemento: un span en
+        // display:block mide todo el ancho del contenedor, y medir ahí
+        // muestrea fondo que ninguna letra toca.
+        const puntos = [];
+        for (const nodo of nodos) {
+          const rango = document.createRange();
+          rango.selectNodeContents(nodo);
+          for (const r of rango.getClientRects()) {
+            if (r.width < 4 || r.height < 6) continue;
+            if (r.top < 4 || r.bottom > window.innerHeight - 4) continue;
+            for (const fy of [0.3, 0.5, 0.7])
+              for (let k = 0; k <= 6; k++)
+                puntos.push([
+                  Math.round(r.left + 1 + ((r.width - 2) * k) / 6),
+                  Math.round(r.top + r.height * fy),
+                ]);
+          }
         }
+        if (puntos.length === 0) continue;
+        vistos.push({
+          sel: el.tagName.toLowerCase() + (el.closest("#inicio") ? "#inicio" : ""),
+          color: cs.color,
+          texto: el.textContent.trim().slice(0, 22),
+          minimo,
+          puntos,
+        });
       }
       return vistos;
     });
 
     if (objetivos.length === 0) continue;
 
+    // Captura con el texto oculto: así se mide el fondo que queda DEBAJO de
+    // los glifos, no el borde suavizado de las propias letras. Se ocultan
+    // también los puntos decorativos de acento, que no son fondo de nada.
+    await p.addStyleTag({
+      content:
+        "*{color:transparent!important;text-decoration-color:transparent!important;-webkit-text-stroke-color:transparent!important;text-shadow:none!important}" +
+        "span[aria-hidden='true'].rounded-full{visibility:hidden!important}",
+    });
+    await new Promise((r) => setTimeout(r, 120));
     const png = await p.screenshot({ type: "png" });
+    await p.evaluate(() =>
+      document.head.lastElementChild?.tagName === "STYLE" &&
+      document.head.lastElementChild.remove(),
+    );
     const { data, info } = await sharp(png)
       .ensureAlpha()
       .raw()
@@ -119,18 +151,28 @@ for (const tema of ["light", "dark"]) {
     };
 
     for (const o of objetivos) {
-      if (o.x < 0 || o.x >= info.width || o.y < 0 || o.y >= info.height) continue;
-      const fondo = pixel(o.x, o.y);
-      const r = ratio(rgb(o.color), fondo);
-      muestras++;
-      if (r < peor) {
-        peor = r;
-        peorDato = { ...o, fondo };
+      let peorLocal = 99;
+      let fondoLocal = null;
+      for (const [x, y] of o.puntos) {
+        if (x < 0 || x >= info.width || y < 0 || y >= info.height) continue;
+        const fondo = pixel(x, y);
+        const r = ratio(rgb(o.color), fondo);
+        muestras++;
+        if (r < peorLocal) {
+          peorLocal = r;
+          fondoLocal = fondo;
+        }
       }
-      if (r < 4.5) {
+      if (!fondoLocal) continue;
+      // Se compara el margen sobre el mínimo que le toca a cada texto.
+      if (peorLocal / o.minimo < peor / (peorDato?.minimo ?? 4.5)) {
+        peor = peorLocal;
+        peorDato = { ...o, fondo: fondoLocal };
+      }
+      if (peorLocal < o.minimo) {
         fallo = true;
         console.log(
-          `  !! ${r.toFixed(2)}:1  ${o.sel.padEnd(12)} fondo rgb(${fondo.join(",")})  "${o.texto}"`,
+          `  !! ${peorLocal.toFixed(2)}:1 (mín ${o.minimo})  ${o.sel.padEnd(10)} fondo rgb(${fondoLocal.join(",")})  "${o.texto}"`,
         );
       }
     }
@@ -139,10 +181,10 @@ for (const tema of ["light", "dark"]) {
   console.log(`  ${muestras} muestras a lo largo de toda la página`);
   if (peorDato) {
     console.log(
-      `  peor caso: ${peor.toFixed(2)}:1  ${peorDato.sel}  fondo rgb(${peorDato.fondo.join(",")})  "${peorDato.texto}"`,
+      `  peor caso: ${peor.toFixed(2)}:1 (mín ${peorDato.minimo})  ${peorDato.sel}  fondo rgb(${peorDato.fondo.join(",")})  "${peorDato.texto}"`,
     );
   }
-  console.log(`  → ${peor >= 4.5 ? "cumple AA" : "POR DEBAJO DE AA"}`);
+  console.log(`  → ${peorDato && peor < peorDato.minimo ? "POR DEBAJO DE AA" : "cumple AA"}`);
   await p.close();
 }
 

@@ -85,7 +85,7 @@ export function Encabezado({ idioma, t }: Props) {
       <div className="lienzo flex h-16 items-center justify-between gap-4 sm:h-20">
         <a
           href="#inicio"
-          className="font-display text-lg tracking-tight transition-colors hover:text-acento"
+          className="font-display text-2xl uppercase leading-none tracking-[0.02em] transition-colors hover:text-acento"
         >
           Benjamín Peña
         </a>
@@ -103,9 +103,9 @@ export function Encabezado({ idioma, t }: Props) {
                     href={`#${id}`}
                     aria-current={esActiva ? "true" : undefined}
                     className={cn(
-                      "relative inline-block px-3 py-2 font-mono text-etiqueta uppercase tracking-[0.12em] transition-colors",
+                      "relative inline-block px-3 py-2 text-sm transition-colors",
                       esActiva
-                        ? "text-acento"
+                        ? "text-texto"
                         : "text-atenuado hover:text-texto",
                     )}
                   >
@@ -113,7 +113,7 @@ export function Encabezado({ idioma, t }: Props) {
                     <span
                       aria-hidden="true"
                       className={cn(
-                        "absolute inset-x-3 bottom-1 h-px origin-left bg-acento transition-transform duration-300",
+                        "absolute inset-x-3 bottom-1 h-px origin-left bg-texto transition-transform duration-300",
                         esActiva ? "scale-x-100" : "scale-x-0",
                       )}
                     />

@@ -1,54 +1,64 @@
-import { Download, Github, Linkedin, Mail, MapPin, Phone } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
 import type { Diccionario } from "@/i18n/diccionario";
 import { perfil } from "@/data/perfil";
-import { Boton } from "@/components/ui/Boton";
 import { BotonCorreo } from "@/components/ui/BotonCorreo";
 import { Reveal } from "@/components/ui/Reveal";
 import { Seccion } from "@/components/ui/Seccion";
 
 type Props = { t: Diccionario };
 
+type Fila = {
+  id: string;
+  etiqueta: string;
+  valor: string;
+  href: string;
+  icono: LucideIcon;
+  externo?: boolean;
+  descargar?: boolean;
+};
+
 export function Contacto({ t }: Props) {
-  const datos = [
+  const filas: Fila[] = [
     {
       id: "email",
-      icono: Mail,
       etiqueta: t.contacto.email,
       valor: perfil.email,
       href: `mailto:${perfil.email}`,
+      icono: ArrowUpRight,
     },
     {
       id: "telefono",
-      icono: Phone,
       etiqueta: t.contacto.telefono,
       valor: perfil.telefono,
       href: `tel:${perfil.telefonoEnlace}`,
-    },
-    {
-      id: "ubicacion",
-      icono: MapPin,
-      etiqueta: t.contacto.ubicacion,
-      valor: perfil.ubicacion,
-      href: null,
-    },
-  ] as const;
-
-  const redes = [
-    {
-      id: "github",
-      icono: Github,
-      nombre: "GitHub",
-      visible: `github.com/${perfil.githubUsuario}`,
-      href: perfil.github,
+      icono: ArrowUpRight,
     },
     {
       id: "linkedin",
-      icono: Linkedin,
-      nombre: "LinkedIn",
-      visible: perfil.linkedinVisible,
+      etiqueta: "LinkedIn",
+      valor: perfil.linkedinVisible,
       href: perfil.linkedin,
+      icono: ArrowUpRight,
+      externo: true,
     },
-  ] as const;
+    {
+      id: "github",
+      etiqueta: "GitHub",
+      valor: `github.com/${perfil.githubUsuario}`,
+      href: perfil.github,
+      icono: ArrowUpRight,
+      externo: true,
+    },
+    {
+      id: "cv",
+      etiqueta: "CV",
+      valor: `${t.contacto.descargarCV} ${t.contacto.cvFormato}`,
+      href: perfil.cv,
+      icono: ArrowDown,
+      descargar: true,
+    },
+  ];
 
   return (
     <Seccion
@@ -56,79 +66,57 @@ export function Contacto({ t }: Props) {
       numero="05"
       etiqueta={t.contacto.etiqueta}
       titulo={t.contacto.titulo}
-      bajada={t.contacto.bajada}
     >
-      <div className="space-y-10">
-        <Reveal>
-          <dl className="grid gap-px overflow-hidden border border-borde bg-borde sm:grid-cols-3">
-            {datos.map(({ id, icono: Icono, etiqueta, valor, href }) => (
-              <div key={id} className="bg-superficie p-5">
-                <dt className="etiqueta flex items-center gap-2">
-                  <Icono aria-hidden="true" className="size-3.5" />
-                  {etiqueta}
-                </dt>
-                <dd className="mt-2 text-menor break-words">
-                  {href ? (
-                    <a href={href} className="enlace">
+      <div className="grid gap-x-canal gap-y-14 md:grid-cols-12">
+        <Reveal className="md:col-span-5">
+          <p className="text-t3 font-light uppercase text-texto">
+            {t.contacto.bajada}
+          </p>
+          <p className="etiqueta mt-6">
+            {t.contacto.ubicacion} · {perfil.ubicacion}
+          </p>
+          <BotonCorreo
+            email={perfil.email}
+            texto={t.contacto.botonCorreo}
+            avisoCopiado={t.contacto.correoCopiado}
+            avisoFallo={t.contacto.correoFallo}
+            className="mt-10 w-full sm:w-auto"
+          />
+        </Reveal>
+
+        {/* Filas enteras pulsables, como un índice: la etiqueta a la
+            izquierda, el dato y la flecha que indica qué pasa al pulsar. */}
+        <Reveal retardo={0.08} className="md:col-span-6 md:col-start-7">
+          <ul className="border-t border-borde">
+            {filas.map(
+              ({ id, etiqueta, valor, href, icono: Icono, externo, descargar }) => (
+                <li key={id} className="border-b border-borde">
+                  <a
+                    href={href}
+                    {...(externo
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                    {...(descargar ? { download: "" } : {})}
+                    className="group grid grid-cols-[4.5rem_1fr_auto] items-center gap-4 py-5 transition-colors sm:grid-cols-[6.5rem_1fr_auto]"
+                  >
+                    <span className="etiqueta">{etiqueta}</span>
+                    <span className="break-words text-base text-texto transition-colors group-hover:text-acento sm:text-lg">
                       {valor}
-                    </a>
-                  ) : (
-                    <span className="text-atenuado">{valor}</span>
-                  )}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </Reveal>
-
-        <Reveal retardo={0.08}>
-          <ul className="flex flex-wrap gap-3">
-            {redes.map(({ id, icono: Icono, nombre, visible, href }) => (
-              <li key={id}>
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2.5 rounded-pieza border border-borde px-4 py-3 text-menor text-atenuado transition-colors hover:border-acento hover:text-acento"
-                >
-                  <Icono aria-hidden="true" className="size-4" />
-                  <span>{visible}</span>
-                  <span className="sr-only">
-                    — {nombre} {t.proyectos.enlaceExterno}
-                  </span>
-                </a>
-              </li>
-            ))}
+                    </span>
+                    <Icono
+                      aria-hidden="true"
+                      className="size-4 text-tenue transition-[color,transform] duration-200 group-hover:text-acento group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
+                    {externo ? (
+                      <span className="sr-only">
+                        {t.proyectos.enlaceExterno}
+                      </span>
+                    ) : null}
+                  </a>
+                </li>
+              ),
+            )}
           </ul>
-        </Reveal>
-
-        <Reveal retardo={0.14}>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <BotonCorreo
-              email={perfil.email}
-              texto={t.contacto.botonCorreo}
-              avisoCopiado={t.contacto.correoCopiado}
-              avisoFallo={t.contacto.correoFallo}
-              className="w-full sm:w-auto"
-            />
-
-            {/* El CV es de lo que más se pide para evaluar experiencia:
-                lleva la variante de acento para que no se pierda al lado del
-                CTA de correo, sin volverse un segundo botón sólido. */}
-            <Boton
-              href={perfil.cv}
-              variante="acento"
-              descargar
-              className="w-full sm:w-auto"
-            >
-              <Download aria-hidden="true" className="size-4" />
-              {/* El formato hereda el color del botón a propósito: sobre el
-                  fondo teñido de acento, el gris atenuado caía a 4.31:1. */}
-              <span>
-                {t.contacto.descargarCV} {t.contacto.cvFormato}
-              </span>
-            </Boton>
-          </div>
         </Reveal>
       </div>
     </Seccion>

@@ -1,27 +1,33 @@
-import { Fraunces, Inter_Tight, JetBrains_Mono } from "next/font/google";
+import { Bebas_Neue, Inter_Tight, JetBrains_Mono } from "next/font/google";
 
 /**
  * Las tres se sirven autoalojadas por next/font: cero requests a Google en
  * producción y `size-adjust` automático en la fuente de respaldo, que es lo
  * que evita el salto de layout mientras cargan.
  *
- * Solo se pide lo que el sistema de diseño usa de verdad: Fraunces en 400 y
- * 500 (titulares), y las otras dos únicamente en 400. Cada peso extra son
+ * Solo se pide lo que el sistema de diseño usa de verdad. Cada peso extra son
  * ~20 KB en la ruta crítica compitiendo con la foto del hero por ancho de
  * banda, y eso empuja el LCP en móvil.
- * De Fraunces se usan instancias estáticas en vez de la variable: los ejes
- * opsz/SOFT/WONK se descargaban sin que ninguna regla los usara.
  */
-export const fuenteDisplay = Fraunces({
+
+/**
+ * Titulares. Una grotesca condensada de un solo peso: a tamaño de cartel es
+ * lo que da el impacto, y al ser estrecha deja escribir el nombre enorme sin
+ * que desborde en un teléfono. Solo tiene mayúsculas, así que los titulares
+ * se escriben normal en el diccionario y se versalizan con CSS: los lectores
+ * de pantalla siguen leyendo "Quién soy" y no "QUIÉN SOY" deletreado.
+ */
+export const fuenteDisplay = Bebas_Neue({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: "400",
   display: "swap",
   variable: "--fuente-display",
 });
 
+/** Cuerpo. El 300 es para los subtítulos grandes y ligeros de las filas. */
 export const fuenteSans = Inter_Tight({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["300", "400"],
   display: "swap",
   variable: "--fuente-sans",
 });

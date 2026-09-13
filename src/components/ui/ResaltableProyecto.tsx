@@ -20,7 +20,8 @@ type Props = {
  * también ve resaltarse en el stack las tecnologías del proyecto que está
  * recorriendo.
  *
- * El resalte SUMA (anillo de acento) en vez de atenuar el resto: bajar la
+ * El resalte SUMA (marco de acento alrededor de la captura, ver
+ * .marco-captura en globals.css) en vez de atenuar el resto: bajar la
  * opacidad de lo no coincidente reduciría el contraste del texto.
  */
 export function ResaltableProyecto({
@@ -49,11 +50,7 @@ export function ResaltableProyecto({
     <div
       {...manejadores}
       data-resaltada={resaltada ? "" : undefined}
-      className={cn(
-        "flex w-full transition-shadow duration-300",
-        resaltada && "shadow-[0_0_0_2px_var(--c-acento)]",
-        className,
-      )}
+      className={cn("block w-full", className)}
     >
       {children}
     </div>

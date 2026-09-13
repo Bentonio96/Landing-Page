@@ -3,6 +3,7 @@ import { ArrowUpRight, Code2 } from "lucide-react";
 import type { Idioma, Proyecto } from "@/types";
 import type { Diccionario } from "@/i18n/diccionario";
 import { BLUR_PROYECTOS } from "@/lib/blur-proyectos";
+import { cn } from "@/lib/utils";
 import { Boton } from "./Boton";
 import { Chip } from "./Chip";
 
@@ -10,72 +11,96 @@ type Props = {
   proyecto: Proyecto;
   idioma: Idioma;
   t: Diccionario;
-  /** Número editorial mostrado en la esquina, p.ej. "01". */
+  /** Número editorial mostrado junto al año, p.ej. "01". */
   indice: string;
+  /** Pone la captura a la derecha en escritorio, para alternar filas. */
+  invertida?: boolean;
 };
 
 /**
- * Tarjeta de un proyecto.
+ * Un proyecto, como fila editorial: captura a un lado y texto al otro,
+ * alternando lado de una fila a la siguiente.
  *
  * Los dos enlaces son independientes y condicionales: si el proyecto no
- * tiene `demoUrl` o `repoUrl`, ese botón no se renderiza. La tarjeta nunca
+ * tiene `demoUrl` o `repoUrl`, ese enlace no se renderiza. La fila nunca
  * muestra un enlace roto.
  *
- * La miniatura se muestra siempre, no al pasar el cursor. Esconder la
- * captura tras un hover dejaría fuera a quien navega desde un teléfono, y
- * es justo lo que alguien quiere ver antes de decidir si abre el proyecto.
- * Lo que sí reacciona es un acercamiento discreto de la imagen.
+ * La captura se muestra siempre. En escritorio va en grises y recupera el
+ * color al apuntar la fila; en pantallas táctiles va en color desde el
+ * principio (ver .captura-proyecto en globals.css).
  *
- * Las tres se cargan en diferido: la sección queda bajo el pliegue en todos
- * los tamaños, así que precargarlas solo le quitaría ancho de banda a la
- * foto del hero, que sí es el elemento LCP.
+ * Las imágenes se cargan en diferido: la sección queda bajo el pliegue en
+ * todos los tamaños, así que precargarlas solo le quitaría ancho de banda a
+ * la foto del hero, que sí es el elemento LCP.
  */
 export function TarjetaProyecto({
   proyecto,
   idioma,
   t,
   indice,
+  invertida = false,
 }: Props) {
   const { nombre, descripcion, tecnologias, demoUrl, repoUrl, anio, imagen } =
     proyecto;
   const idTitulo = `proyecto-${proyecto.slug}-titulo`;
-  // Si el proyecto todavía no tiene URLs, no se reserva el espacio de los
-  // botones: la tarjeta se cierra limpia en vez de dejar un hueco muerto.
   const tieneEnlaces = Boolean(demoUrl ?? repoUrl);
 
   return (
     <article
       aria-labelledby={idTitulo}
-      className="tarjeta-borde group flex h-full flex-col overflow-hidden"
+      className="fila-proyecto grid items-center gap-x-canal gap-y-8 py-12 md:grid-cols-12 md:py-20"
     >
-      {imagen ? (
-        <div className="relative aspect-[16/10] overflow-hidden border-b border-borde bg-elevado">
-          <Image
-            src={imagen}
-            alt={`${t.proyectos.captura} ${nombre}`}
-            fill
-            sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 40vw"
-            loading="lazy"
-            placeholder={BLUR_PROYECTOS[proyecto.slug] ? "blur" : "empty"}
-            blurDataURL={BLUR_PROYECTOS[proyecto.slug]}
-            className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.04] motion-reduce:transform-none motion-reduce:transition-none"
-          />
-        </div>
-      ) : null}
+      <div
+        className={cn(
+          "marco-captura md:col-span-7",
+          invertida && "md:order-last md:col-start-6",
+        )}
+      >
+        {imagen ? (
+          <div className="relative aspect-[16/10] overflow-hidden bg-elevado">
+            <Image
+              src={imagen}
+              alt={`${t.proyectos.captura} ${nombre}`}
+              fill
+              sizes="(max-width: 768px) 92vw, 56vw"
+              loading="lazy"
+              placeholder={BLUR_PROYECTOS[proyecto.slug] ? "blur" : "empty"}
+              blurDataURL={BLUR_PROYECTOS[proyecto.slug]}
+              className="captura-proyecto object-cover object-top"
+            />
+          </div>
+        ) : (
+          // Sin captura (sistemas internos) se reserva igual el hueco, con
+          // el número en contorno: la alternancia de filas no se rompe y no
+          // queda media fila vacía.
+          <div className="flex aspect-[16/10] flex-col justify-between border border-borde p-6 sm:p-8">
+            <p className="etiqueta">{t.proyectos.sinCaptura}</p>
+            <span
+              aria-hidden="true"
+              className="numero-contorno self-end font-display text-[clamp(7rem,3rem+14vw,17rem)] leading-[0.78]"
+            >
+              {indice}
+            </span>
+          </div>
+        )}
+      </div>
 
-      <div className="flex flex-1 flex-col p-6 sm:p-8">
-        <div className="flex items-baseline justify-between gap-4">
-          <span className="etiqueta" aria-hidden="true">
-            {indice}
-          </span>
-          {anio ? <span className="etiqueta">{anio}</span> : null}
-        </div>
+      <div
+        className={cn(
+          "md:col-span-5",
+          invertida ? "md:col-start-1 md:row-start-1" : "md:col-start-8",
+        )}
+      >
+        <p className="etiqueta flex items-baseline gap-3">
+          <span aria-hidden="true">{indice}</span>
+          {anio ? <span>{anio}</span> : null}
+        </p>
 
-        <h3 id={idTitulo} className="mt-5 text-t3">
+        <h3 id={idTitulo} className="mt-5 font-display text-t2 font-normal uppercase">
           {nombre}
         </h3>
 
-        <p className="mt-3 text-base leading-relaxed text-atenuado">
+        <p className="mt-5 text-base leading-relaxed text-atenuado">
           {descripcion[idioma]}
         </p>
 
@@ -92,14 +117,12 @@ export function TarjetaProyecto({
           </ul>
         ) : null}
 
-        {/* Los botones se anclan abajo para que todas las tarjetas de una
-            fila terminen alineadas, sin importar el largo del texto. */}
         {tieneEnlaces ? (
-          <div className="mt-auto flex flex-wrap gap-3 pt-8">
+          <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3">
             {demoUrl ? (
               <Boton
                 href={demoUrl}
-                variante="primario"
+                variante="enlace"
                 externo
                 etiquetaAccesible={`${t.proyectos.verSitio}: ${nombre}`}
                 avisoExterno={t.proyectos.enlaceExterno}
@@ -115,7 +138,7 @@ export function TarjetaProyecto({
             {repoUrl ? (
               <Boton
                 href={repoUrl}
-                variante="secundario"
+                variante="enlace"
                 externo
                 etiquetaAccesible={`${t.proyectos.verCodigo}: ${nombre}`}
                 avisoExterno={t.proyectos.enlaceExterno}

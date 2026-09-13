@@ -20,16 +20,17 @@ export function Proyectos({ idioma, t }: Props) {
       {proyectos.length === 0 ? (
         <p className="text-guia text-atenuado">{t.proyectos.vacio}</p>
       ) : (
-        <ul className="grid gap-5 sm:grid-cols-2">
+        <ul className="border-t border-borde">
           {proyectos.map((proyecto, i) => (
-            <li key={proyecto.slug} className="flex">
-              <Reveal retardo={(i % 2) * 0.08} className="flex w-full">
+            <li key={proyecto.slug} className="border-b border-borde">
+              <Reveal>
                 <ResaltableProyecto tecnologias={proyecto.tecnologias}>
                   <TarjetaProyecto
                     proyecto={proyecto}
                     idioma={idioma}
                     t={t}
                     indice={String(i + 1).padStart(2, "0")}
+                    invertida={i % 2 === 1}
                   />
                 </ResaltableProyecto>
               </Reveal>

@@ -28,19 +28,19 @@ export const metadata = {
  */
 const estilos = `
   :root {
-    --fondo: #FBFAF8;
-    --texto: #16181D;
-    --atenuado: #5C6069;
+    --fondo: #F3F2EE;
+    --texto: #0A0A0A;
+    --atenuado: #525252;
     --acento: #B04426;
     --sobre-acento: #FFFFFF;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --fondo: #0C0E12;
-      --texto: #EDEDEB;
-      --atenuado: #9BA1AB;
+      --fondo: #0A0A0A;
+      --texto: #FAFAFA;
+      --atenuado: #A3A3A3;
       --acento: #F0784E;
-      --sobre-acento: #14100E;
+      --sobre-acento: #140E0B;
     }
   }
   html { color-scheme: light dark; }
@@ -64,11 +64,12 @@ const estilos = `
     margin: 0;
   }
   .e404-titulo {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(1.75rem, 1.4rem + 1.6vw, 2.75rem);
-    font-weight: 500;
-    letter-spacing: -0.022em;
-    line-height: 1.12;
+    font-family: Impact, "Arial Narrow", "Helvetica Neue Condensed", sans-serif;
+    font-size: clamp(2.5rem, 1.6rem + 3.4vw, 4.25rem);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    line-height: 0.95;
     margin: 1.25rem 0 0;
   }
   .e404-bajada {

@@ -46,16 +46,21 @@ export function Chip({
       {...manejadores}
       data-resaltada={resaltada ? "" : undefined}
       className={cn(
-        "rounded-chip border px-2.5 py-1 font-mono text-etiqueta tracking-wide",
+        "inline-flex items-center gap-2 rounded-chip border px-3.5 py-1.5 text-sm",
         "transition-colors duration-200",
-        principal
-          ? "border-acento/40 bg-acentotenue text-acento"
-          : "border-borde bg-elevado text-atenuado",
-        // El cruce sube el chip al tratamiento de acento, sin bajar contraste
-        resaltada && "border-acento bg-acentotenue text-acento",
+        // Principal: texto a tinta plena y un punto de acento. El punto hace
+        // que la diferencia no dependa solo del tono del texto.
+        resaltada
+          ? "border-acento text-acento"
+          : principal
+            ? "border-bordefuerte text-texto"
+            : "border-borde text-atenuado",
         className,
       )}
     >
+      {principal ? (
+        <span aria-hidden="true" className="size-1.5 rounded-full bg-acento" />
+      ) : null}
       {children}
       {principal && etiquetaPrincipal ? (
         <span className="sr-only"> — {etiquetaPrincipal}</span>
