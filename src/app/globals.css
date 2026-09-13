@@ -39,8 +39,8 @@
   --c-acento:        #4335C9;  /*  7.6:1 sobre fondo — AA */
   --c-acento-hover:  #332C6B;
   --c-acento-sobre:  #FFFFFF;  /*  8.1:1 sobre acento — AA */
-  /* El violeta vivo del CV. Solo para rellenos decorativos (barra de
-     progreso, puntos, subrayados): como texto da 4.3:1 sobre claro y 4.2:1
+  /* El violeta vivo del CV. Solo para rellenos decorativos (puntos,
+     subrayados, reglas): como texto da 4.3:1 sobre claro y 4.2:1
      sobre oscuro, por debajo de AA para texto normal. */
   --c-acento-vivo:   #6C5CFF;
   --c-sombra:        rgba(14, 17, 23, 0.08);
@@ -662,43 +662,6 @@ html.lenis body {
 [data-tema="dark"] .grano,
 [data-tema="dark"] .textura {
   opacity: 0.075;
-}
-
-/* ============================================================
-   PROGRESO DE LECTURA
-
-   Ligado al scroll de la raíz con CSS: cero JavaScript y fuera del
-   hilo principal. Sin soporte, la barra queda en scaleX(0), o sea
-   invisible, que es una ausencia limpia.
-   ============================================================ */
-
-@keyframes avanzar-lectura {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-.progreso-lectura {
-  transform: scaleX(0);
-  transform-origin: left center;
-  background-color: var(--c-acento-vivo);
-}
-
-@supports (animation-timeline: scroll()) {
-  .progreso-lectura {
-    animation: avanzar-lectura linear both;
-    animation-timeline: scroll(root block);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .progreso-lectura {
-    animation: none;
-    transform: scaleX(0);
-  }
 }
 
 /* ============================================================

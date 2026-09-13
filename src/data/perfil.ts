@@ -1,4 +1,4 @@
-import type { Certificacion, IdiomaHablado, Texto } from "@/types";
+import type { IdiomaHablado, Texto } from "@/types";
 
 /**
  * URL pública del sitio. Se usa en las canónicas, hreflang, Open Graph,
@@ -68,24 +68,6 @@ export const idiomasHablados: IdiomaHablado[] = [
   },
 ];
 
-export const certificaciones: Certificacion[] = [
-  {
-    nombre: "Getting Started with AI · Digital Mindset",
-    emisor: "IBM",
-    fecha: { es: "Marzo 2026", en: "March 2026" },
-  },
-  {
-    nombre: "Python Essentials 1 & 2",
-    emisor: "Cisco",
-    fecha: { es: "Diciembre 2025", en: "December 2025" },
-  },
-  {
-    nombre: "Introduction to Cybersecurity",
-    emisor: "Cisco",
-    fecha: { es: "Noviembre 2025", en: "November 2025" },
-  },
-];
-
 /** Metadata por idioma, para <title>, description y Open Graph. */
 export const seo: Record<"es" | "en", { titulo: string; descripcion: string }> & {
   palabrasClave: Texto;
@@ -93,15 +75,15 @@ export const seo: Record<"es" | "en", { titulo: string; descripcion: string }> &
   es: {
     titulo: "Benjamín Peña — Desarrollador Frontend & Data Analyst",
     descripcion:
-      "Desarrollador frontend y analista de datos en Santiago de Chile. Interfaces con React, TypeScript y Tailwind; datos con Power BI, Power Apps y Python. Disponible freelance.",
+      "Desarrollador frontend y analista de datos en Santiago de Chile. Interfaces con React, TypeScript y Tailwind; datos con Power BI, Power Apps y Python. Disponible para full-time y freelance.",
   },
   en: {
     titulo: "Benjamín Peña — Frontend Developer & Data Analyst",
     descripcion:
-      "Frontend developer and data analyst in Santiago, Chile. Interfaces with React, TypeScript and Tailwind; data with Power BI, Power Apps and Python. Available freelance.",
+      "Frontend developer and data analyst in Santiago, Chile. Interfaces with React, TypeScript and Tailwind; data with Power BI, Power Apps and Python. Available for full-time and freelance work.",
   },
   palabrasClave: {
-    es: "desarrollador frontend, analista de datos, React, TypeScript, Tailwind, Next.js, Power Apps, Power BI, Power Pages, Python, freelance, Santiago, Chile",
-    en: "frontend developer, data analyst, React, TypeScript, Tailwind, Next.js, Power Apps, Power BI, Power Pages, Python, freelance, Santiago, Chile",
+    es: "desarrollador frontend, analista de datos, React, TypeScript, Tailwind, Next.js, Power Apps, Power BI, Power Pages, Python, full-time, freelance, Santiago, Chile",
+    en: "frontend developer, data analyst, React, TypeScript, Tailwind, Next.js, Power Apps, Power BI, Power Pages, Python, full-time, freelance, Santiago, Chile",
   },
 };

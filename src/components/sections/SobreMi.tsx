@@ -1,6 +1,6 @@
 import type { Idioma } from "@/types";
 import type { Diccionario } from "@/i18n/diccionario";
-import { certificaciones, idiomasHablados } from "@/data/perfil";
+import { idiomasHablados } from "@/data/perfil";
 import { Reveal } from "@/components/ui/Reveal";
 import { Seccion } from "@/components/ui/Seccion";
 
@@ -70,10 +70,10 @@ export function SobreMi({ idioma, t }: Props) {
           </Reveal>
         ) : null}
 
-        <Reveal
-          retardo={0.08}
-          className="grid gap-12 sm:grid-cols-2 md:col-span-5 md:col-start-8 md:grid-cols-1"
-        >
+        {/* Las certificaciones quedan solo en el CV: son de nivel introductorio
+            y en el sitio le quitaban aire a lo que sí pesa para un rol de
+            frontend. */}
+        <Reveal retardo={0.08} className="md:col-span-5 md:col-start-8">
           <div>
             <h3 className="etiqueta text-texto">{t.sobreMi.idiomas}</h3>
             <dl data-trazo="" className="trazo-superior mt-5">
@@ -90,20 +90,6 @@ export function SobreMi({ idioma, t }: Props) {
                 </div>
               ))}
             </dl>
-          </div>
-
-          <div>
-            <h3 className="etiqueta text-texto">{t.sobreMi.certificaciones}</h3>
-            <ul data-trazo="" className="trazo-superior mt-5">
-              {certificaciones.map((cert) => (
-                <li key={cert.nombre} data-trazo="" className="trazo-inferior py-4">
-                  <span className="block text-lg font-light">{cert.nombre}</span>
-                  <span className="mt-1 block font-mono text-etiqueta text-tenue">
-                    {cert.emisor} · {cert.fecha[idioma]}
-                  </span>
-                </li>
-              ))}
-            </ul>
           </div>
         </Reveal>
       </div>

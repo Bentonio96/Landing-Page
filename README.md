@@ -69,7 +69,7 @@ En [`src/data/stack.ts`](src/data/stack.ts), `principal: true` pone la tecnolog�
 { nombre: "HTML semántico" },           // gris, sin punto
 ```
 
-Úsalo con moderación: hoy son 8 de 34. El resalte funciona porque es minoría.
+Úsalo con moderación: hoy son 8 de 36. El resalte funciona porque es minoría.
 
 Para lectores de pantalla el chip añade "— herramienta principal", porque el criterio WCAG 1.4.1 no permite transmitir información solo con color.
 
@@ -125,7 +125,7 @@ node scripts/verificar-contraste.mjs
 |---|---|
 | ![Hero claro](docs/capturas/hero-claro.jpg) | ![Hero oscuro](docs/capturas/hero-oscuro.jpg) |
 
-**Sobre mí** — biografía, cita de cartel que se enciende al leerla, idiomas y certificaciones
+**Sobre mí** — biografía breve, cita de cartel que se enciende al leerla e idiomas
 
 ![Sobre mí](docs/capturas/sobre-mi.jpg)
 
@@ -182,7 +182,7 @@ Inspirado en una plantilla editorial de fotografía: casi todo el impacto sale d
 
 2. **La marca del CV.** La paleta sale del propio PDF del CV —sus operadores de color, no una captura—: tinta azulada, grises fríos y un único violeta. El sitio y el documento se leen como una sola marca, y el apellido va en violeta en los dos.
 
-3. **Un solo acento, con disciplina.** El violeta aparece en el apellido, el subrayado de la cita, la barra de progreso, los puntos de las herramientas principales y del hito actual, el foco y los hover. En ningún otro sitio. En el stack solo 8 de 34 tecnologías llevan el punto.
+3. **Un solo acento, con disciplina.** El violeta aparece en el apellido, el subrayado de la cita, las reglas cortas de cada sección, los puntos de las herramientas principales y del hito actual, el foco y los hover. En ningún otro sitio. En el stack solo 8 de 36 tecnologías llevan el punto.
 
 4. **Foto en blanco y negro, fundida con la página.** Tres velos del color de fondo —arriba, abajo y a la izquierda— la integran en los dos temas, y el nombre entra sobre el lado que no tiene rostro. En móvil la foto va en el flujo y el texto solo pisa su borde inferior.
 
@@ -232,7 +232,6 @@ Todo lo que se mueve con el scroll vive en [`src/components/Movimiento.tsx`](src
 - **Hero con profundidad**: al salir, la foto baja más lenta que la página y el texto sube más rápido.
 - **Cita** cuyas palabras pasan de gris a su color al ritmo de la lectura: una custom property `--p` que GSAP lleva de 0 a 1, con los dos extremos dentro de AA.
 - **Capturas de proyecto en 3D**: llegan tumbadas hacia atrás y giradas hacia el texto, y se enderezan al subir; con ratón, además se inclinan hacia el cursor con un brillo que lo sigue. Son tres capas —perspectiva, giro de scroll, giro de puntero— porque cada una tiene su propio dueño del `transform`.
-- **Píldoras del stack** que caen en cascada.
 - **Reglas capilares que se dibujan** de izquierda a derecha al entrar, y **subrayado de la cita** que se traza con el scroll, línea por línea. Son fondos de 1 px movidos por una custom property `--trazo` y no bordes: un borde no se puede dibujar a medias.
 - **Filas que entran escalonadas**: en proyectos (fecha, nombre, descripción, tecnologías, enlaces), en experiencia (dónde, cuándo, qué) y en contacto, desde la izquierda.
 
@@ -270,7 +269,6 @@ Sobre el fondo va una capa de **grano**: un SVG de 300×300 con `feTurbulence`, 
 
 ### Otras interacciones
 
-- **Progreso de lectura.** Barra de 3 px en violeta con `animation-timeline: scroll(root)`: sin JavaScript y fuera del hilo principal.
 - **Cruce entre Stack y Proyectos.** Apuntar una tecnología del stack enmarca en violeta las capturas de los proyectos que la usan; apuntar o **enfocar** un proyecto resalta sus tecnologías. El resalte suma en vez de atenuar el resto, que bajaría el contraste.
 - **Capturas en grises** que recuperan el color al apuntar la fila, solo con puntero fino: en un teléfono no hay hover y dejarlas grises escondería lo que se viene a ver. Las genera [`scripts/capturar-proyectos.mjs`](scripts/capturar-proyectos.mjs) desde cada demo en producción.
 - **Transición de tema.** El tema nuevo se abre en círculo desde el botón, con la View Transitions API.
@@ -345,7 +343,7 @@ Para cambiar la paleta, la tipografía o el espaciado: **`src/app/globals.css`**
 
 Para cambiar textos de interfaz: **`src/i18n/diccionario.ts`**, en ambos idiomas.
 
-El CV en PDF vive en `public/CV-Benjamin-Pena.pdf` y se enlaza desde Contacto con el atributo `download`. La ruta está en `perfil.cv`, dentro de [`src/data/perfil.ts`](src/data/perfil.ts), junto con idiomas y certificaciones.
+El CV en PDF vive en `public/CV-Benjamin-Pena.pdf` y se enlaza desde el hero y desde Contacto con el atributo `download`. La ruta está en `perfil.cv`, dentro de [`src/data/perfil.ts`](src/data/perfil.ts), junto con los idiomas.
 
 ---
 

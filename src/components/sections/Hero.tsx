@@ -1,11 +1,10 @@
 import { Fragment } from "react";
 import type { CSSProperties } from "react";
 import Image from "next/image";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, Download } from "lucide-react";
 import type { Diccionario } from "@/i18n/diccionario";
 import { perfil } from "@/data/perfil";
 import { Boton } from "@/components/ui/Boton";
-import { BotonCorreo } from "@/components/ui/BotonCorreo";
 import { BLUR_PERFIL } from "@/lib/blur";
 import { cn } from "@/lib/utils";
 
@@ -130,14 +129,17 @@ export function Hero({ t }: Props) {
               {t.hero.verProyectos}
               <ArrowDown aria-hidden="true" className="size-4" />
             </Boton>
-            <BotonCorreo
-              email={perfil.email}
-              texto={t.hero.escribirme}
-              avisoCopiado={t.contacto.correoCopiado}
-              avisoFallo={t.contacto.correoFallo}
+            {/* El CV va aquí y no copiar el correo: es lo primero que busca
+                quien evalúa un perfil, y copiar el correo ya está en Contacto. */}
+            <Boton
+              href={perfil.cv}
               variante="secundario"
+              descargar
               className="w-full sm:w-auto"
-            />
+            >
+              <Download aria-hidden="true" className="size-4" />
+              {t.contacto.descargarCV} {t.contacto.cvFormato}
+            </Boton>
           </div>
         </div>
       </div>

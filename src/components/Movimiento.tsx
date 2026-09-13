@@ -56,9 +56,8 @@ export function Movimiento() {
         gsap.ticker.lagSmoothing(0);
 
         // Anclas internas con el mismo scroll suave. El enlace para saltar
-        // al contenido se deja
-        // nativo: debe mover el foco del teclado, y un scroll programático
-        // no lo mueve.
+        // al contenido se deja nativo: debe mover el foco del teclado, y un
+        // scroll programático no lo mueve.
         const alClic = (evento: MouseEvent) => {
           const enlace = (evento.target as Element).closest<HTMLAnchorElement>(
             'a[href^="#"]',
@@ -184,19 +183,6 @@ export function Movimiento() {
             );
           }
         }
-
-        // --- Stack: las píldoras caen en cascada ------------------------
-        gsap.utils.toArray<HTMLElement>("#stack ul").forEach((lista) => {
-          gsap.from(lista.children, {
-            y: 22,
-            rotateX: -40,
-            transformPerspective: 500,
-            duration: 0.9,
-            ease: "back.out(1.6)",
-            stagger: 0.025,
-            scrollTrigger: { trigger: lista, start: "top 90%", once: true },
-          });
-        });
 
         // --- Proyectos: capturas con relieve -----------------------------
         const quitarPunteros: Array<() => void> = [];

@@ -10,7 +10,7 @@
  *
  * Tres decisiones que no son obvias:
  *
- * 1 · Se captura el VIEWPORT, no el elemento. La capa de auras es
+ * 1 · Se captura el VIEWPORT, no el elemento. La capa de grano es
  *     `position: fixed`, así que solo cubre el alto de la ventana: en una
  *     captura de elemento más alto que el viewport, el fondo se corta a
  *     media imagen y aparece un borde recto que no existe en el sitio.
@@ -87,7 +87,7 @@ for (const t of TOMAS) {
       // abajo. Se congela con el alto que tiene a 900 px.
       const hero = document.querySelector("#inicio");
       if (hero) hero.style.minHeight = `${hero.offsetHeight}px`;
-      for (const sel of ["header", ".progreso-lectura"]) {
+      for (const sel of ["header"]) {
         const el = document.querySelector(sel);
         if (el) el.style.display = "none";
       }

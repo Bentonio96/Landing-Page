@@ -29,11 +29,10 @@ const diccionario = {
       rol: "Desarrollador Frontend & Data Analyst",
       /** Segunda mitad del titular: las tres herramientas del lado de datos. */
       herramientas: "Power Apps · Power BI · Python",
-      disponible: "Disponible para proyectos freelance",
+      disponible: "Disponible para full-time y freelance",
       intro:
         "Construyo interfaces web y las llevo a producción con React, TypeScript y Tailwind. Vengo del análisis de datos, así que también me muevo en Power BI, Power Apps y Python cuando el proyecto lo pide.",
       verProyectos: "Ver proyectos",
-      escribirme: "Copiar mi correo",
       altFoto:
         "Benjamín Peña Díaz, de perfil y con lentes de sol, frente a un cerro. Fotografía en blanco y negro.",
     },
@@ -41,10 +40,10 @@ const diccionario = {
       etiqueta: "Sobre mí",
       titulo: "Quién soy",
       parrafos: [
-        "Soy desarrollador frontend y analista de datos. Estoy terminando Ingeniería Civil en Informática en la Universidad Andrés Bello, egreso en noviembre de 2026, y hoy tomo proyectos freelance.",
-        "Pasé un año y medio continuo en CMPC. Empecé como analista de datos armando tableros en Power BI, y después hice mi práctica en Cybersecurity Operations TI/OT, donde desarrollé el portal interno del área: definí la arquitectura de la interfaz, los flujos de navegación y la jerarquía visual de vistas con mucha densidad de información. Está en producción y el equipo lo usa a diario.",
+        "Soy desarrollador frontend y analista de datos. Estoy terminando Ingeniería Civil en Informática en la Universidad Andrés Bello, egreso en noviembre de 2026, y busco mi próximo rol full-time mientras tomo proyectos freelance.",
+        "Pasé un año y medio en CMPC: primero como analista de datos, armando tableros en Power BI, y después en Cybersecurity Operations TI/OT, donde diseñé y construí el portal interno del área, desde la arquitectura de la interfaz hasta su puesta en marcha. Está en producción y el equipo lo usa a diario.",
         "Entrego interfaces terminadas, no maquetas. Traduzco un diseño de Figma a una interfaz responsive y accesible, y defino la jerarquía visual cuando el diseño todavía no existe.",
-        "El frontend es mi foco, pero no es mi único terreno. Si el proyecto necesita un tablero en Power BI, una app interna en Power Apps o un script en Python que ordene los datos antes de mostrarlos, también lo tomo. Haber trabajado de los dos lados me ayuda a construir interfaces que entienden de dónde vienen los datos que muestran.",
+        "El frontend es mi foco, pero también tomo un tablero en Power BI, una app interna en Power Apps o un script en Python. Haber trabajado de los dos lados me ayuda a construir interfaces que entienden los datos que muestran.",
       ],
       /** La frase que cierra el tercer párrafo, sacada a cita de cartel. */
       cita: {
@@ -54,7 +53,6 @@ const diccionario = {
         pie: "Tanto en lo visual como en lo técnico",
       },
       idiomas: "Idiomas",
-      certificaciones: "Certificaciones",
     },
     stack: {
       etiqueta: "Stack",
@@ -133,11 +131,10 @@ const diccionario = {
     hero: {
       rol: "Frontend Developer & Data Analyst",
       herramientas: "Power Apps · Power BI · Python",
-      disponible: "Available for freelance work",
+      disponible: "Available for full-time and freelance work",
       intro:
         "I build web interfaces and ship them to production with React, TypeScript and Tailwind. I come from data analysis, so I'm just as comfortable in Power BI, Power Apps and Python when a project calls for it.",
       verProyectos: "View projects",
-      escribirme: "Copy my email",
       altFoto:
         "Benjamín Peña Díaz in profile, wearing sunglasses, in front of a hillside. Black and white photograph.",
     },
@@ -145,10 +142,10 @@ const diccionario = {
       etiqueta: "About",
       titulo: "Who I am",
       parrafos: [
-        "I'm a frontend developer and data analyst. I'm finishing a Computer Engineering degree at Universidad Andrés Bello in Santiago, graduating in November 2026, and I'm currently taking on freelance work.",
-        "I spent a year and a half at CMPC. I started as a data analyst building Power BI dashboards, then did my internship in IT/OT Cybersecurity Operations, where I built the team's internal portal: I defined the interface architecture, the navigation flows and the visual hierarchy for very information-dense views. It's in production and the team uses it every day.",
+        "I'm a frontend developer and data analyst. I'm finishing a Computer Engineering degree at Universidad Andrés Bello in Santiago, graduating in November 2026, and I'm looking for my next full-time role while taking on freelance work.",
+        "I spent a year and a half at CMPC: first as a data analyst building Power BI dashboards, then in IT/OT Cybersecurity Operations, where I designed and built the team's internal portal, from the interface architecture through to launch. It's in production and the team uses it every day.",
         "I ship finished interfaces, not mockups. I turn a Figma design into a responsive, accessible interface — and define the visual hierarchy myself when the design doesn't exist yet.",
-        "Frontend is my focus, but it isn't my only ground. If a project needs a Power BI dashboard, an internal Power Apps tool, or a Python script to sort the data before it's displayed, I'll take that on too. Having worked on both sides helps me build interfaces that understand where their data comes from.",
+        "Frontend is my focus, but I'll also take on a Power BI dashboard, an internal Power Apps tool or a Python script. Having worked on both sides helps me build interfaces that understand the data they show.",
       ],
       cita: {
         antes: "“I make sure the final product looks good and ",
@@ -157,7 +154,6 @@ const diccionario = {
         pie: "Both visually and technically",
       },
       idiomas: "Languages",
-      certificaciones: "Certifications",
     },
     stack: {
       etiqueta: "Stack",
