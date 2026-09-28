@@ -109,7 +109,7 @@ export function Contacto({ t }: Props) {
                       avisoFallo={t.contacto.correoFallo}
                       className={claseFila}
                     >
-                      <span data-descifrar="apuntar" className="etiqueta">{etiqueta}</span>
+                      <span className="etiqueta">{etiqueta}</span>
                       <span className={claseValor}>{valor}</span>
                       <Copy
                         aria-hidden="true"
@@ -132,7 +132,7 @@ export function Contacto({ t }: Props) {
                       {...(descargar ? { download: descargar } : {})}
                       className={claseFila}
                     >
-                      <span data-descifrar="apuntar" className="etiqueta">{etiqueta}</span>
+                      <span className="etiqueta">{etiqueta}</span>
                       <span className={claseValor}>{valor}</span>
                       <Icono aria-hidden="true" className={claseIcono} />
                       {externo ? (

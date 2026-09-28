@@ -91,7 +91,6 @@ export function BotonTema({ t }: Props) {
       onClick={alternar}
       aria-label={etiqueta}
       title={etiqueta}
-      data-iman="0.3"
       className="vidrio backdrop-blur-xl backdrop-saturate-150 inline-flex size-10 items-center justify-center rounded-full text-atenuado transition-colors hover:text-acento"
     >
       {/* Se alternan por CSS: correctos incluso antes de hidratar. */}

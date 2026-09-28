@@ -32,8 +32,7 @@ export function Stack({ idioma, t }: Props) {
                 </span>
                 {categoria.titulo[idioma]}
               </h3>
-              {/* Las píldoras caen con un rebote al entrar (data-rebote). */}
-              <ul data-rebote="" className="flex flex-wrap gap-2 md:col-span-8 md:pt-1">
+              <ul className="flex flex-wrap gap-2 md:col-span-8 md:pt-1">
                 {categoria.items.map((item) => (
                   <Chip
                     key={item.nombre}

@@ -89,10 +89,7 @@ export function Hero({ t }: Props) {
                         className="letra"
                         style={{ "--i": indiceLetra(linea, p, l) } as CSSProperties}
                       >
-                        {/* Capa del salto al apuntar (Movimiento.tsx). La
-                            entrada en CSS se queda con el transform de
-                            .letra, así que el salto necesita el suyo. */}
-                        <span className="letra-salto">{letra}</span>
+                        {letra}
                       </span>
                     ))}
                   </span>
@@ -127,10 +124,9 @@ export function Hero({ t }: Props) {
             <Boton
               href="#proyectos"
               variante="primario"
-              iman
               className="w-full sm:w-auto"
             >
-              <span data-descifrar="apuntar">{t.hero.verProyectos}</span>
+              {t.hero.verProyectos}
               <ArrowDown aria-hidden="true" className="size-4" />
             </Boton>
             {/* El CV va aquí y no copiar el correo: es lo primero que busca
@@ -139,13 +135,10 @@ export function Hero({ t }: Props) {
               href={perfil.cv}
               variante="secundario"
               descargar={perfil.cvArchivo}
-              iman
               className="w-full sm:w-auto"
             >
               <Download aria-hidden="true" className="size-4" />
-              <span data-descifrar="apuntar">
-                {t.contacto.descargarCV} {t.contacto.cvFormato}
-              </span>
+              {t.contacto.descargarCV} {t.contacto.cvFormato}
             </Boton>
           </div>
         </div>

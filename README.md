@@ -162,13 +162,13 @@ node scripts/verificar-contraste.mjs
 - **Next.js 15** con App Router
 - **TypeScript** en modo estricto
 - **Tailwind CSS v4** — los tokens viven en `@theme`, dentro de `src/app/globals.css`
-- **GSAP 3** + **ScrollTrigger** + **ScrambleText** — animaciones ligadas al scroll, efectos 3D y al puntero
+- **GSAP 3** + **ScrollTrigger** — animaciones ligadas al scroll y efectos 3D
 - **Lenis** — scroll suave, sincronizado con el reloj de GSAP
 - **lucide-react** para íconos
 - **next/font** — Bebas Neue, Inter Tight y JetBrains Mono, autoalojadas
 - **next/image** — AVIF y WebP automáticos
 
-GSAP y Lenis se cargan con `import()` diferido, después de hidratar: no entran en el JavaScript inicial (First Load JS 115 kB).
+GSAP y Lenis se cargan con `import()` diferido, después de hidratar: no entran en el JavaScript inicial (First Load JS 114 kB).
 
 ---
 
@@ -225,7 +225,7 @@ No se usó `next-intl` ni similar: para dos idiomas y un diccionario plano, un `
 
 ### Movimiento: GSAP y Lenis en un solo componente
 
-Todo lo que se mueve con el scroll o con el puntero vive en [`src/components/Movimiento.tsx`](src/components/Movimiento.tsx):
+Todo lo que se mueve con el scroll vive en [`src/components/Movimiento.tsx`](src/components/Movimiento.tsx):
 
 - **Scroll suave** con Lenis, movido por el `ticker` de GSAP. Un único `requestAnimationFrame` para los dos: con uno cada uno, ScrollTrigger lee posiciones con un fotograma de retraso y los efectos atados al scroll tiemblan. Las anclas del menú usan el mismo scroll suave; el enlace para saltar al contenido se deja nativo, porque debe mover el foco del teclado y un scroll programático no lo mueve.
 - **Titulares de sección** cuyas palabras giran en 3D al entrar, cada una con su propio punto de fuga.
@@ -234,20 +234,13 @@ Todo lo que se mueve con el scroll o con el puntero vive en [`src/components/Mov
 - **Capturas de proyecto en 3D**: llegan tumbadas hacia atrás y giradas hacia el texto, y se enderezan al subir; con ratón, además se inclinan hacia el cursor con un brillo que lo sigue. Son tres capas —perspectiva, giro de scroll, giro de puntero— porque cada una tiene su propio dueño del `transform`.
 - **Reglas capilares que se dibujan** de izquierda a derecha al entrar, y **subrayado de la cita** que se traza con el scroll, línea por línea. Son fondos de 1 px movidos por una custom property `--trazo` y no bordes: un borde no se puede dibujar a medias.
 - **Filas que entran escalonadas**: en proyectos (fecha, nombre, descripción, tecnologías, enlaces), en experiencia (dónde, cuándo, qué) y en contacto, desde la izquierda.
-- **Cinta de titulares** entre el hero y "Sobre mí": avanza sola, acelera y se inclina con la velocidad del scroll, y retrocede cuando se sube. Lleva dos copias idénticas y se desplaza la mitad de su ancho por vuelta, así que el salto no se ve; fuera de pantalla se pausa.
-- **Etiquetas que se descifran** con ScrambleText, como una lectura de terminal: el número y la etiqueta de cada sección al entrar, y el texto de botones y filas de contacto al apuntarlos. Van en la mono, donde cada carácter mide lo mismo, así que el ruido no mueve nada.
-- **Nombre con rebote**: al apuntar una letra del hero salta estirándose y cae con un rebote elástico, arrastrando a sus vecinas de línea. Va en una capa interior de cada letra, porque la entrada en CSS se queda con el `transform` de la exterior.
-- **Botones con imán**: los CTA y los controles del encabezado se dejan atraer por el cursor y vuelven con un rebote al soltarlos.
-- **Píldoras del stack** que caen giradas y se asientan pasándose de largo (`back.out`).
-
-Todo lo que reacciona a "estar encima" (imán, rebote, descifrado al apuntar, inclinación de las capturas) solo se activa con puntero fino: en táctil un toque lo dispararía justo cuando la página cambia.
 
 Cuatro reglas que conviene no deshacer:
 
 1. **Carga diferida.** GSAP, ScrollTrigger y Lenis entran con `import()` dentro del efecto: no compiten con la foto del hero, que es el LCP. Por eso la única animación de carga —las letras del nombre girando en 3D— es CSS: esperar a GSAP dejaría ver el nombre quieto y luego saltar.
 2. **Nada anima la opacidad.** Solo desplazamientos, giros y escalas. Con `opacity: 0` en lo que espera al scroll, las auditorías lo leen como texto sin contraste (la primera versión del sitio marcaba 35 nodos en Lighthouse por eso).
 3. **Todo dentro de `gsap.matchMedia`** con `prefers-reduced-motion: no-preference`. Si el sistema pide menos movimiento no se crea ni Lenis ni una animación; sin JavaScript, igual. No hay ningún estado oculto que haya que desbloquear.
-4. **GSAP no toca la estructura del DOM.** Las palabras y letras se parten en el servidor; el cliente solo escribe transformaciones en línea, que React no gestiona y no pisa al re-renderizar. La excepción es el descifrado: reescribe el texto de un span sin hijos, siempre termina en el original y se repone al revertir. Las etiquetas de sección que se descifran solas van ocultas a lectores de pantalla, con la etiqueta real en un span aparte.
+4. **GSAP no toca la estructura del DOM.** Las palabras y letras se parten en el servidor; el cliente solo escribe transformaciones en línea, que React no gestiona y no pisa al re-renderizar.
 
 Un tropiezo que quedó comentado en el código: `gsap.quickTo` necesita el nombre canónico de la propiedad (`rotationX`), no el alias `rotateX`. Con el alias crea el tween, pero cada actualización busca una propiedad que no existe y la capa nunca se mueve, sin ningún error.
 
@@ -331,8 +324,8 @@ src/
 ├─ components/
 │  ├─ Pagina.tsx           composición única, compartida por ambos idiomas
 │  ├─ LayoutRaiz.tsx       cascarón <html>/<body>
-│  ├─ Movimiento.tsx       Lenis + GSAP: todo lo que se mueve con el scroll o el puntero
-│  ├─ layout/              Encabezado · PieDePagina · Cinta · BotonTema · BotonIdioma · SaltarAlContenido
+│  ├─ Movimiento.tsx       Lenis + GSAP: todo lo que se mueve con el scroll
+│  ├─ layout/              Encabezado · PieDePagina · BotonTema · BotonIdioma · SaltarAlContenido
 │  ├─ sections/            Hero · SobreMi · Stack · Proyectos · Experiencia · Contacto
 │  └─ ui/                  Seccion · TarjetaProyecto · Boton · Chip · Reveal (marca [data-revelar])
 │

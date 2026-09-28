@@ -354,12 +354,6 @@
   transform-origin: left center;
 }
 
-/* Un botón con imán (Movimiento.tsx) puede rozar al de al lado mientras
-   sigue al cursor: el que se está apuntando pasa por encima. */
-.boton-barrido[data-iman]:hover {
-  z-index: 1;
-}
-
 /* ============================================================
    HERO
 
@@ -448,15 +442,6 @@
     backface-visibility: hidden;
     animation: voltear-letra 1.2s var(--ease-salida) both;
     animation-delay: calc(0.12s + var(--i) * 0.035s);
-  }
-
-  /* Capa interior de cada letra, para el salto al apuntar (Movimiento.tsx).
-     No puede ser la misma .letra: una animación CSS con fill-mode `both` se
-     queda con el transform y le gana a cualquier estilo en línea. Apoyada
-     en el pie, como la entrada, para que estire y aplaste desde el suelo. */
-  .letra-salto {
-    display: inline-block;
-    transform-origin: 50% 100%;
   }
 
   /* En pausa hasta que carga la condensada (lib/fuentes.ts). De canto no
@@ -561,20 +546,6 @@ html.lenis body {
 
   .fila-proyecto:hover .brillo-3d {
     opacity: 1;
-  }
-
-  /* Cinta (layout/Cinta.tsx): una de cada dos palabras va solo en contorno,
-     como en un cartel. Es decorativa y va oculta a lectores de pantalla, así
-     que el trazo tenue no tiene que cumplir contraste de texto. */
-  .texto-contorno {
-    color: transparent;
-    -webkit-text-stroke: 1px var(--c-tenue);
-  }
-
-  @supports not (-webkit-text-stroke: 1px black) {
-    .texto-contorno {
-      color: var(--c-tenue);
-    }
   }
 }
 
