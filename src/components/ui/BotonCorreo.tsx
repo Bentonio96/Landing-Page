@@ -64,10 +64,12 @@ export function BotonCorreo({
     <button
       type="button"
       onClick={copiar}
+      data-iman=""
       className={cn(base, variantes[variante], className)}
     >
       <Mail aria-hidden="true" className="size-4" />
-      {texto}
+      {/* Se descifra al apuntar, como el resto de botones (Movimiento.tsx). */}
+      <span data-descifrar="apuntar">{texto}</span>
     </button>
   );
 }

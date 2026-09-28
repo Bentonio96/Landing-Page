@@ -32,6 +32,12 @@ type Props = {
   avisoExterno?: string;
   /** Acción extra al pulsar; no reemplaza la navegación del enlace. */
   onClick?: () => void;
+  /**
+   * El botón se deja atraer por el cursor y vuelve con un rebote al salir
+   * (Movimiento.tsx, data-iman). Para los CTA, no para todos: si todo se
+   * mueve, nada destaca.
+   */
+  iman?: boolean;
   className?: string;
 };
 
@@ -61,6 +67,7 @@ export function Boton({
   etiquetaAccesible,
   avisoExterno,
   onClick,
+  iman = false,
   className,
 }: Props) {
   return (
@@ -68,6 +75,7 @@ export function Boton({
       href={href}
       onClick={onClick}
       aria-label={etiquetaAccesible}
+      data-iman={iman ? "" : undefined}
       {...(externo ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       {...(descargar ? { download: descargar } : {})}
       className={cn(base, variantes[variante], className)}

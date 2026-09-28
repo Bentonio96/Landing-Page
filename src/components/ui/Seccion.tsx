@@ -44,9 +44,17 @@ export function Seccion({
     >
       <div className="lienzo">
         <Reveal>
+          {/* Número y etiqueta se descifran al entrar, como una lectura de
+              terminal (Movimiento.tsx). Mientras dura, el texto visible es
+              ruido: por eso va oculto y la etiqueta real se lee aparte. */}
           <p className="etiqueta flex items-baseline gap-3">
-            <span aria-hidden="true">{numero}</span>
-            <span>{etiqueta}</span>
+            <span aria-hidden="true" data-descifrar="entrar" data-caracteres="0123456789">
+              {numero}
+            </span>
+            <span aria-hidden="true" data-descifrar="entrar">
+              {etiqueta}
+            </span>
+            <span className="sr-only">{etiqueta}</span>
           </p>
           {/* Se estira desde la izquierda al entrar (Movimiento.tsx). */}
           <span

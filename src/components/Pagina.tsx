@@ -1,6 +1,7 @@
 import type { Idioma } from "@/types";
 import { obtenerDiccionario } from "@/i18n/diccionario";
 import { perfil, SITIO_URL } from "@/data/perfil";
+import { Cinta } from "@/components/layout/Cinta";
 import { Encabezado } from "@/components/layout/Encabezado";
 import { PieDePagina } from "@/components/layout/PieDePagina";
 import { SaltarAlContenido } from "@/components/layout/SaltarAlContenido";
@@ -74,6 +75,7 @@ export function Pagina({ idioma }: Props) {
       <ProveedorTecnologia>
         <main id="contenido">
           <Hero t={t} />
+          <Cinta />
           <SobreMi idioma={idioma} t={t} />
           <Stack idioma={idioma} t={t} />
           <Proyectos idioma={idioma} t={t} />

@@ -22,7 +22,7 @@ export function PieDePagina({ t }: Props) {
           href="#inicio"
           className="inline-flex items-center gap-1.5 self-start font-mono text-etiqueta uppercase tracking-[0.12em] text-atenuado transition-colors hover:text-acento sm:self-auto"
         >
-          {t.pie.volverArriba}
+          <span data-descifrar="apuntar">{t.pie.volverArriba}</span>
           <ArrowUp aria-hidden="true" className="size-3.5" />
         </a>
       </div>

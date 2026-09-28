@@ -154,7 +154,7 @@ export function TarjetaProyecto({
                 etiquetaAccesible={`${t.proyectos.verSitio}: ${nombre}`}
                 avisoExterno={t.proyectos.enlaceExterno}
               >
-                {t.proyectos.verSitio}
+                <span data-descifrar="apuntar">{t.proyectos.verSitio}</span>
                 <ArrowUpRight
                   aria-hidden="true"
                   className="size-4 transition-transform duration-200 group-hover/boton:translate-x-0.5 group-hover/boton:-translate-y-0.5"
@@ -171,7 +171,7 @@ export function TarjetaProyecto({
                 avisoExterno={t.proyectos.enlaceExterno}
               >
                 <Code2 aria-hidden="true" className="size-4" />
-                {t.proyectos.verCodigo}
+                <span data-descifrar="apuntar">{t.proyectos.verCodigo}</span>
               </Boton>
             ) : null}
           </div>

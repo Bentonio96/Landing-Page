@@ -98,7 +98,7 @@ const diccionario = {
     },
     pie: {
       derechos: "Hecho en Santiago de Chile.",
-      construidoCon: "Construido con Next.js y Tailwind CSS.",
+      construidoCon: "Construido con Next.js, Tailwind CSS y GSAP.",
       volverArriba: "Volver arriba",
     },
     noEncontrado: {
@@ -198,7 +198,7 @@ const diccionario = {
     },
     pie: {
       derechos: "Made in Santiago, Chile.",
-      construidoCon: "Built with Next.js and Tailwind CSS.",
+      construidoCon: "Built with Next.js, Tailwind CSS and GSAP.",
       volverArriba: "Back to top",
     },
     noEncontrado: {
