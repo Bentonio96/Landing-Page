@@ -44,7 +44,7 @@ export const perfil = {
   nombre: "Benjamín Peña Díaz",
   nombreCorto: "Benjamín Peña",
   ubicacion: "Ñuñoa, Santiago, Chile",
-  email: "benja.diaz.2911@gmail.com",
+  email: "benjamin.pd2911@gmail.com",
   telefono: "+56 9 8522 0071",
   /** Formato E.164, para el enlace tel: */
   telefonoEnlace: "+56985220071",
