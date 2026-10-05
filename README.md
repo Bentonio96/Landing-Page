@@ -133,7 +133,7 @@ node scripts/verificar-contraste.mjs
 
 ![Stack](docs/capturas/stack.jpg)
 
-**Proyectos** — filas alternas con capturas en 3D; los sistemas internos van como fila de solo texto
+**Proyectos** — filas alternas con captura; los sistemas internos van como fila de solo texto
 
 ![Proyectos](docs/capturas/proyectos.jpg)
 
@@ -231,7 +231,7 @@ Todo lo que se mueve con el scroll vive en [`src/components/Movimiento.tsx`](src
 - **Titulares de sección** cuyas palabras giran en 3D al entrar, cada una con su propio punto de fuga.
 - **Hero con profundidad**: al salir, la foto baja más lenta que la página y el texto sube más rápido.
 - **Cita** cuyas palabras pasan de gris a su color al ritmo de la lectura: una custom property `--p` que GSAP lleva de 0 a 1, con los dos extremos dentro de AA.
-- **Capturas de proyecto en 3D**: llegan tumbadas hacia atrás y giradas hacia el texto, y se enderezan al subir; con ratón, además se inclinan hacia el cursor con un brillo que lo sigue. Son tres capas —perspectiva, giro de scroll, giro de puntero— porque cada una tiene su propio dueño del `transform`.
+- **Capturas de proyecto planas**: entran con el mismo desplazamiento que el resto de bloques, sin giro ni inclinación hacia el cursor. Son la prueba del trabajo y tienen que leerse.
 - **Reglas capilares que se dibujan** de izquierda a derecha al entrar, y **subrayado de la cita** que se traza con el scroll, línea por línea. Son fondos de 1 px movidos por una custom property `--trazo` y no bordes: un borde no se puede dibujar a medias.
 - **Filas que entran escalonadas**: en proyectos (fecha, nombre, descripción, tecnologías, enlaces), en experiencia (dónde, cuándo, qué) y en contacto, desde la izquierda.
 
@@ -241,8 +241,6 @@ Cuatro reglas que conviene no deshacer:
 2. **Nada anima la opacidad.** Solo desplazamientos, giros y escalas. Con `opacity: 0` en lo que espera al scroll, las auditorías lo leen como texto sin contraste (la primera versión del sitio marcaba 35 nodos en Lighthouse por eso).
 3. **Todo dentro de `gsap.matchMedia`** con `prefers-reduced-motion: no-preference`. Si el sistema pide menos movimiento no se crea ni Lenis ni una animación; sin JavaScript, igual. No hay ningún estado oculto que haya que desbloquear.
 4. **GSAP no toca la estructura del DOM.** Las palabras y letras se parten en el servidor; el cliente solo escribe transformaciones en línea, que React no gestiona y no pisa al re-renderizar.
-
-Un tropiezo que quedó comentado en el código: `gsap.quickTo` necesita el nombre canónico de la propiedad (`rotationX`), no el alias `rotateX`. Con el alias crea el tween, pero cada actualización busca una propiedad que no existe y la capa nunca se mueve, sin ningún error.
 
 ### Las letras del nombre y el CLS
 

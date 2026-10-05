@@ -521,32 +521,6 @@ html.lenis body {
   .subrayado-cita .palabra-cita {
     --final: var(--c-texto);
   }
-
-  /* Capturas con relieve: la escena (perspectiva) va en el marco, el giro
-     en la capa interior. El brillo sigue al puntero y vende el volumen. */
-  .escena-3d {
-    perspective: 1400px;
-  }
-
-  .capa-3d {
-    transform-style: preserve-3d;
-    will-change: transform;
-  }
-
-  .brillo-3d {
-    background: radial-gradient(
-      circle at var(--gx, 50%) var(--gy, 0%),
-      rgba(255, 255, 255, 0.22),
-      transparent 55%
-    );
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    mix-blend-mode: soft-light;
-  }
-
-  .fila-proyecto:hover .brillo-3d {
-    opacity: 1;
-  }
 }
 
 /* ============================================================

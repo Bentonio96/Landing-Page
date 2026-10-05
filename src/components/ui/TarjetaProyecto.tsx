@@ -58,41 +58,28 @@ export function TarjetaProyecto({
       )}
     >
       {imagen ? (
-        // Tres capas para el 3D (Movimiento.tsx): el marco fija la
-        // perspectiva y lleva el contorno del cruce con el stack; la capa
-        // de scroll se endereza al entrar en pantalla; la de puntero se
-        // inclina hacia el cursor. Separadas porque cada una tiene su propio
-        // dueño del transform.
+        // La captura va plana: es la prueba del trabajo y tiene que leerse.
+        // Entra con el mismo desplazamiento que el resto de bloques
+        // (data-revelar, ver Movimiento.tsx), y el marco lleva el contorno
+        // del cruce con el stack.
         <div
-          data-escena-3d=""
-          data-invertida={invertida ? "" : undefined}
+          data-revelar=""
           className={cn(
-            "marco-captura escena-3d md:col-span-7",
+            "marco-captura md:col-span-7",
             invertida && "md:order-last md:col-start-6",
           )}
         >
-          <div data-capa-scroll="" className="capa-3d">
-            <div
-              data-capa-puntero=""
-              className="capa-3d relative shadow-[0_48px_90px_-48px_var(--c-sombra)]"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden bg-elevado">
-                <Image
-                  src={imagen}
-                  alt={`${t.proyectos.captura} ${nombre}`}
-                  fill
-                  sizes="(max-width: 768px) 92vw, 56vw"
-                  loading="lazy"
-                  placeholder={BLUR_PROYECTOS[proyecto.slug] ? "blur" : "empty"}
-                  blurDataURL={BLUR_PROYECTOS[proyecto.slug]}
-                  className="captura-proyecto object-cover object-top"
-                />
-              </div>
-              <div
-                aria-hidden="true"
-                className="brillo-3d pointer-events-none absolute inset-0"
-              />
-            </div>
+          <div className="relative aspect-[16/10] overflow-hidden bg-elevado shadow-[0_48px_90px_-48px_var(--c-sombra)]">
+            <Image
+              src={imagen}
+              alt={`${t.proyectos.captura} ${nombre}`}
+              fill
+              sizes="(max-width: 768px) 92vw, 56vw"
+              loading="lazy"
+              placeholder={BLUR_PROYECTOS[proyecto.slug] ? "blur" : "empty"}
+              blurDataURL={BLUR_PROYECTOS[proyecto.slug]}
+              className="captura-proyecto object-cover object-top"
+            />
           </div>
         </div>
       ) : null}

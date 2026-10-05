@@ -184,65 +184,12 @@ export function Movimiento() {
           }
         }
 
-        // --- Proyectos: capturas con relieve -----------------------------
-        const quitarPunteros: Array<() => void> = [];
-        gsap.utils.toArray<HTMLElement>("[data-escena-3d]").forEach((escena) => {
-          const invertida = escena.hasAttribute("data-invertida");
-          const capaScroll = escena.querySelector<HTMLElement>("[data-capa-scroll]");
-          const capaPuntero = escena.querySelector<HTMLElement>("[data-capa-puntero]");
-          if (!capaScroll || !capaPuntero) return;
-
-          // Llega tumbada hacia atrás y girada hacia el texto, y se endereza
-          // mientras sube hasta el centro de la pantalla.
-          gsap.fromTo(
-            capaScroll,
-            { rotateX: 28, rotateY: invertida ? -14 : 14, scale: 0.86, y: 60 },
-            {
-              rotateX: 0,
-              rotateY: 0,
-              scale: 1,
-              y: 0,
-              ease: "none",
-              scrollTrigger: { trigger: escena, start: "top bottom", end: "center 55%", scrub: 0.6 },
-            },
-          );
-
-          // Inclinación hacia el cursor, solo con puntero fino: en táctil no
-          // hay "encima" y el gesto sería un scroll.
-          if (!window.matchMedia("(pointer: fine)").matches) return;
-          // quickTo necesita el nombre canónico (rotationX), no el alias
-          // rotateX: con el alias crea el tween pero cada actualización busca
-          // una propiedad que no existe y la capa nunca se mueve.
-          const girarX = gsap.quickTo(capaPuntero, "rotationX", { duration: 0.6, ease: "power3.out" });
-          const girarY = gsap.quickTo(capaPuntero, "rotationY", { duration: 0.6, ease: "power3.out" });
-          const alMover = (e: PointerEvent) => {
-            const caja = escena.getBoundingClientRect();
-            const nx = (e.clientX - caja.left) / caja.width - 0.5;
-            const ny = (e.clientY - caja.top) / caja.height - 0.5;
-            girarY(nx * 14);
-            girarX(-ny * 10);
-            capaPuntero.style.setProperty("--gx", `${(nx + 0.5) * 100}%`);
-            capaPuntero.style.setProperty("--gy", `${(ny + 0.5) * 100}%`);
-          };
-          const alSalir = () => {
-            girarX(0);
-            girarY(0);
-          };
-          escena.addEventListener("pointermove", alMover);
-          escena.addEventListener("pointerleave", alSalir);
-          quitarPunteros.push(() => {
-            escena.removeEventListener("pointermove", alMover);
-            escena.removeEventListener("pointerleave", alSalir);
-          });
-        });
-
         // Las fuentes cambian la altura de los titulares: se recalculan los
         // puntos de disparo cuando terminan de cargar.
         document.fonts?.ready.then(() => ScrollTrigger.refresh());
 
         return () => {
           document.removeEventListener("click", alClic);
-          quitarPunteros.forEach((quitar) => quitar());
           gsap.ticker.remove(alTick);
           lenis.destroy();
         };
