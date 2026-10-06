@@ -4,11 +4,15 @@
  *
  * Uso:  node scripts/capturar-proyectos.mjs
  *
+ * Si solo cambió un proyecto, SOLO limita la captura a esos slugs y deja
+ * las demás miniaturas como están:
+ *   SOLO=centinela node scripts/capturar-proyectos.mjs
+ *
  * Si agregas un proyecto con demo, súmalo al array SITIOS y apunta su
  * `imagen` en src/data/proyectos.ts. Un proyecto sin imagen renderiza la
  * tarjeta sin miniatura, sin romper nada.
  */
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import puppeteer from "puppeteer-core";
 import sharp from "sharp";
@@ -20,6 +24,8 @@ import sharp from "sharp";
 const CHROME =
   process.env.CHROME ?? "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const DESTINO = process.argv[2] ?? "public/proyectos";
+const MODULO_BLUR = "src/lib/blur-proyectos.ts";
+const SOLO = (process.env.SOLO ?? "").split(",").map((s) => s.trim()).filter(Boolean);
 
 const SITIOS = [
   {
@@ -37,10 +43,20 @@ const SITIOS = [
   {
     slug: "centinela",
     url: "https://centinela-rho.vercel.app",
-    tema: "dark",
+    // Tiene un solo tema, claro: este valor no cambia lo que se captura.
+    tema: "light",
     espera: 3000,
   },
 ];
+
+const pendientes = SOLO.length
+  ? SITIOS.filter((s) => SOLO.includes(s.slug))
+  : SITIOS;
+const desconocidos = SOLO.filter((slug) => !SITIOS.some((s) => s.slug === slug));
+if (desconocidos.length) {
+  console.error(`  SOLO: no hay proyecto con slug ${desconocidos.join(", ")}`);
+  process.exit(1);
+}
 
 const navegador = await puppeteer.launch({
   executablePath: CHROME,
@@ -49,9 +65,19 @@ const navegador = await puppeteer.launch({
 });
 
 await mkdir(DESTINO, { recursive: true });
-const blurs = {};
 
-for (const s of SITIOS) {
+// Se parte de los placeholders que ya hay, en el orden de SITIOS: con SOLO,
+// los proyectos que no se vuelven a capturar conservan el suyo.
+const previos = Object.fromEntries(
+  [...(await readFile(MODULO_BLUR, "utf8").catch(() => "")).matchAll(
+    /"([^"]+)":\s*"(data:[^"]+)"/g,
+  )].map(([, slug, dato]) => [slug, dato]),
+);
+const blurs = Object.fromEntries(
+  SITIOS.filter((s) => previos[s.slug]).map((s) => [s.slug, previos[s.slug]]),
+);
+
+for (const s of pendientes) {
   const p = await navegador.newPage();
   // 16:10, el mismo recorte que usan las tarjetas
   await p.setViewport({ width: 1440, height: 900, deviceScaleFactor: 2 });
@@ -88,7 +114,7 @@ const lineas = Object.entries(blurs)
   .join("\n");
 
 await writeFile(
-  "src/lib/blur-proyectos.ts",
+  MODULO_BLUR,
   [
     "/** Generado por scripts/capturar-proyectos.mjs — no editar a mano. */",
     "export const BLUR_PROYECTOS: Record<string, string> = {",
