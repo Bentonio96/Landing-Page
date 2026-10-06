@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 import type { Idioma } from "@/types";
 import type { Diccionario } from "@/i18n/diccionario";
+import { Marca } from "@/components/ui/Marca";
 import { cn } from "@/lib/utils";
 import { BotonIdioma } from "./BotonIdioma";
 import { BotonTema } from "./BotonTema";
@@ -83,11 +84,13 @@ export function Encabezado({ idioma, t }: Props) {
       )}
     >
       <div className="lienzo flex h-16 items-center justify-between gap-4 sm:h-20">
-        <a
-          href="#inicio"
-          className="font-display text-2xl uppercase leading-none tracking-[0.02em] transition-colors hover:text-acento"
-        >
-          Benjamín Peña
+        {/* La marca sola, sin el nombre al lado: el nombre ya va a tamaño de
+            cartel en el hero, justo debajo. No cambia de color al apuntar
+            porque nunca va en violeta. El relleno con margen negativo le da
+            área de toque sin moverla del borde del lienzo. */}
+        <a href="#inicio" className="-m-2 inline-flex p-2 text-texto">
+          <Marca className="h-7 sm:h-8" />
+          <span className="sr-only">Benjamín Peña Díaz</span>
         </a>
 
         <nav

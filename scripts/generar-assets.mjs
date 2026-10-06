@@ -2,9 +2,9 @@
  * Genera los assets estáticos del sitio a partir de la foto original:
  *   • public/benjamin-pena.jpg  — foto limpia, sin metadatos EXIF
  *   • src/lib/blur.ts           — placeholder base64 para next/image
- *   • public/icon.svg           — marca "cordillera"
- *   • public/favicon.ico        — ICO real (16 + 32 px)
- *   • public/apple-icon.png     — 180×180
+ *   • public/icon.svg           — marca "B = P + D" en blanco sobre ficha de tinta
+ *   • public/favicon.ico        — ICO real (16, 32 y 48 px)
+ *   • public/apple-icon.png     — 180×180, cuadrado y con la proporción del avatar
  *   • public/og-es.png / og-en.png — 1200×630 para LinkedIn y WhatsApp
  *
  * Uso:  node scripts/generar-assets.mjs
@@ -29,15 +29,35 @@ const ORIGEN = path.join(PUBLICO, "benjamin-pena.jpg");
 
 // Paleta del CV, la misma que los tokens de globals.css.
 const TINTA = "#0E1117";
-const ACENTO = "#6C5CFF"; // violeta vivo: relleno de la marca
+const ACENTO = "#6C5CFF"; // violeta vivo: la regla corta de las tarjetas sociales
 const ACENTO_TEXTO = "#A79BFF"; // violeta claro: texto sobre tinta
 const HUESO = "#F1F3F7";
 const ATENUADO = "#AFB7C4";
 
-const marcaSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="14" fill="${TINTA}"/>
-  <path d="M7 48 L24 19 L34 37 L41 26 L57 48 Z" fill="${ACENTO}"/>
+/**
+ * Ficha de tinta con la marca "B = P + D" en blanco, sobre el lienzo de 64
+ * del logo. Los dos trazados son los del logo final y no se retocan (los
+ * mismos de components/ui/Marca.tsx); `escala` solo la agranda o la achica
+ * desde el centro.
+ */
+function fichaSvg({ escala, radio }) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="${radio}" fill="${TINTA}"/>
+  <g fill="#FFFFFF" transform="translate(32 32) scale(${Number(escala.toFixed(4))}) translate(-32 -32)">
+    <path d="M12.5 6H34.5A13.5 13.5 0 0 1 44.562 28.5H23.5V58H12.5Z"/>
+    <path d="M28.5 33.5H47.5A14.5 14.5 0 0 1 37 58H28.5Z"/>
+  </g>
 </svg>`;
+}
+
+// Pestaña del navegador. A 16 px lo que manda es que el corte se lea, así que
+// la marca ocupa el 70 % del alto de la ficha: lo máximo que deja su espacio
+// libre, que es un 21 % de su propio alto por lado. La marca mide 52 de alto.
+const marcaSvg = fichaSvg({ escala: (0.7 * 64) / 52, radio: 14 });
+
+// Icono de iOS. Cuadrado, porque el sistema lo redondea él, y con la misma
+// proporción que el avatar del logo: el lienzo de 64 a 352 de 512.
+const appleSvg = fichaSvg({ escala: 352 / 512, radio: 0 });
 
 /** Empaqueta PNGs en un .ico válido (los .ico modernos admiten PNG dentro). */
 function construirIco(imagenes) {
@@ -168,11 +188,14 @@ async function placeholder(limpia) {
 async function iconos() {
   // 3 · Iconos.
   await writeFile(path.join(PUBLICO, "icon.svg"), marcaSvg);
-  const marca = Buffer.from(marcaSvg);
-  const png = (tamano) =>
-    sharp(marca, { density: 384 }).resize(tamano, tamano).png().toBuffer();
+  const aPng = (svg, tamano) =>
+    sharp(Buffer.from(svg), { density: 384 })
+      .resize(tamano, tamano)
+      .png()
+      .toBuffer();
+  const png = (tamano) => aPng(marcaSvg, tamano);
 
-  await writeFile(path.join(PUBLICO, "apple-icon.png"), await png(180));
+  await writeFile(path.join(PUBLICO, "apple-icon.png"), await aPng(appleSvg, 180));
   await writeFile(
     path.join(PUBLICO, "favicon.ico"),
     construirIco([
