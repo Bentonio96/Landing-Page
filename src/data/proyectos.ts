@@ -17,6 +17,32 @@ import type { Proyecto } from "@/types";
  */
 export const proyectos: Proyecto[] = [
   {
+    slug: "kerr",
+    nombre: "Kerr",
+    descripcion: {
+      es: "Misión tripulada ficticia hacia un agujero negro en rotación. La lente gravitacional se calcula en WebGL2, el scroll cruza el horizonte de eventos y el HUD usa física real. Banda sonora original con Web Audio.",
+      en: "A fictional crewed mission to a spinning black hole. The gravitational lensing is computed in WebGL2, the scroll crosses the event horizon and the HUD runs on real physics. Original soundtrack built with Web Audio.",
+    },
+    tecnologias: ["React 19", "TypeScript", "WebGL2", "GSAP", "Web Audio"],
+    fecha: { es: "Octubre 2026", en: "October 2026" },
+    imagen: "/proyectos/kerr.jpg",
+    demoUrl: "https://kerr-mission.vercel.app",
+    repoUrl: "https://github.com/Bentonio96/Kerr-Mission",
+  },
+  {
+    slug: "kinetica",
+    nombre: "Kinetica",
+    descripcion: {
+      es: "Landing de un festival ficticio de luz, sonido y movimiento: un orbe iridiscente en WebGL2, partículas que forman figuras, tipografía cinética y un carrusel 3D de artistas. En español e inglés, y accesible.",
+      en: "Landing page for a fictional festival of light, sound and motion: an iridescent WebGL2 orb, particles that form shapes, kinetic type and a 3D artist carousel. In Spanish and English, and accessible.",
+    },
+    tecnologias: ["React 19", "TypeScript", "Tailwind CSS", "WebGL2", "GSAP"],
+    fecha: { es: "Octubre 2026", en: "October 2026" },
+    imagen: "/proyectos/kinetica.jpg",
+    demoUrl: "https://kinetica-fest.vercel.app",
+    repoUrl: "https://github.com/Bentonio96/Kinetica",
+  },
+  {
     slug: "epicentro",
     nombre: "Epicentro",
     descripcion: {

@@ -22,12 +22,30 @@ import sharp from "sharp";
  *   CHROME="/ruta/a/chrome" node scripts/capturar-proyectos.mjs
  */
 const CHROME =
-  process.env.CHROME ?? "C:/Program Files/Google/Chrome/Application/chrome.exe";
+  process.env.CHROME ??
+  (process.platform === "darwin"
+    ? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+    : "C:/Program Files/Google/Chrome/Application/chrome.exe");
 const DESTINO = process.argv[2] ?? "public/proyectos";
 const MODULO_BLUR = "src/lib/blur-proyectos.ts";
 const SOLO = (process.env.SOLO ?? "").split(",").map((s) => s.trim()).filter(Boolean);
 
 const SITIOS = [
+  {
+    slug: "kerr",
+    url: "https://kerr-mission.vercel.app",
+    // Un solo tema, oscuro. Sin WebGL en headless muestra su póster.
+    tema: "dark",
+    espera: 4000,
+    // Botón (por su texto, visible o no) que se pulsa antes de capturar.
+    cerrar: "Cerrar aviso",
+  },
+  {
+    slug: "kinetica",
+    url: "https://kinetica-fest.vercel.app",
+    tema: "light",
+    espera: 3000,
+  },
   {
     slug: "epicentro",
     url: "https://epicentro-sigma.vercel.app",
@@ -88,6 +106,14 @@ for (const s of pendientes) {
   await p.goto(s.url, { waitUntil: "networkidle0", timeout: 60000 });
   await p.evaluate(() => document.fonts.ready);
   await new Promise((r) => setTimeout(r, s.espera));
+  if (s.cerrar) {
+    await p.evaluate((texto) => {
+      [...document.querySelectorAll("button")]
+        .find((b) => b.textContent?.includes(texto))
+        ?.click();
+    }, s.cerrar);
+    await new Promise((r) => setTimeout(r, 600));
+  }
 
   const png = await p.screenshot({ type: "png" });
   const buf = await sharp(png)

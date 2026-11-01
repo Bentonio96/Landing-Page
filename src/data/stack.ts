@@ -5,7 +5,7 @@ import type { CategoriaStack } from "@/types";
  *
  * `principal: true` pone la herramienta a tinta plena y con el punto violeta.
  * Están marcadas las que el CV puntúa 5/5, más TypeScript, que es la base de
- * los tres proyectos publicados. Son 8 de 36: si marcas muchas más, el
+ * los proyectos publicados. Son 8 de 36: si marcas muchas más, el
  * resalte pierde el efecto.
  *
  * La categoría "Incorporando" es deliberada: separar lo que dominas de lo
