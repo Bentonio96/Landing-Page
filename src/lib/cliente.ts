@@ -7,12 +7,35 @@ import { ATRIBUTO_TEMA, CLAVE_TEMA } from "@/lib/tema";
  * saltar de sector, cambiar la luz y abrir la radio.
  */
 
-type Desplazador = { scrollTo: (destino: HTMLElement, opciones?: { offset?: number }) => void };
+type Desplazador = {
+  scrollTo: (destino: HTMLElement) => void;
+  detener: () => void;
+  reanudar: () => void;
+};
 let desplazador: Desplazador | null = null;
 
 /** Movimiento.tsx registra aquí su Lenis; sin él se usa el scroll nativo. */
 export function registrarDesplazador(d: Desplazador | null) {
   desplazador = d;
+  if (d && document.documentElement.dataset.radio === "abierta") d.detener();
+}
+
+/**
+ * Congela el scroll de la página mientras la radio está abierta: así la
+ * rueda, el trackpad y el dedo mueven el historial y no la página de atrás.
+ * Lenis se detiene (si no, sigue escuchando la rueda en toda la ventana) y
+ * el <html> pierde su barra con un atributo, para cubrir también el caso
+ * sin Lenis (movimiento reducido).
+ */
+export function congelarPagina(congelar: boolean) {
+  const html = document.documentElement;
+  if (congelar) {
+    html.dataset.radio = "abierta";
+    desplazador?.detener();
+  } else {
+    delete html.dataset.radio;
+    desplazador?.reanudar();
+  }
 }
 
 export const sinMovimiento = () =>

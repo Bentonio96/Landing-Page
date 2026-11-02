@@ -9,6 +9,7 @@ import {
   abrirRadio,
   alternarAtajos,
   alternarTema,
+  congelarPagina,
   irA,
   sinMovimiento,
 } from "@/lib/cliente";
@@ -46,7 +47,7 @@ let siguienteId = 0;
 export function Radio({ t, conocimiento, otroIdioma }: Props) {
   const dialogo = useRef<HTMLDialogElement>(null);
   const entrada = useRef<HTMLInputElement>(null);
-  const historial = useRef<HTMLOListElement>(null);
+  const historial = useRef<HTMLDivElement>(null);
   const destinoAlCerrar = useRef<string | null>(null);
   const [mensajes, setMensajes] = useState<Mensaje[]>(() => [
     { id: siguienteId++, autor: "apex", texto: t.radio.bienvenida },
@@ -56,9 +57,8 @@ export function Radio({ t, conocimiento, otroIdioma }: Props) {
     (accion: Accion, { automatica = false } = {}) => {
       switch (accion.tipo) {
         case "ir":
-          // Detrás del diálogo: la página se mueve mientras se conversa, y
-          // al cerrar el foco queda en ese sector.
-          irA(accion.destino, { enfocar: false });
+          // La página está congelada mientras se conversa: el salto se hace
+          // al cerrar, y el foco queda en ese sector.
           destinoAlCerrar.current = accion.destino;
           if (!automatica) dialogo.current?.close();
           break;
@@ -121,13 +121,50 @@ export function Radio({ t, conocimiento, otroIdioma }: Props) {
     return () => removeEventListener("v3:radio", alPedir);
   }, [enviar]);
 
-  // El historial siempre muestra lo último.
+  // El historial sigue a lo último mientras se escribe la respuesta, salvo
+  // que quien lee haya subido a revisar algo: ahí no se le mueve el texto.
+  const pegado = useRef(true);
   useEffect(() => {
     const ol = historial.current;
-    if (ol) ol.scrollTop = ol.scrollHeight;
-  }, [mensajes]);
+    if (!ol) return;
+    const bajar = () => {
+      if (pegado.current) ol.scrollTop = ol.scrollHeight;
+    };
+    const alDesplazar = () => {
+      pegado.current = ol.scrollHeight - ol.scrollTop - ol.clientHeight < 48;
+    };
+    const observador = new MutationObserver(bajar);
+    observador.observe(ol, { childList: true, subtree: true, characterData: true });
+    ol.addEventListener("scroll", alDesplazar, { passive: true });
+    return () => {
+      observador.disconnect();
+      ol.removeEventListener("scroll", alDesplazar);
+    };
+  }, []);
+
+  // Un mensaje nuevo propio siempre baja hasta el final.
+  useEffect(() => {
+    const ol = historial.current;
+    if (!ol) return;
+    pegado.current = true;
+    ol.scrollTop = ol.scrollHeight;
+  }, [mensajes.length]);
+
+  // Al abrir y cerrar, la página de atrás se congela y se suelta. Se escucha
+  // el atributo `open` para cubrir cualquier forma de abrir o cerrar.
+  useEffect(() => {
+    const d = dialogo.current;
+    if (!d) return;
+    const observador = new MutationObserver(() => congelarPagina(d.open));
+    observador.observe(d, { attributes: true, attributeFilter: ["open"] });
+    return () => {
+      observador.disconnect();
+      congelarPagina(false);
+    };
+  }, []);
 
   const alCerrar = () => {
+    congelarPagina(false);
     const destino = destinoAlCerrar.current;
     destinoAlCerrar.current = null;
     if (!destino) return;
@@ -140,6 +177,7 @@ export function Radio({ t, conocimiento, otroIdioma }: Props) {
       <dialog
         ref={dialogo}
         aria-labelledby="radio-titulo"
+        data-lenis-prevent
         onClose={alCerrar}
         onClick={(e) => {
           // Clic en el fondo (fuera de la caja) cierra.
@@ -172,12 +210,17 @@ export function Radio({ t, conocimiento, otroIdioma }: Props) {
             </button>
           </header>
 
-          <ol
+          <div
             ref={historial}
             role="log"
             aria-live="polite"
-            className="min-h-[220px] flex-1 space-y-4 overflow-y-auto px-4 py-4"
+            aria-label={t.radio.historial}
+            // Enfocable para recorrerlo con flechas y PageUp/PageDown.
+            tabIndex={0}
+            data-lenis-prevent
+            className="min-h-[160px] flex-1 basis-auto overflow-y-auto overscroll-contain px-4 py-4 [-webkit-overflow-scrolling:touch] focus-visible:outline-offset-[-2px]"
           >
+            <ol className="space-y-4">
             {mensajes.map((m, i) => (
               <li key={m.id} className={cn("flex flex-col gap-1.5", m.autor === "tu" && "items-end")}>
                 <span className="mono-etiqueta text-tenue" aria-hidden="true">
@@ -209,7 +252,8 @@ export function Radio({ t, conocimiento, otroIdioma }: Props) {
                 )}
               </li>
             ))}
-          </ol>
+            </ol>
+          </div>
 
           <div className="border-t border-linea px-4 pt-3">
             <ul className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">

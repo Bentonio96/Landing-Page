@@ -13,7 +13,7 @@ Ningún efecto está de relleno; cada uno dice algo:
 | Pieza | Qué es | Qué dice |
 |---|---|---|
 | **Tablero de LED** | El nombre, dibujado en un canvas con una tipografía de matriz 5 × 7 hecha a mano (con la Í y la Ñ). Se enciende de izquierda a derecha y el puntero calienta los LED hacia el morado. | El tablero de posiciones de un circuito: el piloto en la pantalla grande. |
-| **Radio con ÁPEX** | `/` o `⌘K` abre una terminal donde se le pregunta lo que sea: «¿sabes Python?», «Kerr», «¿está disponible?», «modo noche». Responde con un guion, sin API ni costo, y mueve la página por detrás. | Benja trabaja con un agente. Aquí se puede hablar con uno. |
+| **Radio con ÁPEX** | `/` o `⌘K` abre una terminal donde se le pregunta lo que sea: «¿sabes Python?», «Kerr», «¿está disponible?», «modo noche». Responde con un guion, sin API ni costo, y al cerrar la radio deja la página en la sección de la que habló. Mientras está abierta, la página de atrás queda quieta y el historial se desplaza solo (rueda, trackpad, dedo o teclado). | Benja trabaja con un agente. Aquí se puede hablar con uno. |
 | **Cronómetro de vuelta** | Arranca al abrir la página, toma el tiempo de paso por cada sector y lo muestra en el box, con la cronometría de la F1: morado es la mejor marca. Se guarda en el navegador para comparar la próxima vuelta. | El morado del sector más rápido es el violeta de su CV: el acento tiene significado. |
 | **Telemetría del HUD** | Velocidad (km/h) y marcha según la velocidad del scroll, luces de cambio, y el mapa del circuito con el recorrido de la página. | El scroll es el acelerador. |
 | **Avisos por sector** | Al cruzar cada sector, ÁPEX dice una línea por radio («S2. Siete autos en el garage…»). | La voz que guía el recorrido. |

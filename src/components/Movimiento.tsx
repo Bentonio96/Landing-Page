@@ -37,7 +37,13 @@ export function Movimiento() {
         const alTick = (tiempo: number) => lenis.raf(tiempo * 1000);
         gsap.ticker.add(alTick);
         gsap.ticker.lagSmoothing(0);
-        registrarDesplazador({ scrollTo: (destino) => lenis.scrollTo(destino, { offset: 0 }) });
+        registrarDesplazador({
+          // `force`: que un salto no se pierda si llega justo cuando Lenis
+          // se está reanudando tras cerrar la radio.
+          scrollTo: (destino) => lenis.scrollTo(destino, { offset: 0, force: true }),
+          detener: () => lenis.stop(),
+          reanudar: () => lenis.start(),
+        });
 
         // Anclas internas con el mismo scroll suave, y el foco al sector.
         const alClic = (evento: MouseEvent) => {

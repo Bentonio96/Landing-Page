@@ -114,6 +114,9 @@ html {
 }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: clip; }
+/* Con la radio abierta la página de atrás no se mueve (ver congelarPagina). */
+html[data-radio="abierta"] { overflow: hidden; scrollbar-gutter: stable; }
 
 body {
   background-color: var(--c-papel);

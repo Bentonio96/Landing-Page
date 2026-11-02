@@ -56,6 +56,35 @@ for (const ruta of ["/", "/en"]) {
   }
 }
 
+// --- la radio abierta, con conversación y el historial desplazable --------
+for (const [ancho, alto] of [[1440, 900], [375, 812]]) {
+  for (const tema of ["light", "dark"]) {
+    const p = await abrir("/", { ancho, alto, tema });
+    await p.keyboard.press("/");
+    await new Promise((r) => setTimeout(r, 300));
+    for (const q of ["kerr", "tesis", "¿sabes react?", "contacto"]) {
+      await p.type("#radio-entrada", q);
+      await p.keyboard.press("Enter");
+      await new Promise((r) => setTimeout(r, 900));
+    }
+    const scroll = await p.evaluate(() => {
+      const log = document.querySelector("[role=log]");
+      const desborda = log.scrollHeight > log.clientHeight;
+      const alFondo = log.scrollHeight - log.scrollTop - log.clientHeight < 2;
+      return { desborda, alFondo, pagina: window.scrollY };
+    });
+    await p.evaluate(AXE);
+    const r = await p.evaluate(() =>
+      window.axe.run(document.querySelector("dialog"), { runOnly: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa", "best-practice"] }),
+    );
+    const malScroll = !scroll.desborda || !scroll.alFondo || scroll.pagina !== 0;
+    problemas += r.violations.length + (malScroll ? 1 : 0);
+    console.log(`radio ${ancho} ${tema.padEnd(5)}: axe ${r.violations.length} · historial ${scroll.desborda ? "desplazable" : "SIN scroll"}, ${scroll.alFondo ? "al fondo" : "NO al fondo"}, página ${scroll.pagina === 0 ? "quieta" : "SE MOVIÓ"}`);
+    for (const x of r.violations) console.log(`   ${x.id}: ${x.nodes.slice(0, 3).map((n) => n.target.join(" ")).join(" | ")}`);
+    await p.close();
+  }
+}
+
 // --- recortes ------------------------------------------------------------
 for (const ancho of [375, 768, 1440]) {
   for (const ruta of ["/", "/en"]) {
