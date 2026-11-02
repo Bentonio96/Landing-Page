@@ -1,671 +1,369 @@
 @import "tailwindcss";
 
-/* Modo oscuro por atributo data-tema, con persistencia en lib/tema.ts.
-   Va en un atributo y no en una clase porque React reaplica el className
-   de <html> al navegar entre idiomas, y borraba la clase. */
 @custom-variant dark (&:where([data-tema="dark"], [data-tema="dark"] *));
 
 /* ============================================================
-   SISTEMA DE DISEÑO — "Obsidiana"
-   Fuente única de verdad: color, tipografía, espaciado, ritmo.
-   Cambiar un valor aquí lo cambia en todo el sitio.
+   SISTEMA DE DISEÑO — «Vuelta rápida»
 
-   La idea: titulares de cartel, mucho aire y la paleta del CV, para
-   que el sitio y el documento se lean como una sola marca. Tinta
-   azulada, grises fríos y un único violeta. El impacto sale de la
-   escala tipográfica y de la foto a sangre; el violeta queda para
-   pocas cosas —el apellido, foco, estado activo, la cita— y por eso
-   se nota.
+   La página es una vuelta de clasificación. Benja es el piloto
+   #29 y ÁPEX, su asistente, le habla por radio desde el muro de
+   boxes. Cada sección es un sector, el scroll es el acelerador y
+   un cronómetro de verdad mide la vuelta de quien visita.
 
-   Los valores salen del propio PDF del CV (operadores de color del
-   contenido), no de una captura: #0E1117, #6C5CFF, #4335C9, #A79BFF.
+   Papel de telemetría: gris verdoso claro con grilla de puntos,
+   tinta casi negra y celdas de 1 px. Un solo acento, el morado,
+   que en la cronometría de la Fórmula 1 marca el sector más
+   rápido de la sesión, y que además es el violeta del CV de
+   Benja. Queda para lo interactivo y para lo mejor de la vuelta.
+
+   El verde y el ámbar existen solo con significado (en pista y
+   sector más lento) y siempre van con su palabra al lado.
+
+   De noche (data-tema="dark") es una carrera nocturna: carbón,
+   nunca negro puro, y el morado recalibrado para AA.
    ============================================================ */
 
 :root {
   color-scheme: light;
 
-  /* --- Color: modo claro --- */
-  --c-fondo:         #F6F7F9;  /* papel frío */
-  --c-superficie:    #FFFFFF;
-  --c-elevado:       #ECEEF2;
-  --c-texto:         #0E1117;  /* 17.6:1 sobre fondo */
-  --c-atenuado:      #414A58;  /*  8.4:1 sobre fondo — AA */
-  /* Más oscuro que el gris del CV (#5D6675): en la banda alterna del stack,
-     con el grano encima, ese gris bajaba a 4.49:1 medido sobre píxel real. */
-  --c-tenue:         #555E6C;  /*  6.1:1 sobre fondo — AA */
-  --c-cita:          #1B212B;
-  --c-borde:         #E0E3E9;
-  --c-borde-fuerte:  #C6CDD8;
-  --c-acento:        #4335C9;  /*  7.6:1 sobre fondo — AA */
-  --c-acento-hover:  #332C6B;
-  --c-acento-sobre:  #FFFFFF;  /*  8.1:1 sobre acento — AA */
-  /* El violeta vivo del CV. Solo para rellenos decorativos (puntos,
-     subrayados, reglas): como texto da 4.3:1 sobre claro y 4.2:1
-     sobre oscuro, por debajo de AA para texto normal. */
-  --c-acento-vivo:   #6C5CFF;
-  --c-sombra:        rgba(14, 17, 23, 0.08);
-  /* Secciones alternas: un velo translúcido y no un color opaco, para que
-     el grano fijo de detrás siga viéndose a través. */
-  --c-banda:         rgba(14, 17, 23, 0.028);
-
-  /* Vidrio: superficies flotantes translúcidas. */
-  --c-vidrio:        rgba(246, 247, 249, 0.82);
-  --c-vidrio-brillo: rgba(255, 255, 255, 0.7);
-  --c-vidrio-borde:  rgba(14, 17, 23, 0.08);
+  --c-papel:        #ECEDE9;
+  --c-panel:        #E2E4DF;
+  --c-panel-alto:   #F6F7F4;
+  --c-tinta:        #0C0E0F;  /* 17.9:1 sobre papel */
+  --c-atenuado:     #474C4F;  /*  7.5:1 sobre papel · 6.9:1 sobre panel */
+  --c-tenue:        #5E6467;  /*  5.1:1 sobre papel · 4.7:1 sobre panel */
+  --c-linea:        #C6C9C3;
+  --c-linea-fuerte: #9DA19B;
+  --c-morado:       #4A2FD0;  /*  6.8:1 sobre papel — texto y foco */
+  --c-morado-hover: #33209A;
+  --c-sobre-morado: #FFFFFF;  /*  8.0:1 sobre morado */
+  --c-morado-vivo:  #6C4BFF;  /* solo rellenos: puntos, trazos, LED */
+  --c-senal:        #086634;  /*  6.0:1 — «en pista», siempre con palabra */
+  --c-ambar:        #8A5A00;  /*  5.0:1 — sector más lento, siempre con palabra */
+  --c-led-apagado:  #CBCEC7;
+  --c-led:          #0C0E0F;
+  --c-punto:        rgba(12, 14, 15, 0.13);
+  --c-velo:         rgba(236, 237, 233, 0.86);
 }
 
 [data-tema="dark"] {
   color-scheme: dark;
 
-  /* --- Color: modo oscuro --- */
-  --c-fondo:         #0E1117;  /* la tinta de la barra lateral del CV */
-  --c-superficie:    #141922;
-  --c-elevado:       #1B212B;
-  --c-texto:         #F1F3F7;  /* 17.0:1 sobre fondo */
-  --c-atenuado:      #AFB7C4;  /*  9.4:1 sobre fondo — AA */
-  --c-tenue:         #8B94A3;  /*  6.2:1 sobre fondo — AA */
-  --c-cita:          #C6CDD8;
-  --c-borde:         #232A36;
-  --c-borde-fuerte:  #3A4353;
-  --c-acento:        #A79BFF;  /*  7.9:1 sobre fondo — AA */
-  --c-acento-hover:  #BFB4FF;
-  --c-acento-sobre:  #0E1117;  /*  7.9:1 sobre acento — AA */
-  --c-acento-vivo:   #6C5CFF;
-  --c-sombra:        rgba(0, 0, 0, 0.5);
-  --c-banda:         rgba(167, 155, 255, 0.022);
-
-  --c-vidrio:        rgba(14, 17, 23, 0.78);
-  --c-vidrio-brillo: rgba(255, 255, 255, 0.06);
-  --c-vidrio-borde:  rgba(255, 255, 255, 0.07);
+  --c-papel:        #0D0F10;
+  --c-panel:        #16191B;
+  --c-panel-alto:   #1D2124;
+  --c-tinta:        #ECEEE9;  /* 16.4:1 sobre papel */
+  --c-atenuado:     #A6ADB1;  /*  8.3:1 */
+  --c-tenue:        #868D92;  /*  5.6:1 sobre papel · 5.2:1 sobre panel */
+  --c-linea:        #272B2E;
+  --c-linea-fuerte: #454B4F;
+  --c-morado:       #A99BFF;  /*  7.9:1 */
+  --c-morado-hover: #C3B9FF;
+  --c-sobre-morado: #0D0F10;
+  --c-morado-vivo:  #7B62FF;
+  --c-senal:        #3DDC84;
+  --c-ambar:        #F2B544;
+  --c-led-apagado:  #262B2E;
+  --c-led:          #F2F1EA;
+  --c-punto:        rgba(236, 238, 233, 0.08);
+  --c-velo:         rgba(13, 15, 16, 0.84);
 }
 
 @theme inline {
-  /* --- Color semántico --- */
-  --color-fondo:        var(--c-fondo);
-  --color-superficie:   var(--c-superficie);
-  --color-elevado:      var(--c-elevado);
-  --color-texto:        var(--c-texto);
-  --color-atenuado:     var(--c-atenuado);
-  --color-tenue:        var(--c-tenue);
-  --color-cita:         var(--c-cita);
-  --color-borde:        var(--c-borde);
-  --color-bordefuerte:  var(--c-borde-fuerte);
-  --color-acento:       var(--c-acento);
-  --color-acentohover:  var(--c-acento-hover);
-  --color-acentosobre:  var(--c-acento-sobre);
-  --color-acentovivo:   var(--c-acento-vivo);
-  --color-banda:        var(--c-banda);
-  --color-vidrio:       var(--c-vidrio);
-  --color-vidrioborde:  var(--c-vidrio-borde);
+  --color-papel:       var(--c-papel);
+  --color-panel:       var(--c-panel);
+  --color-panelalto:   var(--c-panel-alto);
+  --color-tinta:       var(--c-tinta);
+  --color-atenuado:    var(--c-atenuado);
+  --color-tenue:       var(--c-tenue);
+  --color-linea:       var(--c-linea);
+  --color-lineafuerte: var(--c-linea-fuerte);
+  --color-morado:      var(--c-morado);
+  --color-moradohover: var(--c-morado-hover);
+  --color-sobremorado: var(--c-sobre-morado);
+  --color-moradovivo:  var(--c-morado-vivo);
+  --color-senal:       var(--c-senal);
+  --color-ambar:       var(--c-ambar);
+  --color-velo:        var(--c-velo);
 
-  /* --- Tipografía --- */
-  --font-display: var(--fuente-display), "Arial Narrow", Impact, sans-serif;
-  --font-sans:    var(--fuente-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono:    var(--fuente-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-sans: var(--fuente-saira), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--fuente-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
-  /* Escala. Las tres de cartel (gigante, t1, t2) son de la condensada y van
-     con interlineado por debajo de 1: en versales no hay descendentes que
-     choquen, y apretadas es como pesan. */
-  --text-etiqueta:     0.75rem;    /* 12px — mono, versalitas */
+  --text-micro: 0.6875rem;   /* 11px — solo HUD decorativo */
+  --text-micro--line-height: 1.35;
+  --text-etiqueta: 0.75rem;  /* 12px — mono en versales */
   --text-etiqueta--line-height: 1.4;
-  --text-menor:        0.8125rem;  /* 13px */
-  --text-menor--line-height: 1.5;
-  --text-base:         1rem;
-  --text-base--line-height: 1.65;
-  --text-cuerpo:       1.0625rem;  /* 17px — cuerpo de lectura */
-  --text-cuerpo--line-height: 1.7;
-  --text-guia:         clamp(1.125rem, 1rem + 0.5vw, 1.3125rem);
-  --text-guia--line-height: 1.6;
-  --text-t3:           clamp(1.375rem, 1.15rem + 0.9vw, 1.875rem);
-  --text-t3--line-height: 1.25;
-  --text-t2:           clamp(2.5rem, 1.6rem + 3.4vw, 4.25rem);
+  --text-guia: clamp(1.125rem, 1.02rem + 0.45vw, 1.375rem);
+  --text-guia--line-height: 1.55;
+  --text-t3: clamp(1.5rem, 1.2rem + 1.1vw, 2.25rem);
+  --text-t3--line-height: 1.1;
+  --text-t2: clamp(2.5rem, 1.5rem + 4.2vw, 5.75rem);
   --text-t2--line-height: 0.92;
-  --text-t1:           clamp(3.5rem, 1.9rem + 6.2vw, 6.75rem);
-  --text-t1--line-height: 0.9;
-  --text-gigante:      clamp(4.5rem, 1.6rem + 11.5vw, 11rem);
-  --text-gigante--line-height: 0.86;
 
-  /* --- Ritmo vertical y medidas --- */
-  --spacing-seccion:    clamp(6rem, 3.5rem + 9vw, 11rem);
-  --spacing-canal:      clamp(1.25rem, 0.6rem + 2.6vw, 2.5rem);
-  --container-medida:   68ch;   /* medida de lectura cómoda */
-  --container-lienzo:   80rem;  /* ancho máximo del contenido */
-
-  /* --- Forma --- */
-  /* Casi todo va recto, como una página impresa. Lo único redondo son las
-     píldoras de tecnología y los dos controles del encabezado: así la forma
-     distingue etiqueta y control de contenido. */
-  --radius-pieza:   0px;
-  --radius-control: 2px;
-  --radius-chip:    999px;
-
-  /* --- Movimiento --- */
-  --ease-salida: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ============================================================
    BASE
    ============================================================ */
 
-@layer base {
-  * {
-    border-color: var(--c-borde);
-  }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
 
-  /* Desplazamiento suave nativo solo mientras Lenis no está activo (sin JS o
-     con movimiento reducido). Con Lenis encima, el suave del navegador y el
-     suyo se pelean y el scroll tironea. */
-  html:not(.lenis) {
-    scroll-behavior: smooth;
-  }
+body {
+  background-color: var(--c-papel);
+  /* Papel de telemetría: un punto cada 24 px. Fijo, para que el scroll se
+     sienta como avanzar sobre un plano y no como arrastrar una imagen. */
+  background-image: radial-gradient(var(--c-punto) 1px, transparent 1.2px);
+  background-size: 24px 24px;
+  background-attachment: fixed;
+  color: var(--c-tinta);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
 
-  html {
-    /* el header fijo no debe tapar el destino de un ancla */
-    scroll-padding-top: 5rem;
-    -webkit-text-size-adjust: 100%;
-  }
+::selection { background: var(--c-morado-vivo); color: #fff; }
 
-  html {
-    /* El color vive aquí, no en <body>, para que la capa de grano pueda
-       colocarse detrás del contenido con z-index negativo. */
-    background-color: var(--c-fondo);
-  }
+:focus-visible:not([tabindex="-1"]) {
+  outline: 2px solid var(--c-morado);
+  outline-offset: 3px;
+}
 
-  body {
-    background-color: transparent;
-    color: var(--c-texto);
-    font-family: var(--font-sans);
-    font-size: var(--text-cuerpo);
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-  }
+.tnum { font-variant-numeric: tabular-nums; }
 
-  /* Solo h1 y h2 son de cartel. Los h3 de filas y tarjetas van en la sans
-     ligera: dos titulares condensados seguidos se pisan el protagonismo. */
-  h1, h2 {
-    font-family: var(--font-display);
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: -0.01em;
-    text-wrap: balance;
-  }
+/* Titular de sección: Saira expandida e itálica, a peso de transmisión. */
+.titular {
+  font-family: var(--fuente-titular), var(--font-sans);
+  font-style: italic;
+  font-weight: 760;
+  font-variation-settings: "wdth" 118;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
 
-  h3, h4 {
-    font-family: var(--font-sans);
-    font-weight: 300;
-    letter-spacing: -0.01em;
-    text-wrap: balance;
-  }
-
-  p {
-    text-wrap: pretty;
-  }
-
-  /* Foco visible y consistente en todo el sitio — nunca se elimina */
-  :focus-visible {
-    outline: 2px solid var(--c-acento);
-    outline-offset: 3px;
-    border-radius: 2px;
-  }
-
-  ::selection {
-    background-color: var(--c-acento);
-    color: var(--c-acento-sobre);
-  }
-
-  /* Respeta la preferencia del sistema en todo el sitio */
-  @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
-  }
+.mono-etiqueta {
+  font-family: var(--font-mono);
+  font-size: var(--text-etiqueta);
+  line-height: var(--text-etiqueta--line-height);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 /* ============================================================
-   COMPONENTES DE LAYOUT
+   HUD
    ============================================================ */
 
-@layer components {
-  /* Lienzo central con canales laterales fluidos */
-  .lienzo {
-    width: 100%;
-    max-width: var(--container-lienzo);
-    margin-inline: auto;
-    padding-inline: var(--spacing-canal);
-  }
+/* Retícula de cabina: cuatro esquinas fijas que enmarcan la vista. */
+.reticula::before,
+.reticula::after,
+.reticula > span::before,
+.reticula > span::after {
+  content: "";
+  position: fixed;
+  width: 18px;
+  height: 18px;
+  border-color: var(--c-linea-fuerte);
+  border-style: solid;
+  border-width: 0;
+  pointer-events: none;
+  z-index: 40;
+}
+.reticula::before { top: 10px; left: 10px; border-top-width: 1px; border-left-width: 1px; }
+.reticula::after { top: 10px; right: 10px; border-top-width: 1px; border-right-width: 1px; }
+.reticula > span::before { bottom: 10px; left: 10px; border-bottom-width: 1px; border-left-width: 1px; }
+.reticula > span::after { bottom: 10px; right: 10px; border-bottom-width: 1px; border-right-width: 1px; }
 
-  /* Etiqueta monoespaciada de sección: "01 — PROYECTOS" */
-  .etiqueta {
-    font-family: var(--font-mono);
-    font-size: var(--text-etiqueta);
-    font-weight: 400;
-    line-height: 1.4;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--c-tenue);
-  }
+/* Esquinas de mira sobre un elemento (foto, capturas). */
+.mira { position: relative; }
+.mira::before,
+.mira::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--c-tinta), var(--c-tinta)) top left / 14px 1px,
+    linear-gradient(var(--c-tinta), var(--c-tinta)) top left / 1px 14px,
+    linear-gradient(var(--c-tinta), var(--c-tinta)) top right / 14px 1px,
+    linear-gradient(var(--c-tinta), var(--c-tinta)) top right / 1px 14px,
+    linear-gradient(var(--c-tinta), var(--c-tinta)) bottom left / 14px 1px,
+    linear-gradient(var(--c-tinta), var(--c-tinta)) bottom left / 1px 14px,
+    linear-gradient(var(--c-tinta), var(--c-tinta)) bottom right / 14px 1px,
+    linear-gradient(var(--c-tinta), var(--c-tinta)) bottom right / 1px 14px;
+  background-repeat: no-repeat;
+  transition: inset 400ms var(--ease-salida);
+}
+.mira::after { display: none; }
+.mira:hover::before,
+.mira:focus-within::before { inset: -10px; }
 
-  /* Enlace de texto con subrayado que crece desde la izquierda */
-  .enlace {
-    color: var(--c-texto);
-    text-decoration: none;
-    background-image: linear-gradient(var(--c-acento), var(--c-acento));
-    background-repeat: no-repeat;
-    background-position: 0 100%;
-    background-size: 0% 1px;
-    transition: background-size 0.35s var(--ease-salida), color 0.2s ease;
-  }
-  .enlace:hover {
-    color: var(--c-acento);
-    background-size: 100% 1px;
-  }
-
-  /* Subrayado grueso de la cita, dibujado con un fondo y no con
-     text-decoration: un subrayado nativo no se puede recortar, y este se
-     traza de izquierda a derecha con el scroll (--trazo, de 0 a 1).
-
-     Va con box-decoration-break en `slice`, el valor por defecto: el fondo
-     se calcula como si las líneas de la frase fueran una sola tira, así que
-     el trazo recorre la primera línea entera antes de empezar la segunda,
-     como una mano que subraya. Con `clone` las dos se dibujarían a la vez.
-     Sin JavaScript --trazo vale 1 y el subrayado está completo. */
-  .subrayado-cita {
-    color: var(--c-texto);
-    background-image: linear-gradient(var(--c-acento-vivo), var(--c-acento-vivo));
-    background-repeat: no-repeat;
-    background-position: 0 88%;
-    background-size: calc(var(--trazo, 1) * 100%) 0.07em;
-  }
-
-  /* Reglas capilares que se dibujan al entrar (Movimiento.tsx lleva
-     --trazo de 0 a 1). Son fondos de 1 px y no bordes por lo mismo que el
-     subrayado: un borde no se puede dibujar a medias. */
-  .trazo-superior,
-  .trazo-inferior {
-    background-image: linear-gradient(var(--c-borde), var(--c-borde));
-    background-repeat: no-repeat;
-    background-size: calc(var(--trazo, 1) * 100%) 1px;
-  }
-
-  .trazo-superior {
-    background-position: 0 0;
-  }
-
-  .trazo-inferior {
-    background-position: 0 100%;
-  }
+/* Indicador vivo: el punto late solo si se permite el movimiento. */
+.pulso {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: currentColor;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pulso { animation: pulso 1.6s ease-in-out infinite; }
+}
+@keyframes pulso {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 45%, transparent); }
+  50% { box-shadow: 0 0 0 5px transparent; }
 }
 
-/* ============================================================
-   BARRIDO EN LOS BOTONES
+/* Cursor de terminal. */
+.cursor-radio::after {
+  content: "";
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: var(--c-morado-vivo);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .cursor-radio::after { animation: parpadeo 1s steps(1) infinite; }
+}
+@keyframes parpadeo { 50% { opacity: 0; } }
 
-   Al apuntar, el color del botón entra de izquierda a derecha y el texto
-   pasa al color contrario. Al salir, el barrido se va por la derecha en vez
-   de deshacerse hacia atrás: se lee como un gesto que atraviesa el botón.
+/* Tablero de LED del hero. El texto real vive en el h1; el canvas es
+   decorativo. Sin JavaScript se ve el texto, en la misma caja. */
+.tablero { position: relative; width: 100%; }
+.tablero canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.tablero-texto {
+  font-family: var(--fuente-titular), var(--font-sans);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-style: italic;
+  font-weight: 800;
+  font-variation-settings: "wdth" 125;
+  text-transform: uppercase;
+  line-height: 0.82;
+  font-size: clamp(2.6rem, 9.4vw, 8.2rem);
+}
+[data-led="listo"] .tablero-texto {
+  /* Visualmente oculto, pero sigue siendo el nombre accesible del h1. */
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
 
-   Cada variante define --barrido (el color que entra) y --barrido-texto
-   (el color del texto encima). Ambos pares cumplen AA: tinta sobre papel y
-   el violeta de texto con su color de contraste.
+/* Bandera a cuadros del box: celdas que se encienden por columnas. */
+.cuadros {
+  --tam: 14px;
+  background-image:
+    conic-gradient(var(--c-tinta) 25%, transparent 0 50%, var(--c-tinta) 0 75%, transparent 0);
+  background-size: calc(var(--tam) * 2) calc(var(--tam) * 2);
+}
 
-   Va fuera de @layer a propósito. Las utilidades de Tailwind (text-fondo,
-   border-…) viven en la capa utilities, que le gana a components sin
-   importar la especificidad; solo el CSS sin capa les gana a ellas.
-   ============================================================ */
-
-.boton-barrido {
+/* Barrido de botones: el relleno entra desde la izquierda. */
+.barrido {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  transition:
-    color 0.45s var(--ease-salida),
-    border-color 0.45s var(--ease-salida);
 }
-
-/* El barrido va con z-index -1 dentro del contexto que crea isolation: así
-   queda encima del fondo propio del botón y debajo del texto. */
-.boton-barrido::before {
+.barrido::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background-color: var(--barrido);
+  background: var(--barrido, var(--c-morado));
   transform: scaleX(0);
-  transform-origin: right center;
-  transition: transform 0.55s var(--ease-salida);
+  transform-origin: left;
+  transition: transform 360ms var(--ease-salida);
 }
+.barrido:hover::before,
+.barrido:focus-visible::before { transform: scaleX(1); }
 
-.boton-barrido:hover,
-.boton-barrido:focus-visible {
-  color: var(--barrido-texto);
-  border-color: var(--barrido);
+/* Diálogo de la radio. */
+dialog.radio::backdrop {
+  background: color-mix(in srgb, var(--c-papel) 70%, transparent);
+  backdrop-filter: blur(3px);
 }
-
-.boton-barrido:hover::before,
-.boton-barrido:focus-visible::before {
-  transform: scaleX(1);
-  transform-origin: left center;
-}
-
-/* ============================================================
-   HERO
-
-   La foto va a sangre, en blanco y negro, y el nombre se monta encima.
-   Tres velos del color de fondo la funden con la página: arriba para que
-   el encabezado se lea, abajo para el texto pequeño, y a la izquierda en
-   escritorio para que el titular entre en la foto sin perder contraste.
-   Los velos usan el token de fondo, así que valen igual en los dos temas.
-   ============================================================ */
-
-@keyframes acercar-foto {
-  from {
-    transform: scale(1.08);
-  }
-  to {
-    transform: scale(1);
-  }
-}
-
-/* Cada letra del nombre entra girando sobre su canto inferior, desde
-   perpendicular a la pantalla. De canto una letra no se ve, así que no hace
-   falta animar la opacidad: el texto nunca pasa por transparente. */
-@keyframes voltear-letra {
-  from {
-    transform: translateY(0.35em) rotateX(-92deg);
-  }
-  to {
-    transform: none;
-  }
-}
-
-@layer components {
-  .foto-hero {
-    filter: grayscale(1) contrast(1.1) brightness(0.72);
-    animation: acercar-foto 2.2s var(--ease-salida) both;
-  }
-
-  [data-tema="light"] .foto-hero {
-    filter: grayscale(1) contrast(0.92) brightness(1.06);
-  }
-
-  .velo-hero {
-    background:
-      linear-gradient(
-        to top,
-        var(--c-fondo) 0%,
-        color-mix(in srgb, var(--c-fondo) 80%, transparent) 20%,
-        transparent 50%
-      ),
-      linear-gradient(to bottom, var(--c-fondo) 0%, transparent 24%);
-  }
-
-  @media (min-width: 48rem) {
-    .velo-hero {
-      background:
-        linear-gradient(
-          to top,
-          var(--c-fondo) 0%,
-          color-mix(in srgb, var(--c-fondo) 70%, transparent) 20%,
-          transparent 48%
-        ),
-        linear-gradient(to bottom, var(--c-fondo) 0%, transparent 20%),
-        linear-gradient(
-          to right,
-          var(--c-fondo) 0%,
-          color-mix(in srgb, var(--c-fondo) 55%, transparent) 30%,
-          transparent 62%
-        );
-    }
-  }
-
-  .linea-titular {
-    display: block;
-    perspective: 1100px;
-  }
-
-  /* Las palabras no se parten a mitad: cada una es un bloque en línea. */
-  .palabra-titular {
-    display: inline-block;
-    white-space: nowrap;
-  }
-
-  .letra {
-    display: inline-block;
-    transform-origin: 50% 100%;
-    backface-visibility: hidden;
-    animation: voltear-letra 1.2s var(--ease-salida) both;
-    animation-delay: calc(0.12s + var(--i) * 0.035s);
-  }
-
-  /* En pausa hasta que carga la condensada (lib/fuentes.ts). De canto no
-     basta: la letra girada conserva una caja de unos píxeles de alto, y
-     Chrome la sigue contando como desplazamiento al cambiar la fuente.
-     Oculta con visibility no cuenta. Las líneas son aria-hidden; el nombre
-     accesible va en su propio span y no se oculta. */
-  [data-fuentes="pendientes"] .linea-titular {
-    visibility: hidden;
-  }
-
-  [data-fuentes="pendientes"] .letra {
-    animation-play-state: paused;
-  }
+dialog.radio[open] { animation: radio-entra 280ms var(--ease-salida); }
+@keyframes radio-entra {
+  from { transform: translateY(14px) scale(0.985); }
+  to { transform: none; }
 }
 
 /* ============================================================
-   MOVIMIENTO (GSAP + Lenis)
+   MOVIMIENTO
 
-   Toda la animación al hacer scroll vive en components/Movimiento.tsx.
-   Aquí solo queda lo que necesita existir antes de que cargue: el CSS
-   de Lenis y los estados base de los efectos 3D.
-
-   Regla que se mantiene del sistema anterior: se anima el
-   desplazamiento, el giro y la escala, nunca la opacidad. Todo lo que
-   está bajo el pliegue espera al scroll, y con opacity 0 las auditorías
-   automáticas lo leerían como texto sin contraste. Sin JavaScript, o con
-   movimiento reducido, no se crea ninguna animación y todo está en su
-   sitio final desde el principio.
+   Los estados iniciales son desplazamientos y recortes, nunca
+   opacidad: el texto siempre tiene su color final (Lighthouse lee
+   un texto a medio aparecer como falta de contraste).
    ============================================================ */
 
-/* Copiado de lenis/dist/lenis.css para no depender de importar CSS desde
-   node_modules en el bundle. */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis:not(.lenis-autoToggle).lenis-stopped {
-  overflow: clip;
-}
-
-.lenis [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
-}
-
-@layer components {
-  /* Titulares de sección: cada palabra gira en 3D al entrar. La perspectiva
-     va en el contenedor de la palabra para que cada una tenga su propio
-     punto de fuga y no se deformen más las del borde. */
-  .palabra-mascara {
-    display: inline-block;
-    perspective: 900px;
-  }
-
-  .palabra {
-    display: inline-block;
-    transform-origin: 50% 100%;
-  }
-
-  /* Cita: cada palabra mezcla del gris tenue a su color final según --p,
-     que GSAP lleva de 0 a 1 con el scroll. Por defecto vale 1: sin JS la
-     cita se ve entera. Ambos extremos cumplen AA para texto grande, así
-     que no hay punto intermedio ilegible. */
-  .palabra-cita {
-    color: color-mix(
-      in oklab,
-      var(--final, var(--c-cita)) calc(var(--p, 1) * 100%),
-      var(--c-tenue)
-    );
-  }
-
-  .subrayado-cita .palabra-cita {
-    --final: var(--c-texto);
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
-/* ============================================================
-   PROYECTOS
-
-   Las capturas van en blanco y negro y recuperan el color al apuntar la
-   fila, igual que la foto del hero vive en grises. Solo donde hay puntero
-   que pueda apuntar: en un teléfono no hay hover, y dejar la captura gris
-   para siempre escondería justo lo que se viene a ver.
-   ============================================================ */
-
-@layer components {
-  .captura-proyecto {
-    transition:
-      filter 0.6s var(--ease-salida),
-      transform 0.8s var(--ease-salida);
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .captura-proyecto {
-      filter: grayscale(1) contrast(1.05);
-    }
-
-    .fila-proyecto:hover .captura-proyecto,
-    .fila-proyecto:focus-within .captura-proyecto {
-      filter: none;
-      transform: scale(1.03);
-    }
-  }
-
-  /* Cruce con el stack: al apuntar una tecnología, las filas que la usan
-     encienden un marco de acento alrededor de la captura. Suma en vez de
-     atenuar el resto, que bajaría el contraste del texto. */
-  .marco-captura {
-    outline: 1px solid transparent;
-    outline-offset: 10px;
-    transition: outline-color 0.3s ease;
-  }
-
-  [data-resaltada] .marco-captura {
-    outline-color: var(--c-acento);
-  }
-
-  [data-resaltada] .captura-proyecto {
-    filter: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .fila-proyecto:hover .captura-proyecto,
-    .fila-proyecto:focus-within .captura-proyecto {
-      transform: none;
-    }
-  }
-}
-
-/* ============================================================
-   TRANSICIÓN DE TEMA
-
-   El tema nuevo se abre en círculo desde el botón. El recorte lo
-   anima el propio botón; aquí solo se apagan las animaciones por
-   defecto y se ordenan las capas.
-   ============================================================ */
-
+/* Cambio de luz: el tema nuevo entra en círculo desde el botón. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
 }
 
-::view-transition-old(root) {
-  z-index: 1;
+/* Ondas de la radio. */
+.onda > span {
+  width: 3px;
+  height: 40%;
+  background: var(--c-morado-vivo);
+}
+.onda > span:nth-child(2) { height: 85%; }
+.onda > span:nth-child(3) { height: 60%; }
+.onda > span:nth-child(4) { height: 30%; }
+@media (prefers-reduced-motion: no-preference) {
+  .onda > span { animation: onda 900ms ease-in-out infinite alternate; transform-origin: bottom; }
+  .onda > span:nth-child(2) { animation-delay: -300ms; }
+  .onda > span:nth-child(3) { animation-delay: -600ms; }
+  .onda > span:nth-child(4) { animation-delay: -150ms; }
+  .aviso-radio { animation: aviso-entra 420ms var(--ease-salida); }
+}
+@keyframes onda { to { transform: scaleY(0.35); } }
+@keyframes aviso-entra { from { transform: translate(-50%, 24px); } }
+
+/* El cuadro de seguimiento de la cámara a bordo corrige su encuadre. */
+@media (prefers-reduced-motion: no-preference) {
+  .seguimiento { animation: seguimiento 5s ease-in-out infinite; }
+}
+@keyframes seguimiento {
+  0%, 100% { translate: 0 0; }
+  30% { translate: 3px -2px; }
+  60% { translate: -2px 2px; }
 }
 
-::view-transition-new(root) {
-  z-index: 9999;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
-}
-
-/* ============================================================
-   GRANO
-
-   Una pizca de ruido sobre el fondo. Sobre un negro casi plano es lo
-   que lo hace leerse como papel fotográfico y no como una pantalla
-   apagada.
-
-   El patrón es un SVG embebido y repetido: no hay petición de red ni
-   imagen que descargar.
-   ============================================================ */
-
-.grano,
-.textura {
+/* Cortina del garage: láminas horizontales. Arriba (abierta) por defecto;
+   GSAP la baja y la sube con el scroll si el movimiento está permitido. */
+.cortina {
+  background:
+    repeating-linear-gradient(to bottom, var(--c-panel-alto) 0 22px, var(--c-linea-fuerte) 22px 23px, var(--c-panel) 23px 26px);
+  transform: translateY(-101%);
   pointer-events: none;
-  opacity: 0.07;
-  /* Grano grueso: frecuencia 0.42 y 3 octavas, grumos grandes en vez de
-     polvo fino. Mosaico de 300 px para que no se note la repetición. */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-
-.grano {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-}
-
-/* En oscuro el ruido aclara el negro: a 0.1 el fondo se leía gris. */
-[data-tema="dark"] .grano,
-[data-tema="dark"] .textura {
-  opacity: 0.075;
-}
-
-/* ============================================================
-   VIDRIO
-
-   Superficies flotantes translúcidas. Se reserva para controles y
-   para el encabezado: el contenido editorial sigue siendo opaco y
-   recto, de modo que el vidrio comunica "esto es un control".
-   ============================================================ */
-
-@layer components {
-  /*
-   * El desenfoque NO se declara aquí: se aplica con las utilidades
-   * `backdrop-blur-xl backdrop-saturate-150` junto a esta clase. Escrito a
-   * mano, el minificador dejaba solo la variante prefijada y sin el espacio
-   * obligatorio entre funciones —blur(16px)saturate(180%)—, con lo que la
-   * declaración quedaba inválida y el desenfoque no se aplicaba nunca.
-   */
-  .vidrio {
-    background-color: var(--c-vidrio);
-    border: 1px solid var(--c-vidrio-borde);
-    /* Reflejo especular en el canto superior: da volumen */
-    box-shadow: inset 0 1px 0 var(--c-vidrio-brillo);
-  }
-
-  /* Sin soporte de backdrop-filter, se cae a un fondo sólido para no
-     dejar texto sobre una superficie semitransparente ilegible. */
-  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .vidrio {
-      background-color: var(--c-superficie);
-    }
-  }
+.cortina::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 6px;
+  background: var(--c-tinta);
 }

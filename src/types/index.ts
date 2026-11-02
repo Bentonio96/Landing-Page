@@ -13,6 +13,8 @@ export type Texto = Record<Idioma, string>;
 export type Proyecto = {
   /** Identificador estable, usado como key y ancla. */
   slug: string;
+  /** Qué tipo de pieza es, como la categoría de un auto en la grilla. */
+  clase: Texto;
   /** Nombre del proyecto (no se traduce). */
   nombre: string;
   /** Una o dos líneas describiendo qué es. */

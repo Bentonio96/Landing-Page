@@ -18,6 +18,7 @@ import type { Proyecto } from "@/types";
 export const proyectos: Proyecto[] = [
   {
     slug: "kerr",
+    clase: { es: "WebGL · Experiencia", en: "WebGL · Experience" },
     nombre: "Kerr",
     descripcion: {
       es: "Misión tripulada ficticia hacia un agujero negro en rotación. La lente gravitacional se calcula en WebGL2, el scroll cruza el horizonte de eventos y el HUD usa física real. Banda sonora original con Web Audio.",
@@ -31,6 +32,7 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "kinetica",
+    clase: { es: "WebGL · Landing", en: "WebGL · Landing" },
     nombre: "Kinetica",
     descripcion: {
       es: "Landing de un festival ficticio de luz, sonido y movimiento: un orbe iridiscente en WebGL2, partículas que forman figuras, tipografía cinética y un carrusel 3D de artistas. En español e inglés, y accesible.",
@@ -44,6 +46,7 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "epicentro",
+    clase: { es: "Datos en vivo", en: "Live data" },
     nombre: "Epicentro",
     descripcion: {
       es: "Rastreador de sismos en Chile en tiempo real con datos del USGS. Mapa, estadísticas de los últimos 30 días y un listado que funciona entero con teclado y lector de pantalla.",
@@ -62,7 +65,22 @@ export const proyectos: Proyecto[] = [
     repoUrl: "https://github.com/Bentonio96/Epicentro",
   },
   {
+    slug: "barometro",
+    clase: { es: "Datos · Dashboard", en: "Data · Dashboard" },
+    nombre: "Barómetro",
+    descripcion: {
+      es: "Indicadores económicos de Chile con datos de mindicador.cl. Cada serie respeta su propia periodicidad: la UF es diaria, el dólar solo de días hábiles y el IPC mensual, así que ninguna variación compara peras con manzanas.",
+      en: "Chile's economic indicators with data from mindicador.cl. Each series keeps its own frequency: the UF is daily, the dollar only on business days and CPI monthly, so no variation compares apples to oranges.",
+    },
+    tecnologias: ["Next.js 15", "TypeScript", "Tailwind CSS", "Recharts"],
+    fecha: { es: "Septiembre 2026", en: "September 2026" },
+    imagen: "/proyectos/barometro.jpg",
+    demoUrl: "https://barometro-hazel.vercel.app",
+    repoUrl: "https://github.com/Bentonio96/Barometro",
+  },
+  {
     slug: "turnera",
+    clase: { es: "Sitio de producto", en: "Product site" },
     nombre: "Turnera",
     descripcion: {
       es: "Sitio de producto para una app ficticia de gestión de turnos en clínicas pequeñas. El producto no existe; el rigor visual y el presupuesto de rendimiento sí.",
@@ -82,6 +100,7 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "centinela",
+    clase: { es: "Consola · App", en: "Console · App" },
     nombre: "Centinela",
     descripcion: {
       es: "Consola de operaciones de seguridad. Siete vistas sobre un mismo conjunto de incidentes: el panel del turno, la tabla de triaje, un tablero kanban, el calendario, la analítica, el equipo y los ajustes.",
@@ -98,6 +117,7 @@ export const proyectos: Proyecto[] = [
     // pública ni repositorio, así que la tarjeta se renderiza sin botones.
     // Si prefieres dejar solo los tres públicos, borra este bloque.
     slug: "portal-ciberoperaciones",
+    clase: { es: "Interno · CMPC", en: "Internal · CMPC" },
     nombre: "Portal de Ciberoperaciones",
     descripcion: {
       es: "Portal interno de CMPC que centraliza la operación diaria del área y funciona como catálogo de servicios para incidentes de TI y OT.",

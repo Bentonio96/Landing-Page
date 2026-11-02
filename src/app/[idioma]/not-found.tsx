@@ -28,19 +28,19 @@ export const metadata = {
  */
 const estilos = `
   :root {
-    --fondo: #F6F7F9;
-    --texto: #0E1117;
-    --atenuado: #414A58;
-    --acento: #4335C9;
+    --fondo: #ECEDE9;
+    --texto: #0C0E0F;
+    --atenuado: #474C4F;
+    --acento: #4A2FD0;
     --sobre-acento: #FFFFFF;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --fondo: #0E1117;
-      --texto: #F1F3F7;
-      --atenuado: #AFB7C4;
-      --acento: #A79BFF;
-      --sobre-acento: #0E1117;
+      --fondo: #0D0F10;
+      --texto: #ECEEE9;
+      --atenuado: #A6ADB1;
+      --acento: #A99BFF;
+      --sobre-acento: #0D0F10;
     }
   }
   html { color-scheme: light dark; }
@@ -110,7 +110,7 @@ export default function NoEncontrado() {
       />
       <main id="contenido" className="e404-cuerpo">
         <div className="e404-caja">
-          <p className="e404-etiqueta">Error 404</p>
+          <p className="e404-etiqueta">404 · Bandera roja</p>
           <h1 className="e404-titulo">{t.noEncontrado.titulo}</h1>
           <p className="e404-bajada">{t.noEncontrado.bajada}</p>
           <Link href="/" className="e404-boton">

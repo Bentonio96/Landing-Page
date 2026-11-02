@@ -1,157 +1,114 @@
 /**
- * Captura las imágenes que ilustran el README.
+ * Captura las imágenes del README de la v3.
  *
  * Uso:  node scripts/capturar-readme.mjs [url] [destino]
- *       (por defecto http://localhost:3001 y docs/capturas)
+ *       (por defecto http://localhost:3034 y docs/capturas)
  *
- * Correrlo después de cualquier cambio visible: paleta, tipografía, copy,
- * un proyecto nuevo. Hasta ahora las capturas se tomaban a mano y quedaban
- * desfasadas del sitio real sin que nadie se diera cuenta.
- *
- * Tres decisiones que no son obvias:
- *
- * 1 · Se captura el VIEWPORT, no el elemento. La capa de grano es
- *     `position: fixed`, así que solo cubre el alto de la ventana: en una
- *     captura de elemento más alto que el viewport, el fondo se corta a
- *     media imagen y aparece un borde recto que no existe en el sitio.
- *     Por eso la ventana se redimensiona al alto de cada sección antes de
- *     disparar.
- *
- * 2 · En las secciones se oculta el encabezado fijo. Al desplazarse hasta
- *     una sección, el header queda flotando en mitad de la imagen, que es
- *     justo donde nadie lo ve al navegar. En las capturas del hero sí se
- *     deja, porque ahí es donde de verdad está.
- *
- * 3 · Salen en JPEG y no en PNG. El fondo lleva una capa de grano, y el
- *     ruido es el peor caso para PNG: las mismas diez imágenes pesaban
- *     19 MB en PNG. En JPEG de calidad 88 bajan a menos de 2 MB sin
- *     diferencia visible a la escala a la que GitHub las muestra.
+ * Se captura con movimiento permitido (el tablero de LED tiene que terminar
+ * de encenderse: se espera) salvo en las secciones, donde se pide movimiento
+ * reducido para que la cortina del garage y los titulares ya estén en su
+ * sitio. Salen en JPEG: la grilla de puntos del papel infla los PNG.
  */
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import puppeteer from "puppeteer-core";
-import sharp from "sharp";
 
-const CHROME =
-  process.env.CHROME ?? "C:/Program Files/Google/Chrome/Application/chrome.exe";
-const BASE = process.argv[2] ?? "http://localhost:3001";
+const BASE = process.argv[2] ?? "http://localhost:3034";
 const DESTINO = process.argv[3] ?? "docs/capturas";
-
-/** GitHub muestra el README a unos 800 px: 1600 es el 2× que necesita. */
-const ANCHO_MAXIMO = 1600;
-/** Tope de seguridad: una sección más alta que esto se recorta. */
-const ALTO_MAXIMO = 4200;
-
-const TOMAS = [
-  { nombre: "hero-claro", ruta: "/es", sel: "#inicio", tema: "light", ancho: 1440 },
-  { nombre: "hero-oscuro", ruta: "/es", sel: "#inicio", tema: "dark", ancho: 1440 },
-  { nombre: "sobre-mi", ruta: "/es", sel: "#sobre-mi", tema: "light", ancho: 1440 },
-  { nombre: "stack", ruta: "/es", sel: "#stack", tema: "light", ancho: 1440 },
-  { nombre: "proyectos", ruta: "/es", sel: "#proyectos", tema: "light", ancho: 1440 },
-  { nombre: "experiencia", ruta: "/es", sel: "#experiencia", tema: "light", ancho: 1440 },
-  { nombre: "contacto", ruta: "/es", sel: "#contacto", tema: "light", ancho: 1440 },
-  { nombre: "ingles", ruta: "/en", sel: "#inicio", tema: "light", ancho: 1440 },
-  { nombre: "movil-claro", ruta: "/es", sel: "#inicio", tema: "light", ancho: 390 },
-  { nombre: "movil-oscuro", ruta: "/es", sel: "#inicio", tema: "dark", ancho: 390 },
-];
+const CHROME =
+  process.env.CHROME ?? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const navegador = await puppeteer.launch({
   executablePath: CHROME,
   headless: "new",
   args: ["--force-color-profile=srgb", "--hide-scrollbars"],
-  // Redimensionar la ventana a 4000 px de alto y repintar el fondo entero
-  // pasa de los 30 s por defecto en las secciones largas.
-  protocolTimeout: 180000,
 });
-
 await mkdir(DESTINO, { recursive: true });
-let total = 0;
 
-for (const t of TOMAS) {
-  const esHero = t.sel === "#inicio";
+async function pagina({ ruta = "/", ancho = 1440, alto = 900, tema = "light", reducido = false } = {}) {
   const p = await navegador.newPage();
-  await p.setViewport({ width: t.ancho, height: 900, deviceScaleFactor: 2 });
+  await p.setViewport({ width: ancho, height: alto, deviceScaleFactor: 2 });
   await p.emulateMediaFeatures([
-    { name: "prefers-color-scheme", value: t.tema },
-    // Sin esto la captura puede caer a mitad de una animación: con movimiento
-    // reducido Movimiento.tsx no crea ninguna y todo está en su sitio final.
-    { name: "prefers-reduced-motion", value: "reduce" },
+    { name: "prefers-color-scheme", value: tema },
+    { name: "prefers-reduced-motion", value: reducido ? "reduce" : "no-preference" },
   ]);
-  await p.goto(BASE + t.ruta, { waitUntil: "networkidle2", timeout: 60000 });
+  await p.goto(BASE + ruta, { waitUntil: "networkidle0" });
   await p.evaluate(() => document.fonts.ready);
+  return p;
+}
 
-  await p.evaluate((oculta) => {
-    if (oculta) {
-      // El hero mide min-h-svh: al agrandar la ventana al alto de la
-      // sección crecería con ella y empujaría todo miles de píxeles hacia
-      // abajo. Se congela con el alto que tiene a 900 px.
-      const hero = document.querySelector("#inicio");
-      if (hero) hero.style.minHeight = `${hero.offsetHeight}px`;
-      for (const sel of ["header"]) {
-        const el = document.querySelector(sel);
-        if (el) el.style.display = "none";
-      }
-    }
-  }, !esHero);
-
-  // La ventana se ajusta al alto real de la sección para que la capa fija
-  // de grano cubra todo lo que se va a capturar.
-  const alto = await p.evaluate((sel) => {
-    const el = document.querySelector(sel);
-    return el ? Math.ceil(el.getBoundingClientRect().height) : 900;
-  }, t.sel);
-  const altoFinal = Math.min(alto, ALTO_MAXIMO);
-  await p.setViewport({
-    width: t.ancho,
-    height: altoFinal,
-    deviceScaleFactor: 2,
-  });
-
-  await p.evaluate((sel) => {
-    const el = document.querySelector(sel);
-    if (el) {
-      window.scrollTo({
-        top: el.getBoundingClientRect().top + window.scrollY,
-        behavior: "instant",
-      });
-    }
-  }, t.sel);
-  // Las imágenes en diferido necesitan un momento tras entrar en pantalla.
-  // La espera compite contra un tope: una imagen que ya cargó no vuelve a
-  // disparar `onload`, así que sin el tope esto se queda colgado.
-  await new Promise((r) => setTimeout(r, 1200));
-  await p.evaluate(
-    () =>
-      new Promise((listo) => {
-        const tope = setTimeout(listo, 5000);
-        const pendientes = [...document.images].filter((i) => !i.complete);
-        if (pendientes.length === 0) return listo();
-        let faltan = pendientes.length;
-        for (const img of pendientes) {
-          img.onload = img.onerror = () => {
-            if (--faltan === 0) {
-              clearTimeout(tope);
-              listo();
-            }
-          };
-        }
-      }),
-  );
-  await new Promise((r) => setTimeout(r, 400));
-
-  const png = await p.screenshot({ type: "png" });
-  const buf = await sharp(png)
-    .resize({ width: ANCHO_MAXIMO, withoutEnlargement: true })
-    .jpeg({ quality: 88, mozjpeg: true, chromaSubsampling: "4:4:4" })
-    .toBuffer();
-  await writeFile(path.join(DESTINO, `${t.nombre}.jpg`), buf);
-
-  total += buf.length;
-  console.log(
-    `  ${t.nombre.padEnd(13)} ${String(t.ancho).padStart(4)}×${String(altoFinal).padEnd(5)} ${(buf.length / 1024).toFixed(0).padStart(4)} KB`,
-  );
+async function guardar(p, nombre) {
+  const jpg = await p.screenshot({ type: "jpeg", quality: 86 });
+  await writeFile(path.join(DESTINO, `${nombre}.jpg`), jpg);
+  console.log(`  ${nombre}.jpg  ${(jpg.length / 1024).toFixed(0)} KB`);
   await p.close();
 }
 
+async function irA(p, id, ms = 600) {
+  await p.evaluate((id) => document.getElementById(id)?.scrollIntoView(), id);
+  await esperar(ms);
+}
+
+// Hero, claro y oscuro, con el tablero ya encendido y la radio tipeada.
+for (const tema of ["light", "dark"]) {
+  const p = await pagina({ tema });
+  await esperar(4200);
+  await guardar(p, `hero-${tema === "light" ? "claro" : "oscuro"}`);
+}
+
+// La radio con una pregunta respondida.
+{
+  const p = await pagina({ reducido: true });
+  await p.keyboard.press("/");
+  await esperar(300);
+  await p.type("#radio-entrada", "¿Sabes React?");
+  await p.keyboard.press("Enter");
+  await esperar(500);
+  await p.type("#radio-entrada", "Kerr");
+  await p.keyboard.press("Enter");
+  await esperar(500);
+  await guardar(p, "radio");
+}
+
+// Secciones, con movimiento reducido.
+for (const [id, nombre] of [["piloto", "piloto"], ["garage", "garage"], ["tiempos", "tiempos"]]) {
+  const p = await pagina({ reducido: true });
+  await irA(p, id);
+  await guardar(p, nombre);
+}
+
+// Sistemas con una pieza elegida.
+{
+  const p = await pagina({ reducido: true });
+  await irA(p, "sistemas");
+  await p.evaluate(() => {
+    [...document.querySelectorAll("#sistemas button")].find((b) => b.textContent?.startsWith("React"))?.click();
+    window.scrollBy(0, 260);
+  });
+  await esperar(400);
+  await guardar(p, "sistemas");
+}
+
+// El box con la vuelta terminada: se pasa por cada sector.
+{
+  const p = await pagina({ reducido: true });
+  for (const id of ["piloto", "garage", "sistemas", "tiempos", "box"]) await irA(p, id, 900);
+  await p.evaluate(() => window.scrollBy(0, 330));
+  await esperar(600);
+  await guardar(p, "box");
+}
+
+// Teléfono e inglés.
+{
+  const p = await pagina({ ancho: 390, alto: 844 });
+  await esperar(4200);
+  await guardar(p, "movil");
+}
+{
+  const p = await pagina({ ruta: "/en", tema: "dark" });
+  await esperar(4200);
+  await guardar(p, "ingles");
+}
+
 await navegador.close();
-console.log(`  ${"total".padEnd(13)} ${(total / 1024 / 1024).toFixed(2)} MB`);

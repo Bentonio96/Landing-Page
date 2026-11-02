@@ -1,4 +1,4 @@
-export const CLAVE_TEMA = "tema-portafolio";
+export const CLAVE_TEMA = "tema-v3";
 
 /** Atributo donde vive el tema. */
 export const ATRIBUTO_TEMA = "data-tema";

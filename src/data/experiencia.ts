@@ -3,6 +3,21 @@ import type { Hito } from "@/types";
 /** Línea de tiempo, del hito más reciente al más antiguo. Fechas según el CV. */
 export const experiencia: Hito[] = [
   {
+    id: "startup",
+    organizacion: "Startup de bienestar",
+    rol: {
+      es: "Desarrollador · Integración de wearables",
+      en: "Developer · Wearables integration",
+    },
+    periodo: { es: "2026 — Hoy", en: "2026 — Present" },
+    lugar: "Santiago, Chile",
+    descripcion: {
+      es: "Construí la integración de wearables de la app: Google Health Connect, Apple Salud, Whoop y Oura, en un servicio con FastAPI, Celery, Postgres y Redis que normaliza los datos de cada marca en una sola forma.",
+      en: "I built the app's wearables integration: Google Health Connect, Apple Health, Whoop and Oura, in a FastAPI, Celery, Postgres and Redis service that normalises each brand's data into a single shape.",
+    },
+    actual: true,
+  },
+  {
     id: "tesis",
     organizacion: "Universidad Andrés Bello",
     rol: {
@@ -15,10 +30,9 @@ export const experiencia: Hito[] = [
     },
     lugar: "Santiago, Chile",
     descripcion: {
-      es: "Triple Resolutive Approach: metaheurística TDHC adaptada a cinco problemas de optimización combinatoria, con un algoritmo genético memético en Python. Profesor guía: Gustavo Gatica. En paralelo, tomo proyectos freelance de frontend.",
-      en: "Triple Resolutive Approach: a TDHC metaheuristic adapted to five combinatorial optimisation problems, with a memetic genetic algorithm in Python. Supervisor: Gustavo Gatica. In parallel, I take on freelance frontend work.",
+      es: "Triple Resolutive Approach: metaheurística TDHC adaptada a cinco problemas de optimización combinatoria, con un algoritmo genético memético en Python. Profesor guía: Gustavo Gatica. El trabajo está publicado en ECP 2026.",
+      en: "Triple Resolutive Approach: a TDHC metaheuristic adapted to five combinatorial optimisation problems, with a memetic genetic algorithm in Python. Supervisor: Gustavo Gatica. The work is published at ECP 2026.",
     },
-    actual: true,
   },
   {
     id: "cmpc-ciberseguridad",

@@ -59,6 +59,12 @@ const SITIOS = [
     espera: 2500,
   },
   {
+    slug: "barometro",
+    url: "https://barometro-hazel.vercel.app",
+    tema: "light",
+    espera: 3000,
+  },
+  {
     slug: "centinela",
     url: "https://centinela-rho.vercel.app",
     // Tiene un solo tema, claro: este valor no cambia lo que se captura.
