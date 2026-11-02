@@ -28,10 +28,10 @@ export const metadata = {
  */
 const estilos = `
   :root {
-    --fondo: #F6F7F9;
-    --texto: #0E1117;
-    --atenuado: #414A58;
-    --acento: #4335C9;
+    --fondo: #EDE9DA;
+    --texto: #17160F;
+    --atenuado: #4B4838;
+    --acento: #1E5E24;
     --sobre-acento: #FFFFFF;
   }
   @media (prefers-color-scheme: dark) {

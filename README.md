@@ -1,5 +1,8 @@
 # Portafolio · Benjamín Peña Díaz
 
+> **Rama `v2` — «Cancha».** Propuesta de rediseño con el mismo contenido que el sitio actual, publicada aparte en https://benjamin-pena-v2.vercel.app para compararla. Sale de un reel que a Benja le gustó: papel crema, el retrato recortado en grises que se funde con la página, microtexto suelto con datos reales, el nombre en dos voces (Pinyon Script + Archivo Expanded Black) y una franja de cancha con un balón que marca el avance y sirve de navegación. Un solo tema, claro. La canónica apunta al sitio actual. El README de abajo describe la versión de `main`.
+
+
 Sitio personal de **Benjamín Peña Díaz**, desarrollador frontend en Santiago de Chile.
 Español en `/`, inglés en `/en`, modo claro y oscuro, y todo el contenido en archivos de datos tipados.
 

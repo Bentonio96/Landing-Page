@@ -1,671 +1,346 @@
 @import "tailwindcss";
 
-/* Modo oscuro por atributo data-tema, con persistencia en lib/tema.ts.
-   Va en un atributo y no en una clase porque React reaplica el className
-   de <html> al navegar entre idiomas, y borraba la clase. */
-@custom-variant dark (&:where([data-tema="dark"], [data-tema="dark"] *));
-
 /* ============================================================
-   SISTEMA DE DISEÑO — "Obsidiana"
-   Fuente única de verdad: color, tipografía, espaciado, ritmo.
-   Cambiar un valor aquí lo cambia en todo el sitio.
+   SISTEMA DE DISEÑO — «Cancha»
+   Versión 2 del portafolio. Fuente única de verdad: color,
+   tipografía, espaciado y movimiento.
 
-   La idea: titulares de cartel, mucho aire y la paleta del CV, para
-   que el sitio y el documento se lean como una sola marca. Tinta
-   azulada, grises fríos y un único violeta. El impacto sale de la
-   escala tipográfica y de la foto a sangre; el violeta queda para
-   pocas cosas —el apellido, foco, estado activo, la cita— y por eso
-   se nota.
+   Sale de un reel que a Benja le gustó: papel crema, un retrato en
+   blanco y negro recortado que se funde con la página, microtexto
+   suelto alrededor, el nombre en dos voces (caligráfica + grotesca
+   negra ancha) y una franja de cancha con un balón que rueda.
 
-   Los valores salen del propio PDF del CV (operadores de color del
-   contenido), no de una captura: #0E1117, #6C5CFF, #4335C9, #A79BFF.
+   «Tener cancha», en Chile, es tener oficio. Por eso el verde de
+   césped no es decoración: marca lo que se toca y las pausas entre
+   capítulos. El amarillo del balón es solo relleno decorativo.
+
+   Contrastes medidos con la fórmula de WCAG sobre el papel:
+     tinta 14.8:1 · atenuado 7.5:1 · tenue 5.5:1 · acento 6.5:1
+   y sobre el césped: blanco 5.0:1 (el crema se descartó: 4.3:1).
    ============================================================ */
 
 :root {
   color-scheme: light;
 
-  /* --- Color: modo claro --- */
-  --c-fondo:         #F6F7F9;  /* papel frío */
-  --c-superficie:    #FFFFFF;
-  --c-elevado:       #ECEEF2;
-  --c-texto:         #0E1117;  /* 17.6:1 sobre fondo */
-  --c-atenuado:      #414A58;  /*  8.4:1 sobre fondo — AA */
-  /* Más oscuro que el gris del CV (#5D6675): en la banda alterna del stack,
-     con el grano encima, ese gris bajaba a 4.49:1 medido sobre píxel real. */
-  --c-tenue:         #555E6C;  /*  6.1:1 sobre fondo — AA */
-  --c-cita:          #1B212B;
-  --c-borde:         #E0E3E9;
-  --c-borde-fuerte:  #C6CDD8;
-  --c-acento:        #4335C9;  /*  7.6:1 sobre fondo — AA */
-  --c-acento-hover:  #332C6B;
-  --c-acento-sobre:  #FFFFFF;  /*  8.1:1 sobre acento — AA */
-  /* El violeta vivo del CV. Solo para rellenos decorativos (puntos,
-     subrayados, reglas): como texto da 4.3:1 sobre claro y 4.2:1
-     sobre oscuro, por debajo de AA para texto normal. */
-  --c-acento-vivo:   #6C5CFF;
-  --c-sombra:        rgba(14, 17, 23, 0.08);
-  /* Secciones alternas: un velo translúcido y no un color opaco, para que
-     el grano fijo de detrás siga viéndose a través. */
-  --c-banda:         rgba(14, 17, 23, 0.028);
+  --c-papel:        #EDE9DA;
+  --c-papel-hondo:  #E4DFCC;
+  --c-tinta:        #17160F;
+  --c-atenuado:     #4B4838;
+  --c-tenue:        #5F5B48;
+  --c-regla:        rgba(23, 22, 15, 0.16);
+  --c-regla-fuerte: rgba(23, 22, 15, 0.42);
 
-  /* Vidrio: superficies flotantes translúcidas. */
-  --c-vidrio:        rgba(246, 247, 249, 0.82);
-  --c-vidrio-brillo: rgba(255, 255, 255, 0.7);
-  --c-vidrio-borde:  rgba(14, 17, 23, 0.08);
-}
+  /* El acento es el verde, oscurecido para texto sobre papel. */
+  --c-acento:       #1E5E24;
+  --c-acento-hover: #14431A;
 
-[data-tema="dark"] {
-  color-scheme: dark;
+  /* Césped: dos tonos para las franjas de corte, como en una cancha. */
+  --c-cesped:       #2E7F35;
+  --c-cesped-hondo: #29742F;
+  --c-sobre-cesped: #FFFFFF;
+  --c-cal:          rgba(255, 255, 255, 0.78); /* las líneas de cal */
 
-  /* --- Color: modo oscuro --- */
-  --c-fondo:         #0E1117;  /* la tinta de la barra lateral del CV */
-  --c-superficie:    #141922;
-  --c-elevado:       #1B212B;
-  --c-texto:         #F1F3F7;  /* 17.0:1 sobre fondo */
-  --c-atenuado:      #AFB7C4;  /*  9.4:1 sobre fondo — AA */
-  --c-tenue:         #8B94A3;  /*  6.2:1 sobre fondo — AA */
-  --c-cita:          #C6CDD8;
-  --c-borde:         #232A36;
-  --c-borde-fuerte:  #3A4353;
-  --c-acento:        #A79BFF;  /*  7.9:1 sobre fondo — AA */
-  --c-acento-hover:  #BFB4FF;
-  --c-acento-sobre:  #0E1117;  /*  7.9:1 sobre acento — AA */
-  --c-acento-vivo:   #6C5CFF;
-  --c-sombra:        rgba(0, 0, 0, 0.5);
-  --c-banda:         rgba(167, 155, 255, 0.022);
-
-  --c-vidrio:        rgba(14, 17, 23, 0.78);
-  --c-vidrio-brillo: rgba(255, 255, 255, 0.06);
-  --c-vidrio-borde:  rgba(255, 255, 255, 0.07);
+  /* Balón: solo relleno, nunca texto. */
+  --c-balon:        #E6F03C;
 }
 
 @theme inline {
-  /* --- Color semántico --- */
-  --color-fondo:        var(--c-fondo);
-  --color-superficie:   var(--c-superficie);
-  --color-elevado:      var(--c-elevado);
-  --color-texto:        var(--c-texto);
-  --color-atenuado:     var(--c-atenuado);
-  --color-tenue:        var(--c-tenue);
-  --color-cita:         var(--c-cita);
-  --color-borde:        var(--c-borde);
-  --color-bordefuerte:  var(--c-borde-fuerte);
-  --color-acento:       var(--c-acento);
-  --color-acentohover:  var(--c-acento-hover);
-  --color-acentosobre:  var(--c-acento-sobre);
-  --color-acentovivo:   var(--c-acento-vivo);
-  --color-banda:        var(--c-banda);
-  --color-vidrio:       var(--c-vidrio);
-  --color-vidrioborde:  var(--c-vidrio-borde);
+  --color-papel:       var(--c-papel);
+  --color-papelhondo:  var(--c-papel-hondo);
+  --color-tinta:       var(--c-tinta);
+  --color-atenuado:    var(--c-atenuado);
+  --color-tenue:       var(--c-tenue);
+  --color-regla:       var(--c-regla);
+  --color-reglafuerte: var(--c-regla-fuerte);
+  --color-acento:      var(--c-acento);
+  --color-acentohover: var(--c-acento-hover);
+  --color-cesped:      var(--c-cesped);
+  --color-cespedhondo: var(--c-cesped-hondo);
+  --color-sobrecesped: var(--c-sobre-cesped);
+  --color-balon:       var(--c-balon);
 
-  /* --- Tipografía --- */
-  --font-display: var(--fuente-display), "Arial Narrow", Impact, sans-serif;
+  --font-display: var(--fuente-display), "Arial Black", Impact, sans-serif;
+  --font-firma:   var(--fuente-firma), "Snell Roundhand", cursive;
   --font-sans:    var(--fuente-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono:    var(--fuente-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
-  /* Escala. Las tres de cartel (gigante, t1, t2) son de la condensada y van
-     con interlineado por debajo de 1: en versales no hay descendentes que
-     choquen, y apretadas es como pesan. */
-  --text-etiqueta:     0.75rem;    /* 12px — mono, versalitas */
+  --text-micro:     0.6875rem;  /* 11px — el microtexto del reel */
+  --text-micro--line-height: 1.45;
+  --text-etiqueta:  0.75rem;
   --text-etiqueta--line-height: 1.4;
-  --text-menor:        0.8125rem;  /* 13px */
-  --text-menor--line-height: 1.5;
-  --text-base:         1rem;
-  --text-base--line-height: 1.65;
-  --text-cuerpo:       1.0625rem;  /* 17px — cuerpo de lectura */
-  --text-cuerpo--line-height: 1.7;
-  --text-guia:         clamp(1.125rem, 1rem + 0.5vw, 1.3125rem);
+  --text-guia:      clamp(1.0625rem, 0.98rem + 0.35vw, 1.25rem);
   --text-guia--line-height: 1.6;
-  --text-t3:           clamp(1.375rem, 1.15rem + 0.9vw, 1.875rem);
-  --text-t3--line-height: 1.25;
-  --text-t2:           clamp(2.5rem, 1.6rem + 3.4vw, 4.25rem);
-  --text-t2--line-height: 0.92;
-  --text-t1:           clamp(3.5rem, 1.9rem + 6.2vw, 6.75rem);
-  --text-t1--line-height: 0.9;
-  --text-gigante:      clamp(4.5rem, 1.6rem + 11.5vw, 11rem);
-  --text-gigante--line-height: 0.86;
+  --text-t3:        clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem);
+  --text-t3--line-height: 1.2;
+  --text-t2:        clamp(1.75rem, 1.2rem + 2.4vw, 3.25rem);
+  --text-t2--line-height: 0.98;
+  --text-t1:        clamp(2rem, 1rem + 4.6vw, 5.5rem);
+  --text-t1--line-height: 0.92;
 
-  /* --- Ritmo vertical y medidas --- */
-  --spacing-seccion:    clamp(6rem, 3.5rem + 9vw, 11rem);
-  --spacing-canal:      clamp(1.25rem, 0.6rem + 2.6vw, 2.5rem);
-  --container-medida:   68ch;   /* medida de lectura cómoda */
-  --container-lienzo:   80rem;  /* ancho máximo del contenido */
+  --spacing-seccion: clamp(5rem, 3rem + 7vw, 9rem);
+  --spacing-canal:   clamp(1rem, 0.5rem + 2.2vw, 2.25rem);
+  --container-lienzo: 84rem;
 
-  /* --- Forma --- */
-  /* Casi todo va recto, como una página impresa. Lo único redondo son las
-     píldoras de tecnología y los dos controles del encabezado: así la forma
-     distingue etiqueta y control de contenido. */
-  --radius-pieza:   0px;
-  --radius-control: 2px;
-  --radius-chip:    999px;
-
-  /* --- Movimiento --- */
-  --ease-salida: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-cancha: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ============================================================
    BASE
    ============================================================ */
 
-@layer base {
-  * {
-    border-color: var(--c-borde);
-  }
+html {
+  background: var(--c-papel);
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
 
-  /* Desplazamiento suave nativo solo mientras Lenis no está activo (sin JS o
-     con movimiento reducido). Con Lenis encima, el suave del navegador y el
-     suyo se pelean y el scroll tironea. */
-  html:not(.lenis) {
-    scroll-behavior: smooth;
-  }
+body {
+  font-family: var(--font-sans);
+  color: var(--c-tinta);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
 
-  html {
-    /* el header fijo no debe tapar el destino de un ancla */
-    scroll-padding-top: 5rem;
-    -webkit-text-size-adjust: 100%;
-  }
+::selection {
+  background: var(--c-balon);
+  color: var(--c-tinta);
+}
 
-  html {
-    /* El color vive aquí, no en <body>, para que la capa de grano pueda
-       colocarse detrás del contenido con z-index negativo. */
-    background-color: var(--c-fondo);
-  }
+/* Foco: tinta sobre papel, balón sobre césped. Siempre 2 px y separado. */
+:focus-visible {
+  outline: 2px solid var(--c-tinta);
+  outline-offset: 3px;
+}
+.sobre-cesped :focus-visible {
+  outline-color: var(--c-balon);
+}
 
-  body {
-    background-color: transparent;
-    color: var(--c-texto);
-    font-family: var(--font-sans);
-    font-size: var(--text-cuerpo);
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-  }
-
-  /* Solo h1 y h2 son de cartel. Los h3 de filas y tarjetas van en la sans
-     ligera: dos titulares condensados seguidos se pisan el protagonismo. */
-  h1, h2 {
-    font-family: var(--font-display);
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: -0.01em;
-    text-wrap: balance;
-  }
-
-  h3, h4 {
-    font-family: var(--font-sans);
-    font-weight: 300;
-    letter-spacing: -0.01em;
-    text-wrap: balance;
-  }
-
-  p {
-    text-wrap: pretty;
-  }
-
-  /* Foco visible y consistente en todo el sitio — nunca se elimina */
-  :focus-visible {
-    outline: 2px solid var(--c-acento);
-    outline-offset: 3px;
-    border-radius: 2px;
-  }
-
-  ::selection {
-    background-color: var(--c-acento);
-    color: var(--c-acento-sobre);
-  }
-
-  /* Respeta la preferencia del sistema en todo el sitio */
-  @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
-  }
+/* Al saltar a una sección, que la franja fija no le tape el título. */
+[id] {
+  scroll-margin-top: 5.5rem;
 }
 
 /* ============================================================
-   COMPONENTES DE LAYOUT
+   UTILIDADES DE COMPOSICIÓN
    ============================================================ */
 
-@layer components {
-  /* Lienzo central con canales laterales fluidos */
-  .lienzo {
-    width: 100%;
-    max-width: var(--container-lienzo);
-    margin-inline: auto;
-    padding-inline: var(--spacing-canal);
-  }
+.lienzo {
+  width: 100%;
+  max-width: var(--container-lienzo);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 0.4rem + 2.6vw, 2.5rem);
+}
 
-  /* Etiqueta monoespaciada de sección: "01 — PROYECTOS" */
-  .etiqueta {
-    font-family: var(--font-mono);
-    font-size: var(--text-etiqueta);
-    font-weight: 400;
-    line-height: 1.4;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--c-tenue);
-  }
-
-  /* Enlace de texto con subrayado que crece desde la izquierda */
-  .enlace {
-    color: var(--c-texto);
-    text-decoration: none;
-    background-image: linear-gradient(var(--c-acento), var(--c-acento));
-    background-repeat: no-repeat;
-    background-position: 0 100%;
-    background-size: 0% 1px;
-    transition: background-size 0.35s var(--ease-salida), color 0.2s ease;
-  }
-  .enlace:hover {
-    color: var(--c-acento);
-    background-size: 100% 1px;
-  }
-
-  /* Subrayado grueso de la cita, dibujado con un fondo y no con
-     text-decoration: un subrayado nativo no se puede recortar, y este se
-     traza de izquierda a derecha con el scroll (--trazo, de 0 a 1).
-
-     Va con box-decoration-break en `slice`, el valor por defecto: el fondo
-     se calcula como si las líneas de la frase fueran una sola tira, así que
-     el trazo recorre la primera línea entera antes de empezar la segunda,
-     como una mano que subraya. Con `clone` las dos se dibujarían a la vez.
-     Sin JavaScript --trazo vale 1 y el subrayado está completo. */
-  .subrayado-cita {
-    color: var(--c-texto);
-    background-image: linear-gradient(var(--c-acento-vivo), var(--c-acento-vivo));
-    background-repeat: no-repeat;
-    background-position: 0 88%;
-    background-size: calc(var(--trazo, 1) * 100%) 0.07em;
-  }
-
-  /* Reglas capilares que se dibujan al entrar (Movimiento.tsx lleva
-     --trazo de 0 a 1). Son fondos de 1 px y no bordes por lo mismo que el
-     subrayado: un borde no se puede dibujar a medias. */
-  .trazo-superior,
-  .trazo-inferior {
-    background-image: linear-gradient(var(--c-borde), var(--c-borde));
-    background-repeat: no-repeat;
-    background-size: calc(var(--trazo, 1) * 100%) 1px;
-  }
-
-  .trazo-superior {
-    background-position: 0 0;
-  }
-
-  .trazo-inferior {
-    background-position: 0 100%;
+/* Grotesca negra y ancha: la voz de la camiseta. */
+.voz-camiseta {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  overflow-wrap: break-word;
+}
+/* En un teléfono la camiseta se angosta un poco: a 125 % de ancho,
+   palabras como «CIBEROPERACIONES» no cabían en 375 px. */
+@media (max-width: 40rem) {
+  .voz-camiseta {
+    font-stretch: 108%;
+    font-variation-settings: "wdth" 108;
   }
 }
 
-/* ============================================================
-   BARRIDO EN LOS BOTONES
-
-   Al apuntar, el color del botón entra de izquierda a derecha y el texto
-   pasa al color contrario. Al salir, el barrido se va por la derecha en vez
-   de deshacerse hacia atrás: se lee como un gesto que atraviesa el botón.
-
-   Cada variante define --barrido (el color que entra) y --barrido-texto
-   (el color del texto encima). Ambos pares cumplen AA: tinta sobre papel y
-   el violeta de texto con su color de contraste.
-
-   Va fuera de @layer a propósito. Las utilidades de Tailwind (text-fondo,
-   border-…) viven en la capa utilities, que le gana a components sin
-   importar la especificidad; solo el CSS sin capa les gana a ellas.
-   ============================================================ */
-
-.boton-barrido {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  transition:
-    color 0.45s var(--ease-salida),
-    border-color 0.45s var(--ease-salida);
+/* La caligráfica tiene trazos que salen mucho de su caja: se le da aire
+   por los cuatro lados para que ningún contenedor la recorte. */
+.voz-firma {
+  font-family: var(--font-firma);
+  font-weight: 400;
+  line-height: 1.25;
+  padding: 0.12em 0.3em 0.2em 0.12em;
+  margin: -0.12em -0.3em -0.2em -0.12em;
+  letter-spacing: 0;
 }
 
-/* El barrido va con z-index -1 dentro del contexto que crea isolation: así
-   queda encima del fondo propio del botón y debajo del texto. */
-.boton-barrido::before {
-  content: "";
+.micro {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  line-height: var(--text-micro--line-height);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.etiqueta {
+  font-family: var(--font-mono);
+  font-size: var(--text-etiqueta);
+  line-height: var(--text-etiqueta--line-height);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.regla-sup { border-top: 1px solid var(--c-regla); }
+.regla-inf { border-bottom: 1px solid var(--c-regla); }
+
+.sr-only-focusable:not(:focus) {
   position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-color: var(--barrido);
-  transform: scaleX(0);
-  transform-origin: right center;
-  transition: transform 0.55s var(--ease-salida);
-}
-
-.boton-barrido:hover,
-.boton-barrido:focus-visible {
-  color: var(--barrido-texto);
-  border-color: var(--barrido);
-}
-
-.boton-barrido:hover::before,
-.boton-barrido:focus-visible::before {
-  transform: scaleX(1);
-  transform-origin: left center;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* ============================================================
-   HERO
-
-   La foto va a sangre, en blanco y negro, y el nombre se monta encima.
-   Tres velos del color de fondo la funden con la página: arriba para que
-   el encabezado se lea, abajo para el texto pequeño, y a la izquierda en
-   escritorio para que el titular entre en la foto sin perder contraste.
-   Los velos usan el token de fondo, así que valen igual en los dos temas.
+   TEXTURAS
    ============================================================ */
 
-@keyframes acercar-foto {
-  from {
-    transform: scale(1.08);
-  }
-  to {
-    transform: scale(1);
-  }
-}
-
-/* Cada letra del nombre entra girando sobre su canto inferior, desde
-   perpendicular a la pantalla. De canto una letra no se ve, así que no hace
-   falta animar la opacidad: el texto nunca pasa por transparente. */
-@keyframes voltear-letra {
-  from {
-    transform: translateY(0.35em) rotateX(-92deg);
-  }
-  to {
-    transform: none;
-  }
-}
-
-@layer components {
-  .foto-hero {
-    filter: grayscale(1) contrast(1.1) brightness(0.72);
-    animation: acercar-foto 2.2s var(--ease-salida) both;
-  }
-
-  [data-tema="light"] .foto-hero {
-    filter: grayscale(1) contrast(0.92) brightness(1.06);
-  }
-
-  .velo-hero {
-    background:
-      linear-gradient(
-        to top,
-        var(--c-fondo) 0%,
-        color-mix(in srgb, var(--c-fondo) 80%, transparent) 20%,
-        transparent 50%
-      ),
-      linear-gradient(to bottom, var(--c-fondo) 0%, transparent 24%);
-  }
-
-  @media (min-width: 48rem) {
-    .velo-hero {
-      background:
-        linear-gradient(
-          to top,
-          var(--c-fondo) 0%,
-          color-mix(in srgb, var(--c-fondo) 70%, transparent) 20%,
-          transparent 48%
-        ),
-        linear-gradient(to bottom, var(--c-fondo) 0%, transparent 20%),
-        linear-gradient(
-          to right,
-          var(--c-fondo) 0%,
-          color-mix(in srgb, var(--c-fondo) 55%, transparent) 30%,
-          transparent 62%
-        );
-    }
-  }
-
-  .linea-titular {
-    display: block;
-    perspective: 1100px;
-  }
-
-  /* Las palabras no se parten a mitad: cada una es un bloque en línea. */
-  .palabra-titular {
-    display: inline-block;
-    white-space: nowrap;
-  }
-
-  .letra {
-    display: inline-block;
-    transform-origin: 50% 100%;
-    backface-visibility: hidden;
-    animation: voltear-letra 1.2s var(--ease-salida) both;
-    animation-delay: calc(0.12s + var(--i) * 0.035s);
-  }
-
-  /* En pausa hasta que carga la condensada (lib/fuentes.ts). De canto no
-     basta: la letra girada conserva una caja de unos píxeles de alto, y
-     Chrome la sigue contando como desplazamiento al cambiar la fuente.
-     Oculta con visibility no cuenta. Las líneas son aria-hidden; el nombre
-     accesible va en su propio span y no se oculta. */
-  [data-fuentes="pendientes"] .linea-titular {
-    visibility: hidden;
-  }
-
-  [data-fuentes="pendientes"] .letra {
-    animation-play-state: paused;
-  }
-}
-
-/* ============================================================
-   MOVIMIENTO (GSAP + Lenis)
-
-   Toda la animación al hacer scroll vive en components/Movimiento.tsx.
-   Aquí solo queda lo que necesita existir antes de que cargue: el CSS
-   de Lenis y los estados base de los efectos 3D.
-
-   Regla que se mantiene del sistema anterior: se anima el
-   desplazamiento, el giro y la escala, nunca la opacidad. Todo lo que
-   está bajo el pliegue espera al scroll, y con opacity 0 las auditorías
-   automáticas lo leerían como texto sin contraste. Sin JavaScript, o con
-   movimiento reducido, no se crea ninguna animación y todo está en su
-   sitio final desde el principio.
-   ============================================================ */
-
-/* Copiado de lenis/dist/lenis.css para no depender de importar CSS desde
-   node_modules en el bundle. */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis:not(.lenis-autoToggle).lenis-stopped {
-  overflow: clip;
-}
-
-.lenis [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
-}
-
-@layer components {
-  /* Titulares de sección: cada palabra gira en 3D al entrar. La perspectiva
-     va en el contenedor de la palabra para que cada una tenga su propio
-     punto de fuga y no se deformen más las del borde. */
-  .palabra-mascara {
-    display: inline-block;
-    perspective: 900px;
-  }
-
-  .palabra {
-    display: inline-block;
-    transform-origin: 50% 100%;
-  }
-
-  /* Cita: cada palabra mezcla del gris tenue a su color final según --p,
-     que GSAP lleva de 0 a 1 con el scroll. Por defecto vale 1: sin JS la
-     cita se ve entera. Ambos extremos cumplen AA para texto grande, así
-     que no hay punto intermedio ilegible. */
-  .palabra-cita {
-    color: color-mix(
-      in oklab,
-      var(--final, var(--c-cita)) calc(var(--p, 1) * 100%),
-      var(--c-tenue)
-    );
-  }
-
-  .subrayado-cita .palabra-cita {
-    --final: var(--c-texto);
-  }
-}
-
-/* ============================================================
-   PROYECTOS
-
-   Las capturas van en blanco y negro y recuperan el color al apuntar la
-   fila, igual que la foto del hero vive en grises. Solo donde hay puntero
-   que pueda apuntar: en un teléfono no hay hover, y dejar la captura gris
-   para siempre escondería justo lo que se viene a ver.
-   ============================================================ */
-
-@layer components {
-  .captura-proyecto {
-    transition:
-      filter 0.6s var(--ease-salida),
-      transform 0.8s var(--ease-salida);
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .captura-proyecto {
-      filter: grayscale(1) contrast(1.05);
-    }
-
-    .fila-proyecto:hover .captura-proyecto,
-    .fila-proyecto:focus-within .captura-proyecto {
-      filter: none;
-      transform: scale(1.03);
-    }
-  }
-
-  /* Cruce con el stack: al apuntar una tecnología, las filas que la usan
-     encienden un marco de acento alrededor de la captura. Suma en vez de
-     atenuar el resto, que bajaría el contraste del texto. */
-  .marco-captura {
-    outline: 1px solid transparent;
-    outline-offset: 10px;
-    transition: outline-color 0.3s ease;
-  }
-
-  [data-resaltada] .marco-captura {
-    outline-color: var(--c-acento);
-  }
-
-  [data-resaltada] .captura-proyecto {
-    filter: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .fila-proyecto:hover .captura-proyecto,
-    .fila-proyecto:focus-within .captura-proyecto {
-      transform: none;
-    }
-  }
-}
-
-/* ============================================================
-   TRANSICIÓN DE TEMA
-
-   El tema nuevo se abre en círculo desde el botón. El recorte lo
-   anima el propio botón; aquí solo se apagan las animaciones por
-   defecto y se ordenan las capas.
-   ============================================================ */
-
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
-::view-transition-old(root) {
-  z-index: 1;
-}
-
-::view-transition-new(root) {
-  z-index: 9999;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
-}
-
-/* ============================================================
-   GRANO
-
-   Una pizca de ruido sobre el fondo. Sobre un negro casi plano es lo
-   que lo hace leerse como papel fotográfico y no como una pantalla
-   apagada.
-
-   El patrón es un SVG embebido y repetido: no hay petición de red ni
-   imagen que descargar.
-   ============================================================ */
-
-.grano,
-.textura {
-  pointer-events: none;
-  opacity: 0.07;
-  /* Grano grueso: frecuencia 0.42 y 3 octavas, grumos grandes en vez de
-     polvo fino. Mosaico de 300 px para que no se note la repetición. */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
+/* Grano de papel, fijo detrás de todo. */
 .grano {
   position: fixed;
   inset: 0;
   z-index: -1;
+  pointer-events: none;
+  opacity: 0.09;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.09 0 0 0 0 0.086 0 0 0 0 0.06 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
 }
 
-/* En oscuro el ruido aclara el negro: a 0.1 el fondo se leía gris. */
-[data-tema="dark"] .grano,
-[data-tema="dark"] .textura {
-  opacity: 0.075;
+/* Franjas de corte del césped. --franja controla el ancho. */
+.cesped {
+  --franja: clamp(3.5rem, 2rem + 6vw, 7.5rem);
+  background-color: var(--c-cesped);
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--c-cesped) 0 var(--franja),
+    var(--c-cesped-hondo) var(--franja) calc(var(--franja) * 2)
+  );
+  color: var(--c-sobre-cesped);
+}
+
+/* El retrato recortado: se funde con el papel por abajo, como en el reel. */
+.retrato-fundido {
+  -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 96%);
+  mask-image: linear-gradient(to bottom, #000 58%, transparent 96%);
+}
+
+/* El mismo recorte, como silueta blanca de jugador sobre el césped. */
+.silueta {
+  filter: brightness(0) invert(1);
 }
 
 /* ============================================================
-   VIDRIO
-
-   Superficies flotantes translúcidas. Se reserva para controles y
-   para el encabezado: el contenido editorial sigue siendo opaco y
-   recto, de modo que el vidrio comunica "esto es un control".
+   MOVIMIENTO
+   Un solo easing, transform y clip-path. Nunca la opacidad del
+   contenido que espera al scroll: Lighthouse lo lee como texto sin
+   contraste. Todo se apaga con prefers-reduced-motion.
    ============================================================ */
 
-@layer components {
-  /*
-   * El desenfoque NO se declara aquí: se aplica con las utilidades
-   * `backdrop-blur-xl backdrop-saturate-150` junto a esta clase. Escrito a
-   * mano, el minificador dejaba solo la variante prefijada y sin el espacio
-   * obligatorio entre funciones —blur(16px)saturate(180%)—, con lo que la
-   * declaración quedaba inválida y el desenfoque no se aplicaba nunca.
-   */
-  .vidrio {
-    background-color: var(--c-vidrio);
-    border: 1px solid var(--c-vidrio-borde);
-    /* Reflejo especular en el canto superior: da volumen */
-    box-shadow: inset 0 1px 0 var(--c-vidrio-brillo);
-  }
+/* Entrada de la portada, en CSS para no esperar a ningún JavaScript. */
+@keyframes subir {
+  from { transform: translateY(105%); }
+  to   { transform: none; }
+}
+@keyframes trazar {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 -10% 0 -10%); }
+}
+@keyframes asomar {
+  from { transform: translateY(14%) scale(1.04); }
+  to   { transform: none; }
+}
+@keyframes cortina {
+  0%   { transform: none; }
+  100% { transform: translateY(-101%); }
+}
 
-  /* Sin soporte de backdrop-filter, se cae a un fondo sólido para no
-     dejar texto sobre una superficie semitransparente ilegible. */
-  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .vidrio {
-      background-color: var(--c-superficie);
-    }
+/* La máscara deja aire arriba para la tilde de la Ñ. */
+.mascara-linea {
+  display: block;
+  overflow: hidden;
+  padding-top: 0.22em;
+  margin-top: -0.22em;
+  padding-bottom: 0.06em;
+}
+.entra-linea {
+  display: block;
+  animation: subir 0.9s var(--ease-cancha) both;
+  animation-delay: var(--retardo, 0s);
+}
+.entra-firma {
+  animation: trazar 1.4s var(--ease-cancha) both;
+  animation-delay: var(--retardo, 0s);
+}
+.entra-retrato {
+  animation: asomar 1.2s var(--ease-cancha) both;
+}
+
+/* Cortina de césped que se levanta al cargar, como el corte verde del
+   reel. Sin texto ni imagen: no compite por el LCP. */
+.cortina {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  animation: cortina 0.85s var(--ease-cancha) 0.15s both;
+}
+
+/* Revelado al hacer scroll (Revelar.tsx). Sin JS no se oculta nada. */
+[data-js] [data-revelar] {
+  transform: translateY(2.5rem);
+  transition: transform 0.9s var(--ease-cancha);
+  transition-delay: var(--retardo, 0s);
+}
+[data-js] [data-revelar].visible { transform: none; }
+
+/* Microtexto de la portada: cada capa se mueve con el puntero. */
+[data-profundidad] {
+  transition: transform 0.6s var(--ease-cancha);
+  will-change: transform;
+}
+
+/* Vista previa del plantel: la captura activa entra con una cortina. */
+.previa-captura {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.55s var(--ease-cancha);
+}
+.previa-captura[data-activa="true"] { clip-path: inset(0); }
+
+/* Balón: gira según la distancia recorrida (BandaCancha.tsx). */
+.balon {
+  background:
+    radial-gradient(circle at 34% 30%, rgba(255,255,255,.85) 0 12%, transparent 13%),
+    radial-gradient(circle at 50% 50%, var(--c-balon) 0 62%, #C9D21F 100%);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.18);
+}
+
+/* Barrido de los enlaces principales: el césped entra desde abajo. */
+.boton-cancha {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.boton-cancha::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--c-cesped);
+  transform: translateY(101%);
+  transition: transform 0.35s var(--ease-cancha);
+}
+.boton-cancha:hover::before,
+.boton-cancha:focus-visible::before { transform: none; }
+.boton-cancha:hover,
+.boton-cancha:focus-visible { color: var(--c-sobre-cesped); border-color: var(--c-cesped); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
   }
+  .cortina { display: none; }
+  [data-js] [data-revelar] { transform: none; }
+  [data-profundidad] { transform: none !important; }
 }

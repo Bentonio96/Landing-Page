@@ -14,6 +14,13 @@ export const viewportBase: Viewport = {
  * Metadata completa por idioma: canonical, hreflang cruzado, Open Graph
  * con imagen dedicada (para LinkedIn y WhatsApp) y Twitter card.
  */
+/**
+ * La v2 es una propuesta de rediseño con el mismo contenido que el sitio
+ * actual. La canónica y el hreflang apuntan al sitio actual para que los
+ * buscadores no las traten como dos páginas que compiten.
+ */
+const CANONICA = "https://benjamin-pena.vercel.app";
+
 export function construirMetadata(idioma: Idioma): Metadata {
   const { titulo, descripcion } = seo[idioma];
   const ruta = idioma === "es" ? "/" : "/en";
@@ -21,18 +28,18 @@ export function construirMetadata(idioma: Idioma): Metadata {
 
   return {
     metadataBase: new URL(SITIO_URL),
-    title: titulo,
+    title: `${titulo} — v2`,
     description: descripcion,
     keywords: seo.palabrasClave[idioma],
     authors: [{ name: perfil.nombre, url: SITIO_URL }],
     creator: perfil.nombre,
     applicationName: titulo,
     alternates: {
-      canonical: ruta,
+      canonical: `${CANONICA}${ruta === "/" ? "" : ruta}`,
       languages: {
-        es: "/",
-        en: "/en",
-        "x-default": "/",
+        es: CANONICA,
+        en: `${CANONICA}/en`,
+        "x-default": CANONICA,
       },
     },
     openGraph: {
