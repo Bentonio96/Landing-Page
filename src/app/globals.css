@@ -1,70 +1,79 @@
 @import "tailwindcss";
 
 /* ============================================================
-   SISTEMA DE DISEÑO — «Cancha»
+   SISTEMA DE DISEÑO — «Pole»
    Versión 2 del portafolio. Fuente única de verdad: color,
    tipografía, espaciado y movimiento.
 
-   Sale de un reel que a Benja le gustó: papel crema, un retrato en
-   blanco y negro recortado que se funde con la página, microtexto
-   suelto alrededor, el nombre en dos voces (caligráfica + grotesca
-   negra ancha) y una franja de cancha con un balón que rueda.
+   La estructura sale de un reel que a Benja le gustó: el retrato
+   recortado al centro, microtexto suelto alrededor, el nombre en dos
+   voces (caligráfica + grotesca negra) y cortes a un color fuerte.
+   El mundo es el de Benja: los autos. Lo que en el reel era cancha
+   aquí es asfalto, pista, parrilla de largada, bandera a cuadros y
+   telemetría.
 
-   «Tener cancha», en Chile, es tener oficio. Por eso el verde de
-   césped no es decoración: marca lo que se toca y las pausas entre
-   capítulos. El amarillo del balón es solo relleno decorativo.
+   La paleta es la de la versión actual («Obsidiana», sacada del PDF
+   del CV), porque es la que lo identifica: papel frío, tinta azulada
+   y un único violeta. El asfalto es la tinta; el violeta, el color de
+   su auto.
 
-   Contrastes medidos con la fórmula de WCAG sobre el papel:
-     tinta 14.8:1 · atenuado 7.5:1 · tenue 5.5:1 · acento 6.5:1
-   y sobre el césped: blanco 5.0:1 (el crema se descartó: 4.3:1).
+   Contrastes (WCAG):
+     sobre fondo   tinta 17.6:1 · atenuado 8.4:1 · tenue 6.1:1 · acento 7.6:1
+     sobre asfalto texto 17.0:1 · atenuado 9.4:1 · acento claro 7.9:1
+   El violeta vivo (#6C5CFF) es solo relleno: como texto no llega a AA.
    ============================================================ */
 
 :root {
   color-scheme: light;
 
-  --c-papel:        #EDE9DA;
-  --c-papel-hondo:  #E4DFCC;
-  --c-tinta:        #17160F;
-  --c-atenuado:     #4B4838;
-  --c-tenue:        #5F5B48;
-  --c-regla:        rgba(23, 22, 15, 0.16);
-  --c-regla-fuerte: rgba(23, 22, 15, 0.42);
+  --c-fondo:         #F6F7F9;
+  --c-elevado:       #ECEEF2;
+  --c-tinta:         #0E1117;
+  --c-atenuado:      #414A58;
+  --c-tenue:         #555E6C;
+  --c-regla:         rgba(14, 17, 23, 0.12);
+  --c-regla-fuerte:  rgba(14, 17, 23, 0.34);
 
-  /* El acento es el verde, oscurecido para texto sobre papel. */
-  --c-acento:       #1E5E24;
-  --c-acento-hover: #14431A;
+  --c-acento:        #4335C9;
+  --c-acento-hover:  #332C6B;
+  --c-acento-vivo:   #6C5CFF;
 
-  /* Césped: dos tonos para las franjas de corte, como en una cancha. */
-  --c-cesped:       #2E7F35;
-  --c-cesped-hondo: #29742F;
-  --c-sobre-cesped: #FFFFFF;
-  --c-cal:          rgba(255, 255, 255, 0.78); /* las líneas de cal */
+  /* Asfalto: la tinta del CV, con su texto claro y su violeta claro. */
+  --c-asfalto:          #0E1117;
+  --c-asfalto-hondo:    #141922;
+  --c-sobre-asfalto:    #F1F3F7;
+  --c-atenuado-asfalto: #AFB7C4;
+  --c-acento-asfalto:   #A79BFF;
+  --c-linea:            rgba(241, 243, 247, 0.5); /* la pintura de pista */
 
-  /* Balón: solo relleno, nunca texto. */
-  --c-balon:        #E6F03C;
+  /* La señal: el auto que marca el avance. Solo relleno. */
+  --c-senal:         #6C5CFF;
 }
 
 @theme inline {
-  --color-papel:       var(--c-papel);
-  --color-papelhondo:  var(--c-papel-hondo);
-  --color-tinta:       var(--c-tinta);
-  --color-atenuado:    var(--c-atenuado);
-  --color-tenue:       var(--c-tenue);
-  --color-regla:       var(--c-regla);
-  --color-reglafuerte: var(--c-regla-fuerte);
-  --color-acento:      var(--c-acento);
-  --color-acentohover: var(--c-acento-hover);
-  --color-cesped:      var(--c-cesped);
-  --color-cespedhondo: var(--c-cesped-hondo);
-  --color-sobrecesped: var(--c-sobre-cesped);
-  --color-balon:       var(--c-balon);
+  --color-fondo:            var(--c-fondo);
+  --color-elevado:          var(--c-elevado);
+  --color-tinta:            var(--c-tinta);
+  --color-atenuado:         var(--c-atenuado);
+  --color-tenue:            var(--c-tenue);
+  --color-regla:            var(--c-regla);
+  --color-reglafuerte:      var(--c-regla-fuerte);
+  --color-acento:           var(--c-acento);
+  --color-acentohover:      var(--c-acento-hover);
+  --color-acentovivo:       var(--c-acento-vivo);
+  --color-asfalto:          var(--c-asfalto);
+  --color-asfaltohondo:     var(--c-asfalto-hondo);
+  --color-sobreasfalto:     var(--c-sobre-asfalto);
+  --color-atenuadoasfalto:  var(--c-atenuado-asfalto);
+  --color-acentoasfalto:    var(--c-acento-asfalto);
+  --color-senal:            var(--c-senal);
 
   --font-display: var(--fuente-display), "Arial Black", Impact, sans-serif;
   --font-firma:   var(--fuente-firma), "Snell Roundhand", cursive;
   --font-sans:    var(--fuente-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono:    var(--fuente-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
-  --text-micro:     0.6875rem;  /* 11px — el microtexto del reel */
+  --text-micro:     0.6875rem;
   --text-micro--line-height: 1.45;
   --text-etiqueta:  0.75rem;
   --text-etiqueta--line-height: 1.4;
@@ -81,7 +90,7 @@
   --spacing-canal:   clamp(1rem, 0.5rem + 2.2vw, 2.25rem);
   --container-lienzo: 84rem;
 
-  --ease-cancha: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-pista: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ============================================================
@@ -89,7 +98,7 @@
    ============================================================ */
 
 html {
-  background: var(--c-papel);
+  background: var(--c-fondo);
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
@@ -102,26 +111,24 @@ body {
 }
 
 ::selection {
-  background: var(--c-balon);
-  color: var(--c-tinta);
+  background: var(--c-acento-vivo);
+  color: #FFFFFF;
 }
 
-/* Foco: tinta sobre papel, balón sobre césped. Siempre 2 px y separado. */
 :focus-visible {
-  outline: 2px solid var(--c-tinta);
+  outline: 2px solid var(--c-acento);
   outline-offset: 3px;
 }
-.sobre-cesped :focus-visible {
-  outline-color: var(--c-balon);
+.sobre-asfalto :focus-visible {
+  outline-color: var(--c-acento-asfalto);
 }
 
-/* Al saltar a una sección, que la franja fija no le tape el título. */
 [id] {
   scroll-margin-top: 5.5rem;
 }
 
 /* ============================================================
-   UTILIDADES DE COMPOSICIÓN
+   COMPOSICIÓN
    ============================================================ */
 
 .lienzo {
@@ -131,34 +138,36 @@ body {
   padding-inline: clamp(1rem, 0.4rem + 2.6vw, 2.5rem);
 }
 
-/* Grotesca negra y ancha: la voz de la camiseta. */
-.voz-camiseta {
+/* Grotesca negra, ancha y en cursiva sintética: la voz de un número
+   pintado en la carrocería. Solo se carga la redonda; la inclinación la
+   pone el navegador (font-synthesis), sin otro archivo de fuente. */
+.voz-carrera {
   font-family: var(--font-display);
   font-weight: 900;
   font-stretch: 125%;
   font-variation-settings: "wdth" 125;
+  font-style: oblique 9deg;
+  font-synthesis: style;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   overflow-wrap: break-word;
+  /* La inclinación saca el borde derecho de la caja: un poco de aire. */
+  padding-right: 0.08em;
 }
-/* En un teléfono la camiseta se angosta un poco: a 125 % de ancho,
-   palabras como «CIBEROPERACIONES» no cabían en 375 px. */
 @media (max-width: 40rem) {
-  .voz-camiseta {
+  .voz-carrera {
     font-stretch: 108%;
     font-variation-settings: "wdth" 108;
   }
 }
 
-/* La caligráfica tiene trazos que salen mucho de su caja: se le da aire
-   por los cuatro lados para que ningún contenedor la recorte. */
+/* La caligráfica sale mucho de su caja: aire por los cuatro lados. */
 .voz-firma {
   font-family: var(--font-firma);
   font-weight: 400;
   line-height: 1.25;
   padding: 0.12em 0.3em 0.2em 0.12em;
   margin: -0.12em -0.3em -0.2em -0.12em;
-  letter-spacing: 0;
 }
 
 .micro {
@@ -194,47 +203,66 @@ body {
    TEXTURAS
    ============================================================ */
 
-/* Grano de papel, fijo detrás de todo. */
 .grano {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.09;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.09 0 0 0 0 0.086 0 0 0 0 0.06 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.05 0 0 0 0 0.07 0 0 0 0 0.09 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
 }
 
-/* Franjas de corte del césped. --franja controla el ancho. */
-.cesped {
-  --franja: clamp(3.5rem, 2rem + 6vw, 7.5rem);
-  background-color: var(--c-cesped);
+/* Asfalto: tinta con un grano más grueso, como el de una pista. */
+.asfalto {
+  background-color: var(--c-asfalto);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='a'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.07 0'/></filter><rect width='100%' height='100%' filter='url(%23a)'/></svg>");
+  color: var(--c-sobre-asfalto);
+}
+
+/* Bandera a cuadros. --cuadro controla el tamaño. */
+.cuadros {
+  --cuadro: 14px;
+  background-color: var(--c-sobre-asfalto);
+  background-image:
+    conic-gradient(var(--c-asfalto) 25%, transparent 0 50%, var(--c-asfalto) 0 75%, transparent 0);
+  background-size: calc(var(--cuadro) * 2) calc(var(--cuadro) * 2);
+}
+
+/* Piano (el borde pintado de las curvas): violeta y blanco. */
+.piano {
   background-image: repeating-linear-gradient(
     90deg,
-    var(--c-cesped) 0 var(--franja),
-    var(--c-cesped-hondo) var(--franja) calc(var(--franja) * 2)
+    var(--c-acento-vivo) 0 28px,
+    var(--c-sobre-asfalto) 28px 56px
   );
-  color: var(--c-sobre-cesped);
 }
 
-/* El retrato recortado: se funde con el papel por abajo, como en el reel. */
+/* El retrato recortado: se funde con el fondo por abajo. */
+/* La foto original corta los hombros en recto: también se funden los
+   costados de la mitad de abajo. */
 .retrato-fundido {
-  -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 96%);
-  mask-image: linear-gradient(to bottom, #000 58%, transparent 96%);
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 60%, transparent 92%),
+    linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, #000 60%, transparent 92%),
+    linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%);
+  mask-composite: intersect;
 }
 
-/* El mismo recorte, como silueta blanca de jugador sobre el césped. */
+/* El mismo recorte como silueta clara sobre el asfalto. */
 .silueta {
-  filter: brightness(0) invert(1);
+  filter: brightness(0) invert(0.95);
 }
 
 /* ============================================================
    MOVIMIENTO
-   Un solo easing, transform y clip-path. Nunca la opacidad del
-   contenido que espera al scroll: Lighthouse lo lee como texto sin
-   contraste. Todo se apaga con prefers-reduced-motion.
+   Un solo easing, transform, clip-path y trazo. Nunca la opacidad del
+   contenido que espera al scroll. Todo se apaga con
+   prefers-reduced-motion.
    ============================================================ */
 
-/* Entrada de la portada, en CSS para no esperar a ningún JavaScript. */
 @keyframes subir {
   from { transform: translateY(105%); }
   to   { transform: none; }
@@ -244,93 +272,106 @@ body {
   to   { clip-path: inset(0 -10% 0 -10%); }
 }
 @keyframes asomar {
-  from { transform: translateY(14%) scale(1.04); }
+  from { transform: translateY(10%) scale(1.03); }
   to   { transform: none; }
 }
-@keyframes cortina {
+@keyframes bandera {
   0%   { transform: none; }
-  100% { transform: translateY(-101%); }
+  100% { transform: translateX(101%); }
 }
 
-/* La máscara deja aire arriba para la tilde de la Ñ. */
 .mascara-linea {
   display: block;
   overflow: hidden;
-  padding-top: 0.22em;
-  margin-top: -0.22em;
+  padding-top: 0.4em;
+  margin-top: -0.4em;
   padding-bottom: 0.06em;
+  padding-right: 0.1em;
 }
 .entra-linea {
   display: block;
-  animation: subir 0.9s var(--ease-cancha) both;
+  animation: subir 0.9s var(--ease-pista) both;
   animation-delay: var(--retardo, 0s);
 }
 .entra-firma {
-  animation: trazar 1.4s var(--ease-cancha) both;
+  animation: trazar 1.4s var(--ease-pista) both;
   animation-delay: var(--retardo, 0s);
 }
 .entra-retrato {
-  animation: asomar 1.2s var(--ease-cancha) both;
+  animation: asomar 1.2s var(--ease-pista) both;
 }
 
-/* Cortina de césped que se levanta al cargar, como el corte verde del
-   reel. Sin texto ni imagen: no compite por el LCP. */
+/* Al cargar pasa la bandera a cuadros, de izquierda a derecha: la
+   largada. Sin texto ni imagen, así que no compite por el LCP. */
 .cortina {
   position: fixed;
   inset: 0;
   z-index: 60;
   pointer-events: none;
-  animation: cortina 0.85s var(--ease-cancha) 0.15s both;
+  --cuadro: clamp(24px, 4vw, 56px);
+  animation: bandera 0.8s var(--ease-pista) 0.15s both;
 }
 
-/* Revelado al hacer scroll (Revelar.tsx). Sin JS no se oculta nada. */
 [data-js] [data-revelar] {
   transform: translateY(2.5rem);
-  transition: transform 0.9s var(--ease-cancha);
+  transition: transform 0.9s var(--ease-pista);
   transition-delay: var(--retardo, 0s);
 }
 [data-js] [data-revelar].visible { transform: none; }
 
-/* Microtexto de la portada: cada capa se mueve con el puntero. */
 [data-profundidad] {
-  transition: transform 0.6s var(--ease-cancha);
+  transition: transform 0.6s var(--ease-pista);
   will-change: transform;
 }
 
-/* Vista previa del plantel: la captura activa entra con una cortina. */
+/* El trazado del circuito se dibuja con el scroll (Circuito.tsx). */
+.trazado {
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--avance, 1));
+}
+
+/* Vista previa de la clasificación: la captura activa entra barriendo. */
 .previa-captura {
-  clip-path: inset(0 0 100% 0);
-  transition: clip-path 0.55s var(--ease-cancha);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.55s var(--ease-pista);
 }
 .previa-captura[data-activa="true"] { clip-path: inset(0); }
 
-/* Balón: gira según la distancia recorrida (BandaCancha.tsx). */
-.balon {
-  background:
-    radial-gradient(circle at 34% 30%, rgba(255,255,255,.85) 0 12%, transparent 13%),
-    radial-gradient(circle at 50% 50%, var(--c-balon) 0 62%, #C9D21F 100%);
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.18);
-}
-
-/* Barrido de los enlaces principales: el césped entra desde abajo. */
-.boton-cancha {
+/* Barrido de los botones: el violeta entra desde la izquierda. */
+.boton-pista {
   position: relative;
   isolation: isolate;
   overflow: hidden;
 }
-.boton-cancha::before {
+.boton-pista::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: var(--c-cesped);
-  transform: translateY(101%);
-  transition: transform 0.35s var(--ease-cancha);
+  background: var(--c-acento);
+  transform: translateX(-101%);
+  transition: transform 0.35s var(--ease-pista);
 }
-.boton-cancha:hover::before,
-.boton-cancha:focus-visible::before { transform: none; }
-.boton-cancha:hover,
-.boton-cancha:focus-visible { color: var(--c-sobre-cesped); border-color: var(--c-cesped); }
+.boton-pista:hover::before,
+.boton-pista:focus-visible::before { transform: none; }
+.boton-pista:hover,
+.boton-pista:focus-visible { color: #FFFFFF; border-color: var(--c-acento); }
+
+/* Mosaico de meta (BordeCuadros.tsx): los cuadros claros se disuelven
+   al pasar por la pantalla. Solo donde hay scroll-driven animations. */
+@keyframes disolver {
+  from { transform: none; }
+  to   { transform: scale(0); }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .cuadro-mosaico.bg-fondo {
+      animation: disolver linear both;
+      animation-timeline: view();
+      animation-range: entry calc(10% + var(--orden) * 50%) cover calc(25% + var(--orden) * 30%);
+    }
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -343,4 +384,5 @@ body {
   .cortina { display: none; }
   [data-js] [data-revelar] { transform: none; }
   [data-profundidad] { transform: none !important; }
+  .trazado { stroke-dashoffset: 0; }
 }

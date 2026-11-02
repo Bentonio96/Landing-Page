@@ -1,6 +1,6 @@
 # Portafolio · Benjamín Peña Díaz
 
-> **Rama `v2` — «Cancha».** Propuesta de rediseño con el mismo contenido que el sitio actual, publicada aparte en https://benjamin-pena-v2.vercel.app para compararla. Sale de un reel que a Benja le gustó: papel crema, el retrato recortado en grises que se funde con la página, microtexto suelto con datos reales, el nombre en dos voces (Pinyon Script + Archivo Expanded Black) y una franja de cancha con un balón que marca el avance y sirve de navegación. Un solo tema, claro. La canónica apunta al sitio actual. El README de abajo describe la versión de `main`.
+> **Rama `v2` — «Pole».** Propuesta de rediseño con el mismo contenido que el sitio actual, para publicarla aparte y compararla. La estructura sale de un reel que a Benja le gustó (retrato recortado al centro, microtexto con hilos, el nombre en dos voces y cortes a un color fuerte); el mundo es el suyo, los autos: asfalto, una recta con sectores y un auto que marca el avance como navegación, bandera a cuadros que se disuelve en mosaico al hacer scroll, el stack como parrilla de largada, los proyectos como clasificación y un tacómetro con un dato real. Paleta de la versión actual (Obsidiana). Retrato recortado con BiRefNet. La canónica apunta al sitio actual. El README de abajo describe la versión de `main`.
 
 
 Sitio personal de **Benjamín Peña Díaz**, desarrollador frontend en Santiago de Chile.

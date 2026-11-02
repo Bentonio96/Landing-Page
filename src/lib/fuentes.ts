@@ -11,7 +11,7 @@ import { Archivo, Inter_Tight, JetBrains_Mono, Pinyon_Script } from "next/font/g
 /**
  * Titulares y dorsales. Archivo es variable en peso y en ancho: se usa casi
  * siempre a 900 y 125 % de ancho («Archivo Expanded Black»), la voz de una
- * camiseta, sin cargar un archivo por estilo.
+ * carrocería de carrera, sin cargar un archivo por estilo.
  */
 export const fuenteDisplay = Archivo({
   subsets: ["latin"],

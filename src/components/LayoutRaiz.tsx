@@ -14,8 +14,8 @@ type Props = { idioma: Idioma; children: ReactNode };
 const scriptJs = `document.documentElement.setAttribute('data-js','');`;
 
 /**
- * Cascarón <html>/<body> compartido por las dos raíces del sitio. «Cancha»
- * tiene un solo tema, claro: el papel crema es parte del concepto.
+ * Cascarón <html>/<body> compartido por las dos raíces del sitio. «Pole»
+ * tiene un solo tema, claro, con secciones de asfalto en la tinta del CV.
  */
 export function LayoutRaiz({ idioma, children }: Props) {
   return (

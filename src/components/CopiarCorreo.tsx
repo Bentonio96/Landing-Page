@@ -28,7 +28,7 @@ export function CopiarCorreo({ correo, etiqueta, copiado, fallo }: Props) {
       <button
         type="button"
         onClick={copiar}
-        className="etiqueta inline-flex min-h-11 items-center gap-2 border border-sobrecesped px-4 text-sobrecesped hover:bg-sobrecesped hover:text-cesped"
+        className="etiqueta inline-flex min-h-11 items-center gap-2 border border-sobreasfalto px-4 text-sobreasfalto hover:bg-sobreasfalto hover:text-asfalto"
       >
         {estado === "ok" ? (
           <Check aria-hidden="true" className="size-4" />

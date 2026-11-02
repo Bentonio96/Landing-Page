@@ -7,7 +7,7 @@ type Props = { idioma: Idioma; t: Diccionario };
 
 /**
  * Barra superior de microtexto, como la del reel: avatar, dorsal y la
- * disponibilidad. No es fija: la navegación vive en la franja de cancha,
+ * disponibilidad. No es fija: la navegación vive en la recta de pista,
  * que sí se queda arriba al bajar.
  */
 export function Encabezado({ idioma, t }: Props) {
@@ -21,15 +21,15 @@ export function Encabezado({ idioma, t }: Props) {
           alt=""
           width={32}
           height={32}
-          className="size-8 rounded-full bg-papelhondo object-cover object-[50%_20%]"
+          className="size-8 rounded-full bg-elevado object-cover object-[50%_20%]"
         />
         <span className="micro text-tinta">
-          BPD <span className="text-tenue">— {t.cancha.dorsal}</span>
+          BPD <span className="text-tenue">— {t.v2.dorsal}</span>
         </span>
       </Link>
 
       <p className="micro hidden items-center gap-2 text-tinta md:flex">
-        <span aria-hidden="true" className="balon inline-block size-2.5 rounded-full" />
+        <span aria-hidden="true" className="bg-senal inline-block size-2.5 rounded-full" />
         {t.hero.disponible}
       </p>
 

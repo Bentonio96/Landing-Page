@@ -8,28 +8,29 @@ type Seccion = { id: string; etiqueta: string };
 type Props = {
   secciones: Seccion[];
   etiquetaNav: string;
+  etiquetaSector: string;
 };
 
-const TAMANO_BALON = 18;
+const LARGO_AUTO = 30;
 
 /**
- * La franja de cancha del reel, convertida en la navegación del sitio.
+ * Una recta de pista convertida en la navegación del sitio: cada sección
+ * es un sector y la meta a cuadros es el final de la página.
  *
- * Se queda fija arriba al bajar. El balón marca cuánto se ha leído de la
- * página y, al apuntar una sección, rueda hasta ella. Nada se mueve solo:
- * el balón solo sigue al scroll o al puntero. Con movimiento reducido salta
- * a su sitio sin rodar.
+ * Se queda fija arriba al bajar. El auto marca cuánto se ha leído y, al
+ * apuntar o enfocar un sector, va hasta él. Nada se mueve solo: el auto
+ * sigue al scroll o al puntero. Con movimiento reducido salta a su sitio.
  */
-export function BandaCancha({ secciones, etiquetaNav }: Props) {
+export function BandaPista({ secciones, etiquetaNav, etiquetaSector }: Props) {
   const pista = useRef<HTMLDivElement>(null);
-  const balon = useRef<HTMLSpanElement>(null);
+  const auto = useRef<HTMLSpanElement>(null);
   const enlaces = useRef<Array<HTMLAnchorElement | null>>([]);
   const [activa, setActiva] = useState<string | null>(null);
 
   useEffect(() => {
     const caja = pista.current;
-    const pelota = balon.current;
-    if (!caja || !pelota) return;
+    const coche = auto.current;
+    if (!caja || !coche) return;
     const reducido = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     let destino = 0;
@@ -37,27 +38,23 @@ export function BandaCancha({ secciones, etiquetaNav }: Props) {
     let apuntado: number | null = null;
     let cuadro = 0;
 
-    const ancho = () => caja.clientWidth - TAMANO_BALON;
-
     const calcularDestino = () => {
       if (apuntado !== null) {
         const enlace = enlaces.current[apuntado];
         if (enlace) {
           const r = enlace.getBoundingClientRect();
           const c = caja.getBoundingClientRect();
-          destino = r.left - c.left + r.width / 2 - TAMANO_BALON / 2;
+          destino = r.left - c.left + r.width / 2 - LARGO_AUTO / 2;
           return;
         }
       }
       const total = document.documentElement.scrollHeight - window.innerHeight;
       const avance = total > 0 ? Math.min(1, Math.max(0, window.scrollY / total)) : 0;
-      destino = avance * ancho();
+      destino = avance * (caja.clientWidth - LARGO_AUTO);
     };
 
     const pintar = () => {
-      // El giro es la distancia recorrida sobre el radio: rueda, no patina.
-      const giro = (x / (TAMANO_BALON / 2)) * (180 / Math.PI);
-      pelota.style.transform = `translate3d(${x.toFixed(1)}px, 0, 0) rotate(${giro.toFixed(0)}deg)`;
+      coche.style.transform = `translate3d(${x.toFixed(1)}px, 0, 0)`;
     };
 
     const paso = () => {
@@ -68,7 +65,7 @@ export function BandaCancha({ secciones, etiquetaNav }: Props) {
         cuadro = 0;
         return;
       }
-      x += d * 0.16;
+      x += d * 0.14;
       pintar();
       cuadro = requestAnimationFrame(paso);
     };
@@ -78,7 +75,7 @@ export function BandaCancha({ secciones, etiquetaNav }: Props) {
       if (!cuadro) cuadro = requestAnimationFrame(paso);
     };
 
-    // La sección activa es la última cuyo inicio ya pasó el 40 % de la
+    // El sector activo es el último cuyo inicio ya pasó el 40 % de la
     // ventana.
     const marcarActiva = () => {
       let actual: string | null = null;
@@ -94,22 +91,21 @@ export function BandaCancha({ secciones, etiquetaNav }: Props) {
       marcarActiva();
     };
 
-    const entrar = (i: number) => () => {
-      apuntado = i;
-      actualizar();
-    };
     const salir = () => {
       apuntado = null;
       actualizar();
     };
     const oyentes = enlaces.current.map((el, i) => {
       if (!el) return null;
-      const alEntrar = entrar(i);
-      el.addEventListener("pointerenter", alEntrar);
-      el.addEventListener("focus", alEntrar);
+      const entrar = () => {
+        apuntado = i;
+        actualizar();
+      };
+      el.addEventListener("pointerenter", entrar);
+      el.addEventListener("focus", entrar);
       el.addEventListener("pointerleave", salir);
       el.addEventListener("blur", salir);
-      return { el, alEntrar };
+      return { el, entrar };
     });
 
     alDesplazar();
@@ -121,8 +117,8 @@ export function BandaCancha({ secciones, etiquetaNav }: Props) {
       window.removeEventListener("resize", alDesplazar);
       for (const o of oyentes) {
         if (!o) continue;
-        o.el.removeEventListener("pointerenter", o.alEntrar);
-        o.el.removeEventListener("focus", o.alEntrar);
+        o.el.removeEventListener("pointerenter", o.entrar);
+        o.el.removeEventListener("focus", o.entrar);
         o.el.removeEventListener("pointerleave", salir);
         o.el.removeEventListener("blur", salir);
       }
@@ -132,31 +128,20 @@ export function BandaCancha({ secciones, etiquetaNav }: Props) {
   return (
     <nav
       aria-label={etiquetaNav}
-      className="cesped sobre-cesped sticky top-0 z-40 h-16 overflow-hidden [--franja:clamp(2.5rem,1.5rem+4vw,5rem)]"
+      className="asfalto sobre-asfalto sticky top-0 z-40 h-16 overflow-hidden"
     >
-      {/* Líneas de cal: borde, mitad de cancha, círculo central y áreas. */}
-      <svg
+      {/* Pianos violeta y blanco en los dos bordes de la recta. */}
+      <div aria-hidden="true" className="piano absolute inset-x-0 top-0 h-1" />
+      <div aria-hidden="true" className="piano absolute inset-x-0 bottom-0 h-1" />
+      {/* Línea central discontinua. */}
+      <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 size-full"
-        viewBox="0 0 1000 64"
-        preserveAspectRatio="none"
-      >
-        <g fill="none" stroke="var(--c-cal)" strokeWidth="1.5" vectorEffect="non-scaling-stroke">
-          <rect x="6" y="6" width="988" height="52" vectorEffect="non-scaling-stroke" />
-          <line x1="500" y1="6" x2="500" y2="58" vectorEffect="non-scaling-stroke" />
-          <rect x="6" y="16" width="70" height="32" vectorEffect="non-scaling-stroke" />
-          <rect x="924" y="16" width="70" height="32" vectorEffect="non-scaling-stroke" />
-        </g>
-      </svg>
-      <svg
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[52px] -translate-x-1/2 -translate-y-1/2"
-        viewBox="0 0 52 52"
-      >
-        <circle cx="26" cy="26" r="24" fill="none" stroke="var(--c-cal)" strokeWidth="1.5" />
-      </svg>
+        className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-[repeating-linear-gradient(90deg,var(--c-linea)_0_18px,transparent_18px_36px)]"
+      />
+      {/* Meta a cuadros al final de la recta. */}
+      <div aria-hidden="true" className="cuadros absolute inset-y-1 right-0 w-5 [--cuadro:5px]" />
 
-      <div ref={pista} className="lienzo relative h-full">
+      <div ref={pista} className="lienzo relative h-full pr-8">
         <ul className="relative z-10 grid h-full grid-cols-5">
           {secciones.map((s, i) => (
             <li key={s.id} className="flex items-center justify-center">
@@ -167,22 +152,36 @@ export function BandaCancha({ secciones, etiquetaNav }: Props) {
                 href={`#${s.id}`}
                 aria-current={activa === s.id ? "location" : undefined}
                 className={cn(
-                  "micro inline-flex min-h-11 items-center gap-1.5 px-1.5 text-sobrecesped decoration-2 underline-offset-4 hover:underline",
-                  activa === s.id && "underline",
+                  "micro relative inline-flex min-h-11 items-center gap-1.5 bg-asfalto px-2 text-sobreasfalto decoration-2 underline-offset-4 hover:underline",
+                  activa === s.id && "text-acentoasfalto underline",
                 )}
               >
-                <span>{String(i + 1).padStart(2, "0")}</span>
+                <span>
+                  <span className="sr-only">{etiquetaSector} </span>S{i + 1}
+                </span>
                 <span className="sr-only sm:not-sr-only">{s.etiqueta}</span>
               </a>
             </li>
           ))}
         </ul>
+
+        {/* El auto, visto desde arriba, apuntando a la meta. */}
         <span
-          ref={balon}
+          ref={auto}
           aria-hidden="true"
-          className="balon pointer-events-none absolute bottom-1 left-0 z-0 block rounded-full"
-          style={{ width: TAMANO_BALON, height: TAMANO_BALON }}
-        />
+          className="pointer-events-none absolute bottom-[7px] left-0 z-0 block"
+          style={{ width: LARGO_AUTO }}
+        >
+          <svg viewBox="0 0 30 14" className="block h-[14px] w-[30px]">
+            <rect x="4" y="0" width="5" height="3" rx="1" fill="#05070A" />
+            <rect x="4" y="11" width="5" height="3" rx="1" fill="#05070A" />
+            <rect x="20" y="0" width="5" height="3" rx="1" fill="#05070A" />
+            <rect x="20" y="11" width="5" height="3" rx="1" fill="#05070A" />
+            <path d="M1 4.5 Q1 2 4 2 L22 2 Q29 3 29 7 Q29 11 22 12 L4 12 Q1 12 1 9.5 Z" fill="var(--c-senal)" />
+            <path d="M12 4 L18 4.5 Q20 7 18 9.5 L12 10 Q11 7 12 4 Z" fill="#0E1117" opacity="0.75" />
+            <rect x="1" y="5.5" width="2" height="3" fill="#F1F3F7" />
+          </svg>
+        </span>
       </div>
     </nav>
   );
