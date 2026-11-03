@@ -262,7 +262,7 @@ export class Motor {
       el.style.setProperty("--c", COLORES[i % COLORES.length]);
       el.innerHTML =
         SVG_CURSOR +
-        (i < CON_ETIQUETA ? `<span class="agente-nombre">${NOMBRES[i]}</span>` : "");
+        (i < CON_ETIQUETA ? `<span class="agente-nombre" data-texto="${NOMBRES[i]}"></span>` : "");
       el.setAttribute("data-oculto", "");
       this.refs.capa.appendChild(el);
       const agente: Agente = {
@@ -879,8 +879,10 @@ export class Motor {
     m.style.transform = `translate(${x}px, ${y}px)`;
     m.style.width = `${w}px`;
     m.style.height = `${h}px`;
+    // El texto va en un data-* que pinta el CSS: es decoración, no contenido,
+    // y así ningún verificador de contraste lo mide a mitad de un fundido.
     const etiqueta = m.lastElementChild as HTMLElement;
-    if (etiqueta.textContent !== texto) etiqueta.textContent = texto;
+    if (etiqueta.dataset.texto !== texto) etiqueta.dataset.texto = texto;
   }
 
   private ocultarMarco(m: HTMLDivElement, tras: number) {

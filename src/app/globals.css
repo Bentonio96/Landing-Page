@@ -409,6 +409,10 @@ html[data-obra="completa"]:not([data-intro-hecha]) [data-logo-slot] {
   line-height: 1.5;
   white-space: nowrap;
 }
+.marco span::before,
+.agente-nombre::before {
+  content: attr(data-texto);
+}
 .marco b {
   /* Cruz de posición en el origen de la pieza. */
   position: absolute;
