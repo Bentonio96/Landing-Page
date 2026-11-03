@@ -60,7 +60,7 @@ export function ProveedorAvisos({ children }: { children: ReactNode }) {
       <div
         role="status"
         aria-live="polite"
-        className="pointer-events-none fixed inset-x-0 bottom-0 z-[70] flex justify-center px-4 pb-6 sm:pb-8"
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-[70] flex justify-center px-4 pb-20 sm:pb-24"
       >
         <div
           className={`vidrio backdrop-blur-xl backdrop-saturate-150 flex max-w-[min(28rem,92vw)] items-center gap-3 rounded-control px-4 py-3 shadow-[0_12px_36px_-12px_var(--c-sombra)] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${

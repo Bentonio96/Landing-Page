@@ -1,671 +1,473 @@
 @import "tailwindcss";
 
-/* Modo oscuro por atributo data-tema, con persistencia en lib/tema.ts.
-   Va en un atributo y no en una clase porque React reaplica el className
-   de <html> al navegar entre idiomas, y borraba la clase. */
+/* Modo oscuro por atributo data-tema (ver lib/tema.ts). Va en un atributo y
+   no en una clase porque React reaplica el className de <html>. */
 @custom-variant dark (&:where([data-tema="dark"], [data-tema="dark"] *));
 
 /* ============================================================
-   SISTEMA DE DISEÑO — "Obsidiana"
-   Fuente única de verdad: color, tipografía, espaciado, ritmo.
-   Cambiar un valor aquí lo cambia en todo el sitio.
-
-   La idea: titulares de cartel, mucho aire y la paleta del CV, para
-   que el sitio y el documento se lean como una sola marca. Tinta
-   azulada, grises fríos y un único violeta. El impacto sale de la
-   escala tipográfica y de la foto a sangre; el violeta queda para
-   pocas cosas —el apellido, foco, estado activo, la cita— y por eso
-   se nota.
-
-   Los valores salen del propio PDF del CV (operadores de color del
-   contenido), no de una captura: #0E1117, #6C5CFF, #4335C9, #A79BFF.
+   SISTEMA DE DISEÑO — v4 «Obra»
+   La página es un lienzo de diseño: grilla de puntos, marcos de selección
+   azules y cursores de colores. Los colores de marca siguen siendo los del
+   CV (tinta #0E1117 y el violeta #6C5CFF / #4335C9 / #A79BFF); los cursores
+   y el azul de selección son la capa de «herramienta», no de marca.
    ============================================================ */
 
 :root {
   color-scheme: light;
 
-  /* --- Color: modo claro --- */
-  --c-fondo:         #F6F7F9;  /* papel frío */
-  --c-superficie:    #FFFFFF;
-  --c-elevado:       #ECEEF2;
-  --c-texto:         #0E1117;  /* 17.6:1 sobre fondo */
-  --c-atenuado:      #414A58;  /*  8.4:1 sobre fondo — AA */
-  /* Más oscuro que el gris del CV (#5D6675): en la banda alterna del stack,
-     con el grano encima, ese gris bajaba a 4.49:1 medido sobre píxel real. */
-  --c-tenue:         #555E6C;  /*  6.1:1 sobre fondo — AA */
-  --c-cita:          #1B212B;
-  --c-borde:         #E0E3E9;
-  --c-borde-fuerte:  #C6CDD8;
-  --c-acento:        #4335C9;  /*  7.6:1 sobre fondo — AA */
-  --c-acento-hover:  #332C6B;
-  --c-acento-sobre:  #FFFFFF;  /*  8.1:1 sobre acento — AA */
-  /* El violeta vivo del CV. Solo para rellenos decorativos (puntos,
-     subrayados, reglas): como texto da 4.3:1 sobre claro y 4.2:1
-     sobre oscuro, por debajo de AA para texto normal. */
-  --c-acento-vivo:   #6C5CFF;
-  --c-sombra:        rgba(14, 17, 23, 0.08);
-  /* Secciones alternas: un velo translúcido y no un color opaco, para que
-     el grano fijo de detrás siga viéndose a través. */
-  --c-banda:         rgba(14, 17, 23, 0.028);
-
-  /* Vidrio: superficies flotantes translúcidas. */
-  --c-vidrio:        rgba(246, 247, 249, 0.82);
-  --c-vidrio-brillo: rgba(255, 255, 255, 0.7);
-  --c-vidrio-borde:  rgba(14, 17, 23, 0.08);
+  --c-fondo:        #F6F7F9;
+  --c-punto:        #D3D8E0;
+  --c-superficie:   #FFFFFF;
+  --c-elevado:      #EEF0F4;
+  --c-texto:        #0E1117;  /* 17.6:1 */
+  --c-atenuado:     #414A58;  /*  8.4:1 */
+  --c-tenue:        #555E6C;  /*  6.1:1 */
+  --c-borde:        #E0E3E9;
+  --c-borde-fuerte: #C6CDD8;
+  --c-acento:       #4335C9;  /*  7.6:1 */
+  --c-acento-hover: #332C6B;
+  --c-acento-sobre: #FFFFFF;
+  --c-acento-vivo:  #6C5CFF;  /* solo decorativo */
+  --c-seleccion:    #2563EB;  /* marcos de selección; blanco encima 5.2:1 */
+  --c-ok:           #15803D;
+  --c-sombra:       rgba(14, 17, 23, 0.10);
+  --c-vidrio:       rgba(255, 255, 255, 0.86);
+  --c-vidrio-borde: rgba(14, 17, 23, 0.10);
+  --c-codigo:       #0E1117;
+  --c-codigo-texto: #E6E9EF;
 }
 
 [data-tema="dark"] {
   color-scheme: dark;
 
-  /* --- Color: modo oscuro --- */
-  --c-fondo:         #0E1117;  /* la tinta de la barra lateral del CV */
-  --c-superficie:    #141922;
-  --c-elevado:       #1B212B;
-  --c-texto:         #F1F3F7;  /* 17.0:1 sobre fondo */
-  --c-atenuado:      #AFB7C4;  /*  9.4:1 sobre fondo — AA */
-  --c-tenue:         #8B94A3;  /*  6.2:1 sobre fondo — AA */
-  --c-cita:          #C6CDD8;
-  --c-borde:         #232A36;
-  --c-borde-fuerte:  #3A4353;
-  --c-acento:        #A79BFF;  /*  7.9:1 sobre fondo — AA */
-  --c-acento-hover:  #BFB4FF;
-  --c-acento-sobre:  #0E1117;  /*  7.9:1 sobre acento — AA */
-  --c-acento-vivo:   #6C5CFF;
-  --c-sombra:        rgba(0, 0, 0, 0.5);
-  --c-banda:         rgba(167, 155, 255, 0.022);
-
-  --c-vidrio:        rgba(14, 17, 23, 0.78);
-  --c-vidrio-brillo: rgba(255, 255, 255, 0.06);
-  --c-vidrio-borde:  rgba(255, 255, 255, 0.07);
+  --c-fondo:        #0B0E13;
+  --c-punto:        #1F2530;
+  --c-superficie:   #12161D;
+  --c-elevado:      #1A1F28;
+  --c-texto:        #F1F3F7;  /* 17.9:1 */
+  --c-atenuado:     #AFB7C4;  /*  9.6:1 */
+  --c-tenue:        #8B94A3;  /*  6.3:1 */
+  --c-borde:        #222833;
+  --c-borde-fuerte: #353D4B;
+  --c-acento:       #A79BFF;  /*  8.1:1 */
+  --c-acento-hover: #BFB4FF;
+  --c-acento-sobre: #0E1117;
+  --c-acento-vivo:  #6C5CFF;
+  --c-seleccion:    #2563EB;
+  --c-ok:           #4ADE80;
+  --c-sombra:       rgba(0, 0, 0, 0.55);
+  --c-vidrio:       rgba(18, 22, 29, 0.86);
+  --c-vidrio-borde: rgba(255, 255, 255, 0.09);
+  --c-codigo:       #07090D;
+  --c-codigo-texto: #E6E9EF;
 }
 
 @theme inline {
-  /* --- Color semántico --- */
-  --color-fondo:        var(--c-fondo);
-  --color-superficie:   var(--c-superficie);
-  --color-elevado:      var(--c-elevado);
-  --color-texto:        var(--c-texto);
-  --color-atenuado:     var(--c-atenuado);
-  --color-tenue:        var(--c-tenue);
-  --color-cita:         var(--c-cita);
-  --color-borde:        var(--c-borde);
-  --color-bordefuerte:  var(--c-borde-fuerte);
-  --color-acento:       var(--c-acento);
-  --color-acentohover:  var(--c-acento-hover);
-  --color-acentosobre:  var(--c-acento-sobre);
-  --color-acentovivo:   var(--c-acento-vivo);
-  --color-banda:        var(--c-banda);
-  --color-vidrio:       var(--c-vidrio);
-  --color-vidrioborde:  var(--c-vidrio-borde);
+  --color-fondo:       var(--c-fondo);
+  --color-superficie:  var(--c-superficie);
+  --color-elevado:     var(--c-elevado);
+  --color-texto:       var(--c-texto);
+  --color-atenuado:    var(--c-atenuado);
+  --color-tenue:       var(--c-tenue);
+  --color-borde:       var(--c-borde);
+  --color-bordefuerte: var(--c-borde-fuerte);
+  --color-acento:      var(--c-acento);
+  --color-acentohover: var(--c-acento-hover);
+  --color-acentosobre: var(--c-acento-sobre);
+  --color-acentovivo:  var(--c-acento-vivo);
+  --color-seleccion:   var(--c-seleccion);
+  --color-ok:          var(--c-ok);
+  --color-vidrio:      var(--c-vidrio);
+  --color-codigo:      var(--c-codigo);
+  --color-codigotexto: var(--c-codigo-texto);
 
-  /* --- Tipografía --- */
-  --font-display: var(--fuente-display), "Arial Narrow", Impact, sans-serif;
-  --font-sans:    var(--fuente-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono:    var(--fuente-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-sans: var(--fuente-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--fuente-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
-  /* Escala. Las tres de cartel (gigante, t1, t2) son de la condensada y van
-     con interlineado por debajo de 1: en versales no hay descendentes que
-     choquen, y apretadas es como pesan. */
-  --text-etiqueta:     0.75rem;    /* 12px — mono, versalitas */
+  --text-etiqueta: 0.75rem;
   --text-etiqueta--line-height: 1.4;
-  --text-menor:        0.8125rem;  /* 13px */
-  --text-menor--line-height: 1.5;
-  --text-base:         1rem;
-  --text-base--line-height: 1.65;
-  --text-cuerpo:       1.0625rem;  /* 17px — cuerpo de lectura */
+  --text-menor: 0.875rem;
+  --text-menor--line-height: 1.55;
+  --text-cuerpo: 1.0625rem;
   --text-cuerpo--line-height: 1.7;
-  --text-guia:         clamp(1.125rem, 1rem + 0.5vw, 1.3125rem);
-  --text-guia--line-height: 1.6;
-  --text-t3:           clamp(1.375rem, 1.15rem + 0.9vw, 1.875rem);
-  --text-t3--line-height: 1.25;
-  --text-t2:           clamp(2.5rem, 1.6rem + 3.4vw, 4.25rem);
-  --text-t2--line-height: 0.92;
-  --text-t1:           clamp(3.5rem, 1.9rem + 6.2vw, 6.75rem);
-  --text-t1--line-height: 0.9;
-  --text-gigante:      clamp(4.5rem, 1.6rem + 11.5vw, 11rem);
-  --text-gigante--line-height: 0.86;
+  --text-t3: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+  --text-t3--line-height: 1.3;
+  --text-t2: clamp(2rem, 1.4rem + 2.6vw, 3.5rem);
+  --text-t2--line-height: 1.02;
+  --text-t1: clamp(3.25rem, 1.9rem + 5.4vw, 6.25rem);
+  --text-t1--line-height: 0.95;
 
-  /* --- Ritmo vertical y medidas --- */
-  --spacing-seccion:    clamp(6rem, 3.5rem + 9vw, 11rem);
-  --spacing-canal:      clamp(1.25rem, 0.6rem + 2.6vw, 2.5rem);
-  --container-medida:   68ch;   /* medida de lectura cómoda */
-  --container-lienzo:   80rem;  /* ancho máximo del contenido */
+  --spacing-seccion: clamp(5rem, 3rem + 7vw, 9rem);
+  --container-lienzo: 76rem;
+  --container-medida: 62ch;
 
-  /* --- Forma --- */
-  /* Casi todo va recto, como una página impresa. Lo único redondo son las
-     píldoras de tecnología y los dos controles del encabezado: así la forma
-     distingue etiqueta y control de contenido. */
-  --radius-pieza:   0px;
-  --radius-control: 2px;
-  --radius-chip:    999px;
-
-  /* --- Movimiento --- */
-  --ease-salida: cubic-bezier(0.16, 1, 0.3, 1);
+  --radius-pieza: 14px;
+  --radius-control: 999px;
 }
 
-/* ============================================================
-   BASE
-   ============================================================ */
-
 @layer base {
-  * {
-    border-color: var(--c-borde);
-  }
-
-  /* Desplazamiento suave nativo solo mientras Lenis no está activo (sin JS o
-     con movimiento reducido). Con Lenis encima, el suave del navegador y el
-     suyo se pelean y el scroll tironea. */
-  html:not(.lenis) {
-    scroll-behavior: smooth;
-  }
-
   html {
-    /* el header fijo no debe tapar el destino de un ancla */
-    scroll-padding-top: 5rem;
-    -webkit-text-size-adjust: 100%;
-  }
-
-  html {
-    /* El color vive aquí, no en <body>, para que la capa de grano pueda
-       colocarse detrás del contenido con z-index negativo. */
     background-color: var(--c-fondo);
+    /* Grilla de puntos de lienzo de diseño. Estática: no cuesta nada. */
+    background-image: radial-gradient(var(--c-punto) 1px, transparent 1.3px);
+    background-size: 22px 22px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-padding-top: 5.5rem;
+    /* Los agentes y las piezas desplazadas pueden asomarse por los bordes:
+       nunca deben crear scroll horizontal. */
+    overflow-x: clip;
   }
 
   body {
-    background-color: transparent;
-    color: var(--c-texto);
     font-family: var(--font-sans);
-    font-size: var(--text-cuerpo);
-    line-height: 1.7;
+    color: var(--c-texto);
+    overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-  }
-
-  /* Solo h1 y h2 son de cartel. Los h3 de filas y tarjetas van en la sans
-     ligera: dos titulares condensados seguidos se pisan el protagonismo. */
-  h1, h2 {
-    font-family: var(--font-display);
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: -0.01em;
-    text-wrap: balance;
-  }
-
-  h3, h4 {
-    font-family: var(--font-sans);
-    font-weight: 300;
-    letter-spacing: -0.01em;
-    text-wrap: balance;
-  }
-
-  p {
-    text-wrap: pretty;
-  }
-
-  /* Foco visible y consistente en todo el sitio — nunca se elimina */
-  :focus-visible {
-    outline: 2px solid var(--c-acento);
-    outline-offset: 3px;
-    border-radius: 2px;
+    /* Espacio para la píldora de estado fija. */
+    padding-bottom: 5rem;
   }
 
   ::selection {
-    background-color: var(--c-acento);
-    color: var(--c-acento-sobre);
+    background: var(--c-acento-vivo);
+    color: #fff;
   }
 
-  /* Respeta la preferencia del sistema en todo el sitio */
-  @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
+  :focus-visible {
+    outline: 2px solid var(--c-acento);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html:focus-within {
+      scroll-behavior: smooth;
     }
   }
 }
 
-/* ============================================================
-   COMPONENTES DE LAYOUT
-   ============================================================ */
-
 @layer components {
-  /* Lienzo central con canales laterales fluidos */
   .lienzo {
+    /* Las piezas esperan desplazadas: nunca deben ensanchar la página. */
+    overflow-x: clip;
     width: 100%;
     max-width: var(--container-lienzo);
     margin-inline: auto;
-    padding-inline: var(--spacing-canal);
+    padding-inline: clamp(1rem, 0.5rem + 2.4vw, 2.5rem);
   }
 
-  /* Etiqueta monoespaciada de sección: "01 — PROYECTOS" */
   .etiqueta {
     font-family: var(--font-mono);
     font-size: var(--text-etiqueta);
-    font-weight: 400;
     line-height: 1.4;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--c-tenue);
   }
 
-  /* Enlace de texto con subrayado que crece desde la izquierda */
+  .panel {
+    background: var(--c-superficie);
+    border: 1px solid var(--c-borde);
+    border-radius: var(--radius-pieza);
+    box-shadow: 0 1px 0 var(--c-vidrio-borde), 0 18px 40px -28px var(--c-sombra);
+  }
+
+  .vidrio {
+    background: var(--c-vidrio);
+    border: 1px solid var(--c-vidrio-borde);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    backdrop-filter: blur(14px) saturate(1.4);
+  }
+
+  .boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius-control);
+    font-size: var(--text-menor);
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+  }
+  .boton:active { transform: translateY(1px); }
+  .boton-primario {
+    background: var(--c-texto);
+    color: var(--c-fondo);
+  }
+  .boton-primario:hover { background: var(--c-acento); color: var(--c-acento-sobre); }
+  .boton-secundario {
+    border: 1px solid var(--c-borde-fuerte);
+    color: var(--c-texto);
+    background: var(--c-superficie);
+  }
+  .boton-secundario:hover { border-color: var(--c-acento); color: var(--c-acento); }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border: 1px solid var(--c-borde);
+    background: var(--c-elevado);
+    border-radius: 999px;
+    padding: 0.25rem 0.625rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--c-atenuado);
+  }
+
   .enlace {
-    color: var(--c-texto);
-    text-decoration: none;
-    background-image: linear-gradient(var(--c-acento), var(--c-acento));
-    background-repeat: no-repeat;
-    background-position: 0 100%;
-    background-size: 0% 1px;
-    transition: background-size 0.35s var(--ease-salida), color 0.2s ease;
+    text-decoration: underline;
+    text-decoration-color: var(--c-borde-fuerte);
+    text-underline-offset: 0.2em;
+    transition: color 0.2s, text-decoration-color 0.2s;
   }
-  .enlace:hover {
-    color: var(--c-acento);
-    background-size: 100% 1px;
-  }
-
-  /* Subrayado grueso de la cita, dibujado con un fondo y no con
-     text-decoration: un subrayado nativo no se puede recortar, y este se
-     traza de izquierda a derecha con el scroll (--trazo, de 0 a 1).
-
-     Va con box-decoration-break en `slice`, el valor por defecto: el fondo
-     se calcula como si las líneas de la frase fueran una sola tira, así que
-     el trazo recorre la primera línea entera antes de empezar la segunda,
-     como una mano que subraya. Con `clone` las dos se dibujarían a la vez.
-     Sin JavaScript --trazo vale 1 y el subrayado está completo. */
-  .subrayado-cita {
-    color: var(--c-texto);
-    background-image: linear-gradient(var(--c-acento-vivo), var(--c-acento-vivo));
-    background-repeat: no-repeat;
-    background-position: 0 88%;
-    background-size: calc(var(--trazo, 1) * 100%) 0.07em;
-  }
-
-  /* Reglas capilares que se dibujan al entrar (Movimiento.tsx lleva
-     --trazo de 0 a 1). Son fondos de 1 px y no bordes por lo mismo que el
-     subrayado: un borde no se puede dibujar a medias. */
-  .trazo-superior,
-  .trazo-inferior {
-    background-image: linear-gradient(var(--c-borde), var(--c-borde));
-    background-repeat: no-repeat;
-    background-size: calc(var(--trazo, 1) * 100%) 1px;
-  }
-
-  .trazo-superior {
-    background-position: 0 0;
-  }
-
-  .trazo-inferior {
-    background-position: 0 100%;
-  }
+  .enlace:hover { color: var(--c-acento); text-decoration-color: currentColor; }
 }
 
 /* ============================================================
-   BARRIDO EN LOS BOTONES
+   LA OBRA
+   Cada elemento con [data-pieza] es una capa que un agente coloca.
+   El estado «pendiente» solo existe si el script del <head> puso
+   data-obra en <html>: sin JavaScript, o con movimiento reducido, la
+   página llega armada.
 
-   Al apuntar, el color del botón entra de izquierda a derecha y el texto
-   pasa al color contrario. Al salir, el barrido se va por la derecha en vez
-   de deshacerse hacia atrás: se lee como un gesto que atraviesa el botón.
-
-   Cada variante define --barrido (el color que entra) y --barrido-texto
-   (el color del texto encima). Ambos pares cumplen AA: tinta sobre papel y
-   el violeta de texto con su color de contraste.
-
-   Va fuera de @layer a propósito. Las utilidades de Tailwind (text-fondo,
-   border-…) viven en la capa utilities, que le gana a components sin
-   importar la especificidad; solo el CSS sin capa les gana a ellas.
+   Las piezas de texto esperan desplazadas y giradas; las cajas esperan
+   recortadas y se «dibujan» desde la esquina, como un rectángulo en Figma.
+   Las del titular quedan visibles (opacity 1) aunque desplazadas: están
+   bajo el telón de la intro y así el navegador las pinta en el primer
+   cuadro, que es lo que mide el LCP.
    ============================================================ */
 
-.boton-barrido {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
+[data-pieza] {
+  --esc: 1;
   transition:
-    color 0.45s var(--ease-salida),
-    border-color 0.45s var(--ease-salida);
+    transform 0.44s cubic-bezier(0.33, 1, 0.68, 1),
+    clip-path 0.44s cubic-bezier(0.33, 1, 0.68, 1),
+    opacity 0.18s ease;
 }
 
-/* El barrido va con z-index -1 dentro del contexto que crea isolation: así
-   queda encima del fondo propio del botón y debajo del texto. */
-.boton-barrido::before {
-  content: "";
-  position: absolute;
+@media (max-width: 640px) {
+  [data-pieza] { --esc: 0.45; }
+}
+
+[data-tipo="texto"] {
+  transform-origin: 0 0;
+}
+
+:is(
+  html[data-obra="completa"] [data-pieza],
+  html[data-obra="breve"] [data-seccion="inicio"] [data-pieza]
+):not([data-armada])[data-tipo="texto"] {
+  transform: translate(calc(var(--dx) * var(--esc)), calc(var(--dy) * var(--esc))) rotate(var(--rot));
+  opacity: 0;
+}
+
+:is(
+  html[data-obra="completa"] [data-pieza],
+  html[data-obra="breve"] [data-seccion="inicio"] [data-pieza]
+):not([data-armada])[data-tipo="caja"] {
+  clip-path: inset(0 100% 100% 0);
+}
+
+:is(
+  html[data-obra="completa"] [data-seccion="inicio"] [data-pieza],
+  html[data-obra="breve"] [data-seccion="inicio"] [data-pieza],
+  html[data-obra] [data-pieza][data-tomada]
+):not([data-armada])[data-tipo="texto"] {
+  opacity: 1;
+}
+
+/* Armada, el recorte se abre más allá del borde: no corta esquinas
+   redondeadas ni sombras, sea cual sea el radio de la caja. */
+[data-armada][data-tipo="caja"] {
+  clip-path: inset(-48px);
+}
+
+/* Saltar arma todo de una vez, sin transiciones. */
+html[data-obra-instante] [data-pieza] {
+  transition: none !important;
+}
+
+/* --- Telón de la intro ------------------------------------- */
+.telon {
+  position: fixed;
   inset: 0;
-  z-index: -1;
-  background-color: var(--barrido);
-  transform: scaleX(0);
-  transform-origin: right center;
-  transition: transform 0.55s var(--ease-salida);
+  z-index: 80;
+  display: none;
+  place-items: center;
+  background-color: var(--c-fondo);
+  background-image: radial-gradient(var(--c-punto) 1px, transparent 1.3px);
+  background-size: 22px 22px;
+  transition: opacity 0.6s ease;
+}
+html[data-obra="completa"]:not([data-intro-hecha]) .telon {
+  display: grid;
+}
+.telon[data-saliendo] {
+  opacity: 0;
 }
 
-.boton-barrido:hover,
-.boton-barrido:focus-visible {
-  color: var(--barrido-texto);
-  border-color: var(--barrido);
+.logo-intro {
+  width: min(42vmin, 13.5rem);
+  aspect-ratio: 1;
+  transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.logo-intro svg { width: 100%; height: 100%; overflow: visible; }
+.logo-intro .ficha {
+  fill: #0E1117;
+  transform-box: fill-box;
+  transform-origin: 0 0;
+  transform: scale(0);
+  transition: opacity 0.45s ease;
+}
+[data-tema="dark"] .logo-intro .ficha {
+  stroke: rgba(255, 255, 255, 0.16);
+  stroke-width: 0.6;
+}
+.logo-intro .trazo {
+  fill: #FFFFFF;
+  fill-opacity: 0;
+  stroke: #FFFFFF;
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  transition: fill-opacity 0.3s ease, fill 0.6s ease, stroke 0.6s ease;
+}
+.logo-intro[data-aterrizando] .trazo {
+  fill: var(--c-texto);
+  stroke: var(--c-texto);
+}
+.logo-intro[data-aterrizando] .ficha { opacity: 0; }
+
+html[data-obra="completa"]:not([data-intro-hecha]) [data-logo-slot] {
+  opacity: 0;
 }
 
-.boton-barrido:hover::before,
-.boton-barrido:focus-visible::before {
-  transform: scaleX(1);
-  transform-origin: left center;
-}
-
-/* ============================================================
-   HERO
-
-   La foto va a sangre, en blanco y negro, y el nombre se monta encima.
-   Tres velos del color de fondo la funden con la página: arriba para que
-   el encabezado se lea, abajo para el texto pequeño, y a la izquierda en
-   escritorio para que el titular entre en la foto sin perder contraste.
-   Los velos usan el token de fondo, así que valen igual en los dos temas.
-   ============================================================ */
-
-@keyframes acercar-foto {
-  from {
-    transform: scale(1.08);
-  }
-  to {
-    transform: scale(1);
-  }
-}
-
-/* Cada letra del nombre entra girando sobre su canto inferior, desde
-   perpendicular a la pantalla. De canto una letra no se ve, así que no hace
-   falta animar la opacidad: el texto nunca pasa por transparente. */
-@keyframes voltear-letra {
-  from {
-    transform: translateY(0.35em) rotateX(-92deg);
-  }
-  to {
-    transform: none;
-  }
-}
-
-@layer components {
-  .foto-hero {
-    filter: grayscale(1) contrast(1.1) brightness(0.72);
-    animation: acercar-foto 2.2s var(--ease-salida) both;
-  }
-
-  [data-tema="light"] .foto-hero {
-    filter: grayscale(1) contrast(0.92) brightness(1.06);
-  }
-
-  .velo-hero {
-    background:
-      linear-gradient(
-        to top,
-        var(--c-fondo) 0%,
-        color-mix(in srgb, var(--c-fondo) 80%, transparent) 20%,
-        transparent 50%
-      ),
-      linear-gradient(to bottom, var(--c-fondo) 0%, transparent 24%);
-  }
-
-  @media (min-width: 48rem) {
-    .velo-hero {
-      background:
-        linear-gradient(
-          to top,
-          var(--c-fondo) 0%,
-          color-mix(in srgb, var(--c-fondo) 70%, transparent) 20%,
-          transparent 48%
-        ),
-        linear-gradient(to bottom, var(--c-fondo) 0%, transparent 20%),
-        linear-gradient(
-          to right,
-          var(--c-fondo) 0%,
-          color-mix(in srgb, var(--c-fondo) 55%, transparent) 30%,
-          transparent 62%
-        );
-    }
-  }
-
-  .linea-titular {
-    display: block;
-    perspective: 1100px;
-  }
-
-  /* Las palabras no se parten a mitad: cada una es un bloque en línea. */
-  .palabra-titular {
-    display: inline-block;
-    white-space: nowrap;
-  }
-
-  .letra {
-    display: inline-block;
-    transform-origin: 50% 100%;
-    backface-visibility: hidden;
-    animation: voltear-letra 1.2s var(--ease-salida) both;
-    animation-delay: calc(0.12s + var(--i) * 0.035s);
-  }
-
-  /* En pausa hasta que carga la condensada (lib/fuentes.ts). De canto no
-     basta: la letra girada conserva una caja de unos píxeles de alto, y
-     Chrome la sigue contando como desplazamiento al cambiar la fuente.
-     Oculta con visibility no cuenta. Las líneas son aria-hidden; el nombre
-     accesible va en su propio span y no se oculta. */
-  [data-fuentes="pendientes"] .linea-titular {
-    visibility: hidden;
-  }
-
-  [data-fuentes="pendientes"] .letra {
-    animation-play-state: paused;
-  }
-}
-
-/* ============================================================
-   MOVIMIENTO (GSAP + Lenis)
-
-   Toda la animación al hacer scroll vive en components/Movimiento.tsx.
-   Aquí solo queda lo que necesita existir antes de que cargue: el CSS
-   de Lenis y los estados base de los efectos 3D.
-
-   Regla que se mantiene del sistema anterior: se anima el
-   desplazamiento, el giro y la escala, nunca la opacidad. Todo lo que
-   está bajo el pliegue espera al scroll, y con opacity 0 las auditorías
-   automáticas lo leerían como texto sin contraste. Sin JavaScript, o con
-   movimiento reducido, no se crea ninguna animación y todo está en su
-   sitio final desde el principio.
-   ============================================================ */
-
-/* Copiado de lenis/dist/lenis.css para no depender de importar CSS desde
-   node_modules en el bundle. */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis:not(.lenis-autoToggle).lenis-stopped {
-  overflow: clip;
-}
-
-.lenis [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-smooth iframe {
+/* --- Agentes ------------------------------------------------ */
+.capa-agentes {
+  position: absolute;
+  left: 0;
+  top: 0;
+  /* Ancho de la página y alto cero: recorta a los lados (las etiquetas de
+     un cursor junto al borde no crean scroll) y deja ver todo hacia abajo. */
+  width: 100%;
+  height: 0;
+  overflow-x: clip;
+  overflow-y: visible;
+  z-index: 85;
   pointer-events: none;
 }
-
-@layer components {
-  /* Titulares de sección: cada palabra gira en 3D al entrar. La perspectiva
-     va en el contenedor de la palabra para que cada una tenga su propio
-     punto de fuga y no se deformen más las del borde. */
-  .palabra-mascara {
-    display: inline-block;
-    perspective: 900px;
-  }
-
-  .palabra {
-    display: inline-block;
-    transform-origin: 50% 100%;
-  }
-
-  /* Cita: cada palabra mezcla del gris tenue a su color final según --p,
-     que GSAP lleva de 0 a 1 con el scroll. Por defecto vale 1: sin JS la
-     cita se ve entera. Ambos extremos cumplen AA para texto grande, así
-     que no hay punto intermedio ilegible. */
-  .palabra-cita {
-    color: color-mix(
-      in oklab,
-      var(--final, var(--c-cita)) calc(var(--p, 1) * 100%),
-      var(--c-tenue)
-    );
-  }
-
-  .subrayado-cita .palabra-cita {
-    --final: var(--c-texto);
-  }
+.agente {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+  will-change: transform;
+  transition: opacity 0.3s ease;
+}
+.agente[data-oculto] { opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0s 0.3s; }
+.agente svg {
+  width: 15px;
+  height: 18px;
+  filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.35));
+}
+.agente-nombre {
+  margin-top: 13px;
+  padding: 1px 6px 2px;
+  border-radius: 4px 999px 999px 999px;
+  background: var(--c);
+  color: #0E1117;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
-/* ============================================================
-   PROYECTOS
-
-   Las capturas van en blanco y negro y recuperan el color al apuntar la
-   fila, igual que la foto del hero vive en grises. Solo donde hay puntero
-   que pueda apuntar: en un teléfono no hay hover, y dejar la captura gris
-   para siempre escondería justo lo que se viene a ver.
-   ============================================================ */
-
-@layer components {
-  .captura-proyecto {
-    transition:
-      filter 0.6s var(--ease-salida),
-      transform 0.8s var(--ease-salida);
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .captura-proyecto {
-      filter: grayscale(1) contrast(1.05);
-    }
-
-    .fila-proyecto:hover .captura-proyecto,
-    .fila-proyecto:focus-within .captura-proyecto {
-      filter: none;
-      transform: scale(1.03);
-    }
-  }
-
-  /* Cruce con el stack: al apuntar una tecnología, las filas que la usan
-     encienden un marco de acento alrededor de la captura. Suma en vez de
-     atenuar el resto, que bajaría el contraste del texto. */
-  .marco-captura {
-    outline: 1px solid transparent;
-    outline-offset: 10px;
-    transition: outline-color 0.3s ease;
-  }
-
-  [data-resaltada] .marco-captura {
-    outline-color: var(--c-acento);
-  }
-
-  [data-resaltada] .captura-proyecto {
-    filter: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .fila-proyecto:hover .captura-proyecto,
-    .fila-proyecto:focus-within .captura-proyecto {
-      transform: none;
-    }
-  }
+/* --- Marcos de selección ----------------------------------- */
+.marco {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border: 1px solid var(--c-seleccion);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.marco[data-visible] { opacity: 1; transition-duration: 0.08s; }
+.marco i {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: var(--c-fondo);
+  border: 1px solid var(--c-seleccion);
+}
+.marco i:nth-of-type(1) { left: -4px; top: -4px; }
+.marco i:nth-of-type(2) { right: -4px; top: -4px; }
+.marco i:nth-of-type(3) { left: -4px; bottom: -4px; }
+.marco i:nth-of-type(4) { right: -4px; bottom: -4px; }
+.marco span {
+  position: absolute;
+  left: -1px;
+  bottom: calc(100% + 5px);
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--c-seleccion);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.marco b {
+  /* Cruz de posición en el origen de la pieza. */
+  position: absolute;
+  left: -14px;
+  top: -14px;
+  width: 9px;
+  height: 9px;
+  background:
+    linear-gradient(var(--c-seleccion), var(--c-seleccion)) center / 1px 100% no-repeat,
+    linear-gradient(var(--c-seleccion), var(--c-seleccion)) center / 100% 1px no-repeat;
 }
 
-/* ============================================================
-   TRANSICIÓN DE TEMA
+/* --- Píldora de estado ------------------------------------- */
+.pastilla {
+  display: none;
+}
+html[data-obra-viva] .pastilla {
+  display: flex;
+}
+.punto-vivo {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--c-ok);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--c-ok) 60%, transparent);
+}
+.pastilla[data-fase="armando"] .punto-vivo {
+  animation: latido 1.4s ease-out infinite;
+}
+@keyframes latido {
+  to { box-shadow: 0 0 0 7px transparent; }
+}
 
-   El tema nuevo se abre en círculo desde el botón. El recorte lo
-   anima el propio botón; aquí solo se apagan las animaciones por
-   defecto y se ordenan las capas.
-   ============================================================ */
-
+/* --- Transición de tema ------------------------------------ */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
 }
 
-::view-transition-old(root) {
-  z-index: 1;
-}
-
-::view-transition-new(root) {
-  z-index: 9999;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
-}
-
-/* ============================================================
-   GRANO
-
-   Una pizca de ruido sobre el fondo. Sobre un negro casi plano es lo
-   que lo hace leerse como papel fotográfico y no como una pantalla
-   apagada.
-
-   El patrón es un SVG embebido y repetido: no hay petición de red ni
-   imagen que descargar.
-   ============================================================ */
-
-.grano,
-.textura {
-  pointer-events: none;
-  opacity: 0.07;
-  /* Grano grueso: frecuencia 0.42 y 3 octavas, grumos grandes en vez de
-     polvo fino. Mosaico de 300 px para que no se note la repetición. */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-.grano {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-}
-
-/* En oscuro el ruido aclara el negro: a 0.1 el fondo se leía gris. */
-[data-tema="dark"] .grano,
-[data-tema="dark"] .textura {
-  opacity: 0.075;
-}
-
-/* ============================================================
-   VIDRIO
-
-   Superficies flotantes translúcidas. Se reserva para controles y
-   para el encabezado: el contenido editorial sigue siendo opaco y
-   recto, de modo que el vidrio comunica "esto es un control".
-   ============================================================ */
-
-@layer components {
-  /*
-   * El desenfoque NO se declara aquí: se aplica con las utilidades
-   * `backdrop-blur-xl backdrop-saturate-150` junto a esta clase. Escrito a
-   * mano, el minificador dejaba solo la variante prefijada y sin el espacio
-   * obligatorio entre funciones —blur(16px)saturate(180%)—, con lo que la
-   * declaración quedaba inválida y el desenfoque no se aplicaba nunca.
-   */
-  .vidrio {
-    background-color: var(--c-vidrio);
-    border: 1px solid var(--c-vidrio-borde);
-    /* Reflejo especular en el canto superior: da volumen */
-    box-shadow: inset 0 1px 0 var(--c-vidrio-brillo);
-  }
-
-  /* Sin soporte de backdrop-filter, se cae a un fondo sólido para no
-     dejar texto sobre una superficie semitransparente ilegible. */
-  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .vidrio {
-      background-color: var(--c-superficie);
-    }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

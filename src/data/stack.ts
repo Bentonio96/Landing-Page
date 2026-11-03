@@ -58,6 +58,7 @@ export const stack: CategoriaStack[] = [
       { nombre: "Figma", principal: true },
       { nombre: "Power Pages", principal: true },
       { nombre: "Git / GitHub" },
+      { nombre: "Claude Code" },
       { nombre: "Power Apps" },
       { nombre: "Vercel" },
       { nombre: "Vite" },

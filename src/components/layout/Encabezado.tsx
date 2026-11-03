@@ -1,179 +1,66 @@
-"use client";
-
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Menu, X } from "lucide-react";
 import type { Idioma } from "@/types";
 import type { Diccionario } from "@/i18n/diccionario";
+import { rutaDe } from "@/i18n/config";
 import { Marca } from "@/components/ui/Marca";
-import { cn } from "@/lib/utils";
 import { BotonIdioma } from "./BotonIdioma";
 import { BotonTema } from "./BotonTema";
 
 type Props = { idioma: Idioma; t: Diccionario };
 
-/** Los ids son iguales en ambos idiomas: así el hash sobrevive al cambio. */
-const SECCIONES = [
-  { id: "sobre-mi", clave: "sobreMi" },
-  { id: "stack", clave: "stack" },
-  { id: "proyectos", clave: "proyectos" },
-  { id: "experiencia", clave: "experiencia" },
-  { id: "contacto", clave: "contacto" },
-] as const;
-
+/**
+ * Barra superior. No es parte de la obra: tiene que funcionar desde el
+ * primer cuadro. El logo es el «hueco» donde aterriza el de la intro.
+ */
 export function Encabezado({ idioma, t }: Props) {
-  const [abierto, setAbierto] = useState(false);
-  const [activa, setActiva] = useState<string | null>(null);
-  const [desplazado, setDesplazado] = useState(false);
-  const botonMenu = useRef<HTMLButtonElement>(null);
-
-  const cerrar = useCallback(() => {
-    setAbierto(false);
-    botonMenu.current?.focus();
-  }, []);
-
-  // Marca en el nav la sección que se está leyendo.
-  useEffect(() => {
-    const observador = new IntersectionObserver(
-      (entradas) => {
-        const visible = entradas
-          .filter((e) => e.isIntersecting)
-          .sort(
-            (a, b) => a.boundingClientRect.top - b.boundingClientRect.top,
-          )[0];
-        if (visible) setActiva(visible.target.id);
-      },
-      { rootMargin: "-45% 0px -50% 0px" },
-    );
-
-    for (const { id } of SECCIONES) {
-      const el = document.getElementById(id);
-      if (el) observador.observe(el);
-    }
-    return () => observador.disconnect();
-  }, []);
-
-  // Sombra/borde del encabezado solo cuando ya se bajó.
-  useEffect(() => {
-    const alDesplazar = () => setDesplazado(window.scrollY > 12);
-    alDesplazar();
-    window.addEventListener("scroll", alDesplazar, { passive: true });
-    return () => window.removeEventListener("scroll", alDesplazar);
-  }, []);
-
-  // Escape cierra el menú móvil y devuelve el foco al botón.
-  useEffect(() => {
-    if (!abierto) return;
-    const alPresionar = (e: KeyboardEvent) => {
-      if (e.key === "Escape") cerrar();
-    };
-    document.addEventListener("keydown", alPresionar);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", alPresionar);
-      document.body.style.overflow = "";
-    };
-  }, [abierto, cerrar]);
+  const enlaces = [
+    { href: "#proyectos", texto: t.nav.proyectos },
+    { href: "#stack", texto: t.nav.stack },
+    { href: "#experiencia", texto: t.nav.experiencia },
+    { href: "#contacto", texto: t.nav.contacto },
+  ];
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-colors duration-300",
-        desplazado || abierto
-          ? "vidrio backdrop-blur-xl backdrop-saturate-150 border-x-0 border-t-0 border-b-[var(--c-vidrio-borde)]"
-          : "border-b border-transparent",
-      )}
-    >
-      <div className="lienzo flex h-16 items-center justify-between gap-4 sm:h-20">
-        {/* La marca sola, sin el nombre al lado: el nombre ya va a tamaño de
-            cartel en el hero, justo debajo. No cambia de color al apuntar
-            porque nunca va en violeta. El relleno con margen negativo le da
-            área de toque sin moverla del borde del lienzo. */}
-        <a href="#inicio" className="-m-2 inline-flex p-2 text-texto">
-          <Marca className="h-7 sm:h-8" />
-          <span className="sr-only">Benjamín Peña Díaz</span>
-        </a>
+    <header className="sticky top-0 z-50 pt-3">
+      <div className="lienzo">
+        <div className="vidrio flex h-14 items-center gap-2 rounded-full pl-4 pr-2 shadow-[0_10px_30px_-18px_var(--c-sombra)]">
+          <a
+            href={rutaDe(idioma)}
+            className="flex items-center gap-2.5 rounded-full py-1 pr-2 text-texto"
+          >
+            <span className="sr-only">Benjamín Peña — {t.nav.inicio}. </span>
+            <span data-logo-slot className="block transition-opacity duration-300">
+              <Marca className="h-7" />
+            </span>
+            <span className="hidden font-mono text-[0.75rem] text-atenuado sm:inline">v4 · obra</span>
+          </a>
 
-        <nav
-          aria-label={idioma === "es" ? "Principal" : "Main"}
-          className="hidden md:block"
-        >
-          <ul className="flex items-center gap-1">
-            {SECCIONES.map(({ id, clave }) => {
-              const esActiva = activa === id;
-              return (
-                <li key={id}>
+          <nav aria-label={t.nav.principal} className="ml-auto hidden md:block">
+            <ul className="flex items-center gap-1">
+              {enlaces.map((e) => (
+                <li key={e.href}>
                   <a
-                    href={`#${id}`}
-                    aria-current={esActiva ? "true" : undefined}
-                    className={cn(
-                      "relative inline-block px-3 py-2 text-sm transition-colors",
-                      esActiva
-                        ? "text-texto"
-                        : "text-atenuado hover:text-texto",
-                    )}
+                    href={e.href}
+                    className="rounded-full px-3 py-2 text-menor text-atenuado transition-colors hover:bg-elevado hover:text-texto"
                   >
-                    {t.nav[clave]}
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        "absolute inset-x-3 bottom-1 h-px origin-left bg-texto transition-transform duration-300",
-                        esActiva ? "scale-x-100" : "scale-x-0",
-                      )}
-                    />
+                    {e.texto}
                   </a>
                 </li>
-              );
-            })}
-          </ul>
-        </nav>
+              ))}
+            </ul>
+          </nav>
 
-        <div className="flex items-center gap-2">
-          <BotonIdioma idioma={idioma} t={t} />
-          <BotonTema t={t} />
-          <button
-            ref={botonMenu}
-            type="button"
-            onClick={() => setAbierto((v) => !v)}
-            aria-expanded={abierto}
-            aria-controls="menu-movil"
-            aria-label={abierto ? t.nav.cerrarMenu : t.nav.abrirMenu}
-            className="vidrio backdrop-blur-xl backdrop-saturate-150 inline-flex size-10 items-center justify-center rounded-full text-atenuado transition-colors hover:text-acento md:hidden"
-          >
-            {abierto ? (
-              <X aria-hidden="true" className="size-4" />
-            ) : (
-              <Menu aria-hidden="true" className="size-4" />
-            )}
-          </button>
+          <div className="ml-auto flex items-center gap-1.5 md:ml-2">
+            <a
+              href="#contacto"
+              className="rounded-full px-3 py-2 text-menor text-atenuado transition-colors hover:text-texto md:hidden"
+            >
+              {t.nav.contacto}
+            </a>
+            <BotonIdioma idioma={idioma} t={t} />
+            <BotonTema t={t} />
+          </div>
         </div>
       </div>
-
-      {/* Menú móvil: se desmonta al cerrar, no queda en el orden de tabulación. */}
-      {abierto ? (
-        <nav
-          id="menu-movil"
-          aria-label={idioma === "es" ? "Principal, móvil" : "Main, mobile"}
-          className="border-t border-borde bg-fondo md:hidden"
-        >
-          <ul className="lienzo flex flex-col py-2">
-            {SECCIONES.map(({ id, clave }) => (
-              <li key={id}>
-                <a
-                  href={`#${id}`}
-                  onClick={cerrar}
-                  aria-current={activa === id ? "true" : undefined}
-                  className={cn(
-                    "block border-b border-borde py-4 font-mono text-etiqueta uppercase tracking-[0.12em] transition-colors last:border-b-0",
-                    activa === id ? "text-acento" : "text-atenuado",
-                  )}
-                >
-                  {t.nav[clave]}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      ) : null}
     </header>
   );
 }

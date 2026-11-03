@@ -5,6 +5,7 @@ export const experiencia: Hito[] = [
   {
     id: "tesis",
     organizacion: "Universidad Andrés Bello",
+    logo: "/logos/unab.svg",
     rol: {
       es: "Tesista · Ingeniería Civil en Informática",
       en: "Thesis student · Computer Engineering",
@@ -23,6 +24,7 @@ export const experiencia: Hito[] = [
   {
     id: "cmpc-ciberseguridad",
     organizacion: "CMPC",
+    logo: "/logos/cmpc.svg",
     rol: {
       es: "Práctica profesional · Cybersecurity Operations TI/OT",
       en: "Internship · IT/OT Cybersecurity Operations",
@@ -37,6 +39,7 @@ export const experiencia: Hito[] = [
   {
     id: "cmpc-datos",
     organizacion: "CMPC",
+    logo: "/logos/cmpc.svg",
     rol: {
       es: "Analista de datos · Prácticas I y II",
       en: "Data analyst · Internships I and II",
@@ -51,6 +54,7 @@ export const experiencia: Hito[] = [
   {
     id: "unab",
     organizacion: "Universidad Andrés Bello",
+    logo: "/logos/unab.svg",
     rol: {
       es: "Ingeniería Civil en Informática",
       en: "Computer Engineering",

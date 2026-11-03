@@ -65,6 +65,8 @@ export type Hito = {
   descripcion: Texto;
   /** Marca el hito como en curso (punto acentuado en la línea de tiempo). */
   actual?: boolean;
+  /** Logo de la organización, relativo a /public. */
+  logo?: string;
 };
 
 /** Un idioma hablado y su nivel. */

@@ -1,60 +1,71 @@
+import Image from "next/image";
 import type { Idioma } from "@/types";
 import type { Diccionario } from "@/i18n/diccionario";
 import { experiencia } from "@/data/experiencia";
-import { Seccion } from "@/components/ui/Seccion";
+import { pieza } from "@/lib/pieza";
+import { Titulo } from "@/components/ui/Titulo";
 
 type Props = { idioma: Idioma; t: Diccionario };
 
-/**
- * Experiencia como tabla editorial: dónde y qué, cuándo, y el detalle, en
- * tres columnas separadas por reglas capilares. En móvil se apilan.
- */
 export function Experiencia({ idioma, t }: Props) {
   return (
-    <Seccion
+    <section
       id="experiencia"
-      numero="04"
-      etiqueta={t.experiencia.etiqueta}
-      titulo={t.experiencia.titulo}
-      alterna
+      data-seccion="experiencia"
+      aria-labelledby="titulo-experiencia"
+      className="lienzo pb-seccion"
     >
-      <ol data-trazo="" className="trazo-superior">
+      <Titulo id="experiencia" etiqueta={t.experiencia.etiqueta} titulo={t.experiencia.titulo} />
+
+      <ol className="mt-10 grid gap-4">
         {experiencia.map((hito) => (
-          <li key={hito.id} data-trazo="" className="trazo-inferior">
-            {/* Las tres columnas entran una tras otra: dónde, cuándo, qué. */}
-            <div data-escalonar="" className="grid gap-x-canal gap-y-4 py-10 md:grid-cols-12 md:py-14">
-              <div className="md:col-span-5">
-                <h3 className="text-t3 text-texto">{hito.organizacion}</h3>
-                <p className="mt-2 text-base text-atenuado">
-                  {hito.rol[idioma]}
-                </p>
-                {hito.lugar ? (
-                  <p className="mt-1 text-menor text-tenue">{hito.lugar}</p>
+          <li
+            key={hito.id}
+            {...pieza(`hito-${hito.id}`, "hito", "caja")}
+            className="panel grid gap-3 p-5 sm:p-6 md:grid-cols-[13rem_1fr] md:gap-8"
+          >
+            <div className="flex items-start gap-4 md:flex-col">
+              {hito.logo ? (
+                <div
+                  {...pieza(`hito-logo-${hito.id}`, "logo", "caja")}
+                  className="flex h-16 w-20 shrink-0 items-center justify-center rounded-[10px] border border-borde bg-white p-2 md:h-20 md:w-28"
+                >
+                  {/* El nombre de la organización ya está escrito al lado: el logo es decorativo. */}
+                  <Image
+                    src={hito.logo}
+                    alt=""
+                    width={112}
+                    height={80}
+                    unoptimized
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+              ) : null}
+              <div {...pieza(`hito-periodo-${hito.id}`, "periodo")} className="block">
+                <p className="font-mono text-etiqueta text-atenuado">{hito.periodo[idioma]}</p>
+                {hito.actual ? (
+                  <p className="mt-2 inline-flex items-center gap-1.5 font-mono text-etiqueta text-ok">
+                    <span className="size-1.5 rounded-full bg-ok" aria-hidden="true" />
+                    {t.experiencia.actual}
+                  </p>
                 ) : null}
               </div>
-
-              <p className="etiqueta flex items-start gap-2.5 md:col-span-3 md:pt-2.5">
-                {hito.actual ? (
-                  <span
-                    aria-hidden="true"
-                    className="mt-1 size-1.5 shrink-0 rounded-full bg-acentovivo"
-                  />
-                ) : null}
-                <span className={hito.actual ? "text-texto" : undefined}>
-                  {hito.periodo[idioma]}
-                  {hito.actual ? (
-                    <span className="sr-only"> — {t.experiencia.actual}</span>
-                  ) : null}
-                </span>
+            </div>
+            <div>
+              <h3 {...pieza(`hito-rol-${hito.id}`, "h3")} className="block text-[1.1875rem] font-semibold tracking-[-0.02em] text-texto">
+                {hito.rol[idioma]}
+              </h3>
+              <p {...pieza(`hito-org-${hito.id}`, "org")} className="mt-1 block text-menor text-tenue">
+                {hito.organizacion}
+                {hito.lugar ? ` · ${hito.lugar}` : ""}
               </p>
-
-              <p className="text-base leading-relaxed text-atenuado md:col-span-4 md:pt-1.5">
+              <p {...pieza(`hito-desc-${hito.id}`, "texto")} className="mt-3 block max-w-[70ch] text-menor text-atenuado">
                 {hito.descripcion[idioma]}
               </p>
             </div>
           </li>
         ))}
       </ol>
-    </Seccion>
+    </section>
   );
 }

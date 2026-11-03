@@ -1,153 +1,91 @@
-import type { LucideIcon } from "lucide-react";
-import { ArrowDown, ArrowUpRight, Copy } from "lucide-react";
+import { ArrowUpRight, Download, Github, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 import type { Diccionario } from "@/i18n/diccionario";
 import { perfil } from "@/data/perfil";
+import { enlaceCorreo } from "@/lib/utils";
+import { pieza } from "@/lib/pieza";
 import { BotonCorreo } from "@/components/ui/BotonCorreo";
-import { EnlaceCorreo } from "@/components/ui/EnlaceCorreo";
-import { Reveal } from "@/components/ui/Reveal";
-import { Seccion } from "@/components/ui/Seccion";
+import { Titulo } from "@/components/ui/Titulo";
 
 type Props = { t: Diccionario };
 
-const claseFila =
-  "group grid grid-cols-[4.5rem_1fr_auto] items-center gap-4 py-5 transition-colors sm:grid-cols-[6.5rem_1fr_auto]";
-const claseValor =
-  "break-words text-base text-texto transition-colors group-hover:text-acento sm:text-lg";
-const claseIcono =
-  "size-4 text-tenue transition-[color,transform] duration-200 group-hover:text-acento group-hover:translate-x-0.5 group-hover:-translate-y-0.5";
-
-type Fila = {
-  id: string;
-  etiqueta: string;
-  valor: string;
-  href: string;
-  icono: LucideIcon;
-  externo?: boolean;
-  /** Nombre con el que se guarda el archivo; si falta, el enlace navega. */
-  descargar?: string;
-};
-
 export function Contacto({ t }: Props) {
-  const filas: Fila[] = [
+  const tc = t.contacto;
+  const filas = [
     {
-      id: "email",
-      etiqueta: t.contacto.email,
+      id: "correo",
+      icono: Mail,
+      rotulo: tc.email,
       valor: perfil.email,
-      href: `mailto:${perfil.email}`,
-      icono: ArrowUpRight,
+      href: enlaceCorreo(perfil.email, tc.asuntoCorreo, tc.cuerpoCorreo),
     },
-    {
-      id: "telefono",
-      etiqueta: t.contacto.telefono,
-      valor: perfil.telefono,
-      href: `tel:${perfil.telefonoEnlace}`,
-      icono: ArrowUpRight,
-    },
-    {
-      id: "linkedin",
-      etiqueta: "LinkedIn",
-      valor: perfil.linkedinVisible,
-      href: perfil.linkedin,
-      icono: ArrowUpRight,
-      externo: true,
-    },
-    {
-      id: "github",
-      etiqueta: "GitHub",
-      valor: `github.com/${perfil.githubUsuario}`,
-      href: perfil.github,
-      icono: ArrowUpRight,
-      externo: true,
-    },
-    {
-      id: "cv",
-      etiqueta: "CV",
-      valor: `${t.contacto.descargarCV} ${t.contacto.cvFormato}`,
-      href: perfil.cv,
-      icono: ArrowDown,
-      descargar: perfil.cvArchivo,
-    },
+    { id: "telefono", icono: Phone, rotulo: tc.telefono, valor: perfil.telefono, href: `tel:${perfil.telefonoEnlace}` },
+    { id: "linkedin", icono: Linkedin, rotulo: "LinkedIn", valor: perfil.linkedinVisible, href: perfil.linkedin, externo: true },
+    { id: "github", icono: Github, rotulo: "GitHub", valor: `github.com/${perfil.githubUsuario}`, href: perfil.github, externo: true },
+    { id: "ubicacion", icono: MapPin, rotulo: tc.ubicacion, valor: perfil.ubicacion },
   ];
 
   return (
-    <Seccion
+    <section
       id="contacto"
-      numero="05"
-      etiqueta={t.contacto.etiqueta}
-      titulo={t.contacto.titulo}
+      data-seccion="contacto"
+      aria-labelledby="titulo-contacto"
+      className="lienzo grid gap-10 pb-16 lg:grid-cols-[1fr_1.1fr] lg:gap-16"
     >
-      <div className="grid gap-x-canal gap-y-14 md:grid-cols-12">
-        <Reveal className="md:col-span-5">
-          <p className="text-t3 font-light uppercase text-texto">
-            {t.contacto.bajada}
-          </p>
-          <p className="etiqueta mt-6">
-            {t.contacto.ubicacion} · {perfil.ubicacion}
-          </p>
-          <BotonCorreo
-            email={perfil.email}
-            texto={t.contacto.botonCorreo}
-            avisoCopiado={t.contacto.correoCopiado}
-            avisoFallo={t.contacto.correoFallo}
-            className="mt-10 w-full sm:w-auto"
-          />
-        </Reveal>
-
-        {/* Filas enteras pulsables, como un índice: la etiqueta a la
-            izquierda, el dato y la flecha que indica qué pasa al pulsar. */}
-        <Reveal retardo={0.08} className="md:col-span-6 md:col-start-7">
-          <ul data-trazo="" data-escalonar="x" className="trazo-superior">
-            {filas.map(
-              ({ id, etiqueta, valor, href, icono: Icono, externo, descargar }) => (
-                <li key={id} data-trazo="" className="trazo-inferior">
-                  {id === "email" ? (
-                    // En escritorio copia en vez de abrir un mailto: que sin
-                    // app de correo deja una pestaña en blanco (EnlaceCorreo).
-                    <EnlaceCorreo
-                      email={perfil.email}
-                      avisoCopiado={t.contacto.correoCopiado}
-                      avisoFallo={t.contacto.correoFallo}
-                      className={claseFila}
-                    >
-                      <span className="etiqueta">{etiqueta}</span>
-                      <span className={claseValor}>{valor}</span>
-                      <Copy
-                        aria-hidden="true"
-                        className={`${claseIcono} hidden pointer-fine:block`}
-                      />
-                      <Icono
-                        aria-hidden="true"
-                        className={`${claseIcono} pointer-fine:hidden`}
-                      />
-                      <span className="sr-only hidden pointer-fine:inline">
-                        {t.contacto.correoFilaCopia}
-                      </span>
-                    </EnlaceCorreo>
-                  ) : (
-                    <a
-                      href={href}
-                      {...(externo
-                        ? { target: "_blank", rel: "noopener noreferrer" }
-                        : {})}
-                      {...(descargar ? { download: descargar } : {})}
-                      className={claseFila}
-                    >
-                      <span className="etiqueta">{etiqueta}</span>
-                      <span className={claseValor}>{valor}</span>
-                      <Icono aria-hidden="true" className={claseIcono} />
-                      {externo ? (
-                        <span className="sr-only">
-                          {t.proyectos.enlaceExterno}
-                        </span>
-                      ) : null}
-                    </a>
-                  )}
-                </li>
-              ),
-            )}
-          </ul>
-        </Reveal>
+      <div>
+        <Titulo id="contacto" etiqueta={tc.etiqueta} titulo={tc.titulo} bajada={tc.bajada} />
+        <div className="mt-8 flex flex-wrap gap-3">
+          <span {...pieza("contacto-copiar", "botón")} className="inline-block">
+            <BotonCorreo
+              email={perfil.email}
+              texto={tc.botonCorreo}
+              avisoCopiado={tc.correoCopiado}
+              avisoFallo={tc.correoFallo}
+            />
+          </span>
+          <a
+            {...pieza("contacto-cv", "botón")}
+            href={perfil.cv}
+            download={perfil.cvArchivo}
+            className="boton boton-secundario"
+          >
+            <Download aria-hidden="true" className="size-4" />
+            {tc.descargarCV}
+            <span className="sr-only"> {tc.cvFormato}</span>
+          </a>
+        </div>
       </div>
-    </Seccion>
+
+      <ul {...pieza("contacto-ficha", "ficha", "caja")} className="panel self-start divide-y divide-borde">
+        {filas.map((f) => {
+          const Icono = f.icono;
+          const contenido = (
+            <>
+              <Icono aria-hidden="true" className="size-4 shrink-0 text-tenue" />
+              <span className="w-24 shrink-0 font-mono text-etiqueta text-tenue">{f.rotulo}</span>
+              <span className="min-w-0 break-words text-menor text-texto">{f.valor}</span>
+              {f.href && f.externo ? (
+                <ArrowUpRight aria-hidden="true" className="ml-auto size-4 shrink-0 text-tenue" />
+              ) : null}
+            </>
+          );
+          return (
+            <li key={f.id} {...pieza(`contacto-${f.id}`, "fila")} className="block">
+              {f.href ? (
+                <a
+                  href={f.href}
+                  {...(f.externo ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className="flex min-h-14 items-center gap-3 px-4 py-3 transition-colors hover:bg-elevado sm:px-5"
+                >
+                  {contenido}
+                  {f.externo ? <span className="sr-only">{t.proyectos.enlaceExterno}</span> : null}
+                </a>
+              ) : (
+                <p className="flex min-h-14 items-center gap-3 px-4 py-3 sm:px-5">{contenido}</p>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }

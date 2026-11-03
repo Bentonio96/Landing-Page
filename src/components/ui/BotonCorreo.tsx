@@ -7,46 +7,17 @@ import { useAvisos } from "./Avisos";
 type Props = {
   email: string;
   texto: string;
-  /** Mensaje del aviso flotante tras copiar. */
   avisoCopiado: string;
-  /** Mensaje alternativo si el portapapeles no está disponible. */
   avisoFallo: string;
-  variante?: "primario" | "secundario";
   className?: string;
 };
 
-// Mismas clases que Boton: los dos conviven lado a lado y deben medir igual.
-const base =
-  "boton-barrido group/boton inline-flex items-center justify-center gap-2 rounded-control " +
-  "border px-6 py-3.5 font-mono text-etiqueta uppercase tracking-[0.12em] " +
-  "focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-acento";
-
-const variantes = {
-  primario:
-    "border-texto bg-texto text-fondo [--barrido:var(--c-acento)] [--barrido-texto:var(--c-acento-sobre)]",
-  secundario:
-    "border-bordefuerte text-texto [--barrido:var(--c-texto)] [--barrido-texto:var(--c-fondo)]",
-} as const;
-
 /**
- * Copia la dirección de correo y lo avisa.
- *
- * Es un <button> y no un enlace `mailto:` a propósito. `mailto:` depende de
- * que quien visita tenga un cliente de correo configurado: si no lo tiene
- * —muy común— el navegador abre una pestaña inútil o directamente no pasa
- * nada. Copiar la dirección funciona siempre y en cualquier dispositivo.
- *
- * Para quien sí prefiere abrir su cliente, la dirección de la ficha de
- * contacto sigue siendo un enlace `mailto:` normal.
+ * Copia la dirección de correo y lo avisa. Es un botón y no un `mailto:`
+ * porque `mailto:` depende de tener un cliente de correo configurado; la
+ * dirección de la ficha sigue siendo un enlace para quien sí lo tiene.
  */
-export function BotonCorreo({
-  email,
-  texto,
-  avisoCopiado,
-  avisoFallo,
-  variante = "primario",
-  className,
-}: Props) {
+export function BotonCorreo({ email, texto, avisoCopiado, avisoFallo, className }: Props) {
   const avisos = useAvisos();
 
   async function copiar() {
@@ -54,18 +25,12 @@ export function BotonCorreo({
       await navigator.clipboard.writeText(email);
       avisos?.avisar(avisoCopiado);
     } catch {
-      // Sin permiso de portapapeles, en contexto inseguro o sin soporte:
-      // se muestra la dirección para que se pueda copiar a mano.
       avisos?.avisar(`${avisoFallo} ${email}`);
     }
   }
 
   return (
-    <button
-      type="button"
-      onClick={copiar}
-      className={cn(base, variantes[variante], className)}
-    >
+    <button type="button" onClick={copiar} className={cn("boton boton-primario", className)}>
       <Mail aria-hidden="true" className="size-4" />
       {texto}
     </button>
