@@ -1,4 +1,64 @@
-# Portafolio · Benjamín Peña Díaz
+# Portafolio · Benjamín Peña Díaz — v4 «Obra»
+
+> **Rama `v4`.** Versión experimental del portafolio, publicada aparte en
+> **https://benjamin-pena-v4.vercel.app**. La versión principal vive en `main`
+> (https://benjamin-pena.vercel.app). Todo lo que sigue después de esta sección
+> describe la versión de `main`, de la que la v4 hereda datos, i18n y SEO.
+
+## La idea
+
+Inspirada en un reel de agentes de IA que arman una landing en vivo («deja que
+los agentes lo hagan»). Benjamín trabaja a diario con agentes (varias sesiones
+de Claude Code en paralelo), así que la página se arma frente al visitante:
+
+1. **Intro:** la pantalla parte vacía. Llegan seis cursores-agente (`infra`,
+   `front`, `api`, `jarvis`, `datos`, `qa`): `infra` arrastra la ficha desde la
+   esquina, `front` dibuja la P y `api` la D siguiendo la punta del trazo, y
+   `jarvis` da el visto bueno a «B = P + D». El logo vuela al encabezado.
+2. **Obra:** 28 agentes (16 en tablet, 10 en móvil) toman cada capa tirada en
+   la página y la arrastran a su lugar, o dibujan las cajas desde la esquina
+   como un rectángulo en Figma. Cada pieza deja un marco de selección azul con
+   el agente, la etiqueta y las medidas reales.
+3. **Scroll:** cada sección la terminan de armar al entrar en pantalla.
+4. **Píldora de estado:** agentes, capas armadas sobre el total y PRs (una
+   sección terminada = un PR fusionado). Los tres números los cuenta la página
+   en vivo; los del panel «Resumen» salen de `src/data` al compilar.
+
+| Intro | Armando | Armada |
+|---|---|---|
+| ![Intro](docs/capturas-v4/v4-intro-logo.jpg) | ![Armando](docs/capturas-v4/v4-armando-claro.jpg) | ![Armada](docs/capturas-v4/v4-armada-oscuro.jpg) |
+
+| Stack | Móvil armando | Móvil armada |
+|---|---|---|
+| ![Stack](docs/capturas-v4/v4-stack-claro.jpg) | ![Móvil](docs/capturas-v4/v4-movil-armando.jpg) | ![Móvil armada](docs/capturas-v4/v4-movil-armada.jpg) |
+
+## Cómo se salta
+
+- Botón **Saltar** en la píldora (segundo tab, después de «Saltar al contenido»), o **Escape**.
+- Llevar el foco con teclado a cualquier enlace arma todo; un scroll durante la intro adelanta el logo.
+- **Segunda visita:** no hay intro; solo se rearma el titular en un par de segundos (`localStorage`). El botón **Rearmar** repite la obra entera.
+- **`prefers-reduced-motion`** o sin JavaScript: la página llega armada. Si el bundle no carga en 6 s, se arma sola.
+
+## Decisiones técnicas de la v4
+
+- **Motor propio, sin GSAP ni Lenis** (`src/components/obra/motor.ts`). Un solo `requestAnimationFrame` que escribe un `transform` por agente en movimiento y se apaga cuando todos se esconden. Nada pasa por el estado de React.
+- **Capa de agentes en coordenadas de documento**, no fija: el scroll los arrastra sin JavaScript y nunca traba el scroll.
+- **Las piezas son CSS**: `[data-pieza]` espera desplazada y girada (texto) o recortada con `clip-path` (cajas); el agente solo pone `data-armada` y la transición hace el resto.
+- **Desorden determinista** (`src/lib/pieza.ts`): hash del id, no `Math.random`, para que el HTML del servidor y el del cliente coincidan.
+- **LCP:** el titular está desarmado pero visible bajo el telón desde el primer cuadro; el navegador lo pinta de inmediato aunque la intro dure 3 s.
+- **CLS 0:** ningún cursor sale del viewport (en móvil ensanchaba el layout) y las piezas viven en contenedores con `overflow-x: clip`.
+- Logos de UNAB y CMPC desde Wikimedia Commons (`public/logos`).
+
+## Calidad medida (build de producción, 2026-11-03)
+
+- Lighthouse escritorio **100 / 100 / 100 / 100**, móvil **97 / 100 / 100 / 100** (CLS 0, TBT 0 ms).
+- axe-core **0 violaciones** en 375, 768 y 1440, claro y oscuro, ES y EN y con movimiento reducido.
+- **0 textos recortados** ni scroll horizontal en 375, 768 y 1440.
+- Teclado completo: el foco nunca cae fuera de la vista y nunca queda bajo el telón.
+
+---
+
+# Versión principal (main)
 
 Sitio personal de **Benjamín Peña Díaz**, desarrollador frontend en Santiago de Chile.
 Español en `/`, inglés en `/en`, modo claro y oscuro, y todo el contenido en archivos de datos tipados.
