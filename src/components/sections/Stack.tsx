@@ -41,7 +41,7 @@ export function Stack({ idioma, t }: Props) {
           return (
             <div
               key={categoria.id}
-              {...pieza(`stack-${categoria.id}`, "grupo", "caja")}
+              {...pieza("grupo", "caja")}
               className={cn("panel flex flex-col p-5 sm:p-6", ANCHO[categoria.id])}
             >
               <h3 className="flex items-center justify-between font-mono text-etiqueta uppercase tracking-[0.08em] text-texto">
@@ -49,7 +49,7 @@ export function Stack({ idioma, t }: Props) {
                 <span className="text-tenue">{categoria.items.length}</span>
               </h3>
               {descripcion ? (
-                <p {...pieza(`stack-desc-${categoria.id}`, "texto")} className="mt-2 block text-menor text-atenuado">
+                <p {...pieza("texto")} className="mt-2 block text-menor text-atenuado">
                   {descripcion}
                 </p>
               ) : null}
@@ -57,7 +57,7 @@ export function Stack({ idioma, t }: Props) {
                 {categoria.items.map((item) => (
                   <li
                     key={item.nombre}
-                    {...pieza(`chip-${categoria.id}-${item.nombre}`, "chip")}
+                    {...pieza("chip")}
                     className={item.principal ? "chip border-acento/40 text-texto" : "chip"}
                   >
                     {item.principal ? (
@@ -74,7 +74,7 @@ export function Stack({ idioma, t }: Props) {
               </ul>
               {usados.length ? (
                 <p
-                  {...pieza(`stack-usados-${categoria.id}`, "proyectos")}
+                  {...pieza("proyectos")}
                   className="mt-auto block border-t border-borde pt-4 text-[0.8125rem] text-tenue"
                 >
                   <span className="font-mono text-[0.6875rem] uppercase tracking-[0.08em]">{ts.enProyectos}</span>
@@ -86,13 +86,13 @@ export function Stack({ idioma, t }: Props) {
         })}
 
         <div
-          {...pieza("stack-flujo", "flujo", "caja")}
+          {...pieza("flujo", "caja")}
           className="panel flex flex-col p-5 sm:p-6"
         >
           <h3 className="font-mono text-etiqueta uppercase tracking-[0.08em] text-texto">{ts.flujo.titulo}</h3>
           <ol className="mt-4 space-y-3">
             {ts.flujo.pasos.map((paso, i) => (
-              <li key={i} {...pieza(`flujo-${i}`, `paso ${i + 1}`)} className="flex gap-3 text-menor text-atenuado">
+              <li key={i} {...pieza(`paso ${i + 1}`)} className="flex gap-3 text-menor text-atenuado">
                 <span
                   className="flex size-6 shrink-0 items-center justify-center rounded-full font-mono text-[0.6875rem] font-medium text-[#0E1117]"
                   style={{ background: ["#FF7AC6", "#5CD0FF", "#5BE49B", "#FFD25C"][i % 4] }}

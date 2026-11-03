@@ -68,12 +68,12 @@ export function SobreMi({ t }: Props) {
         <Titulo id="sobre-mi" etiqueta={t.sobreMi.etiqueta} titulo={t.sobreMi.titulo} />
         <div className="mt-6 space-y-4 text-cuerpo text-atenuado">
           {t.sobreMi.parrafos.map((p, i) => (
-            <p key={i} {...pieza(`sobre-p-${i}`, "párrafo")} className="block">
+            <p key={i} {...pieza("párrafo")} className="block">
               {p}
             </p>
           ))}
           <p
-            {...pieza("sobre-agentes", "párrafo")}
+            {...pieza("párrafo")}
             className="block border-l-2 border-acentovivo pl-4 text-texto"
           >
             {t.sobreMi.agentes}
@@ -82,7 +82,7 @@ export function SobreMi({ t }: Props) {
       </div>
 
       <figure
-        {...pieza("sobre-codigo", "editor", "caja")}
+        {...pieza("editor", "caja")}
         className="self-start overflow-hidden rounded-[14px] border border-[#1F2530] bg-codigo text-codigotexto shadow-[0_24px_60px_-30px_var(--c-sombra)]"
       >
         <figcaption className="flex items-center gap-3 border-b border-[#1F2530] px-4 py-3 font-mono text-[0.75rem] text-[#AFB7C4]">
@@ -98,7 +98,7 @@ export function SobreMi({ t }: Props) {
             {lineas.map((linea, i) => (
               <span
                 key={i}
-                {...pieza(`codigo-${i}`, `línea ${i + 1}`)}
+                {...pieza(`línea ${i + 1}`)}
                 className="grid grid-cols-[1.25rem_1fr] gap-x-3"
               >
                 <span className="select-none text-right text-[#6B7383]" aria-hidden="true">

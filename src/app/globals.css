@@ -230,40 +230,31 @@
 
 /* ============================================================
    LA OBRA
-   Cada elemento con [data-pieza] es una capa que un agente coloca.
-   El estado «pendiente» solo existe si el script del <head> puso
-   data-obra en <html>: sin JavaScript, o con movimiento reducido, la
-   página llega armada.
+   Cada elemento con [data-pieza] es una capa que un agente arma. El
+   estado «pendiente» solo existe si el script del <head> puso data-obra
+   en <html>: sin JavaScript, o con movimiento reducido, la página llega
+   armada.
 
-   Las piezas de texto esperan desplazadas y giradas; las cajas esperan
-   recortadas y se «dibujan» desde la esquina, como un rectángulo en Figma.
-   Las del titular quedan visibles (opacity 1) aunque desplazadas: están
-   bajo el telón de la intro y así el navegador las pinta en el primer
-   cuadro, que es lo que mide el LCP.
+   Nada aparece hecho: los textos esperan recortados y el agente los
+   escribe línea a línea (el motor anima un clip-path poligonal bajo el
+   cursor); las cajas se dibujan desde la esquina, como un rectángulo en
+   Figma.
+
+   Excepción: en la primera visita el titular espera visible bajo el
+   telón de la intro. Así el navegador lo pinta en el primer cuadro (lo
+   que mide el LCP); el motor lo esconde con data-oculta justo antes de
+   levantar el telón y lo escribe frente a quien visita.
    ============================================================ */
 
 [data-pieza] {
-  --esc: 1;
-  transition:
-    transform 0.44s cubic-bezier(0.33, 1, 0.68, 1),
-    clip-path 0.44s cubic-bezier(0.33, 1, 0.68, 1),
-    opacity 0.18s ease;
-}
-
-@media (max-width: 640px) {
-  [data-pieza] { --esc: 0.45; }
-}
-
-[data-tipo="texto"] {
-  transform-origin: 0 0;
+  transition: clip-path 0.44s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 :is(
   html[data-obra="completa"] [data-pieza],
   html[data-obra="breve"] [data-seccion="inicio"] [data-pieza]
 ):not([data-armada])[data-tipo="texto"] {
-  transform: translate(calc(var(--dx) * var(--esc)), calc(var(--dy) * var(--esc))) rotate(var(--rot));
-  opacity: 0;
+  clip-path: inset(0 100% 0 0);
 }
 
 :is(
@@ -273,12 +264,8 @@
   clip-path: inset(0 100% 100% 0);
 }
 
-:is(
-  html[data-obra="completa"] [data-seccion="inicio"] [data-pieza],
-  html[data-obra="breve"] [data-seccion="inicio"] [data-pieza],
-  html[data-obra] [data-pieza][data-tomada]
-):not([data-armada])[data-tipo="texto"] {
-  opacity: 1;
+html[data-obra="completa"] [data-seccion="inicio"] [data-pieza][data-tipo="texto"]:not([data-armada]):not([data-oculta]) {
+  clip-path: none;
 }
 
 /* Armada, el recorte se abre más allá del borde: no corta esquinas

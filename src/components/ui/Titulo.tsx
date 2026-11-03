@@ -11,18 +11,18 @@ type Props = {
 export function Titulo({ id, etiqueta, titulo, bajada }: Props) {
   return (
     <header className="max-w-[46rem]">
-      <p {...pieza(`${id}-etiqueta`, "etiqueta")} className="etiqueta block">
+      <p {...pieza("etiqueta")} className="etiqueta block">
         {etiqueta}
       </p>
       <h2
         id={`titulo-${id}`}
-        {...pieza(`${id}-titulo`, "h2")}
+        {...pieza("h2")}
         className="mt-3 block text-t2 font-semibold tracking-[-0.04em] text-texto"
       >
         {titulo}
       </h2>
       {bajada ? (
-        <p {...pieza(`${id}-bajada`, "bajada")} className="mt-4 block text-cuerpo text-atenuado">
+        <p {...pieza("bajada")} className="mt-4 block text-cuerpo text-atenuado">
           {bajada}
         </p>
       ) : null}

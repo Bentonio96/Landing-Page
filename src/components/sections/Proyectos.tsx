@@ -22,9 +22,9 @@ export function Proyectos({ idioma, t }: Props) {
 
       <ul className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {proyectos.map((p) => (
-          <li key={p.slug} {...pieza(`tarjeta-${p.slug}`, "tarjeta", "caja")} className="panel flex flex-col p-3">
+          <li key={p.slug} {...pieza("tarjeta", "caja")} className="panel flex flex-col p-3">
             <div
-              {...pieza(`captura-${p.slug}`, "imagen", "caja")}
+              {...pieza("imagen", "caja")}
               className="relative aspect-[16/10] overflow-hidden rounded-[10px] border border-borde bg-elevado"
             >
               {p.imagen ? (
@@ -46,22 +46,22 @@ export function Proyectos({ idioma, t }: Props) {
             </div>
 
             <div className="flex flex-1 flex-col px-2 pb-2 pt-4">
-              <div {...pieza(`nombre-${p.slug}`, "título")} className="flex items-baseline justify-between gap-3">
+              <div {...pieza("título")} className="flex items-baseline justify-between gap-3">
                 <h3 className="text-[1.1875rem] font-semibold tracking-[-0.02em] text-texto">{p.nombre}</h3>
                 {p.fecha ? (
                   <p className="shrink-0 font-mono text-[0.6875rem] text-tenue">{p.fecha[idioma]}</p>
                 ) : null}
               </div>
-              <p {...pieza(`desc-${p.slug}`, "texto")} className="mt-2 block text-menor text-atenuado">
+              <p {...pieza("texto")} className="mt-2 block text-menor text-atenuado">
                 {p.descripcion[idioma]}
               </p>
-              <ul {...pieza(`tec-${p.slug}`, "chips")} className="mt-4 flex flex-wrap gap-1.5" aria-label={`${idioma === "es" ? "Tecnologías de" : "Technologies in"} ${p.nombre}`}>
+              <ul {...pieza("chips")} className="mt-4 flex flex-wrap gap-1.5" aria-label={`${idioma === "es" ? "Tecnologías de" : "Technologies in"} ${p.nombre}`}>
                 {p.tecnologias.map((tec) => (
                   <li key={tec} className="chip">{tec}</li>
                 ))}
               </ul>
               {p.demoUrl || p.repoUrl ? (
-                <div {...pieza(`enlaces-${p.slug}`, "enlaces")} className="mt-auto flex flex-wrap gap-2 pt-5">
+                <div {...pieza("enlaces")} className="mt-auto flex flex-wrap gap-2 pt-5">
                   {p.demoUrl ? (
                     <a href={p.demoUrl} target="_blank" rel="noopener noreferrer" className="boton boton-primario min-h-10 px-4">
                       {tp.verSitio}

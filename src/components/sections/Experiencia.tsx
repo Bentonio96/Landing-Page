@@ -21,13 +21,13 @@ export function Experiencia({ idioma, t }: Props) {
         {experiencia.map((hito) => (
           <li
             key={hito.id}
-            {...pieza(`hito-${hito.id}`, "hito", "caja")}
+            {...pieza("hito", "caja")}
             className="panel grid gap-3 p-5 sm:p-6 md:grid-cols-[13rem_1fr] md:gap-8"
           >
             <div className="flex items-start gap-4 md:flex-col">
               {hito.logo ? (
                 <div
-                  {...pieza(`hito-logo-${hito.id}`, "logo", "caja")}
+                  {...pieza("logo", "caja")}
                   className="flex h-16 w-20 shrink-0 items-center justify-center rounded-[10px] border border-borde bg-white p-2 md:h-20 md:w-28"
                 >
                   {/* El nombre de la organización ya está escrito al lado: el logo es decorativo. */}
@@ -41,7 +41,7 @@ export function Experiencia({ idioma, t }: Props) {
                   />
                 </div>
               ) : null}
-              <div {...pieza(`hito-periodo-${hito.id}`, "periodo")} className="block">
+              <div {...pieza("periodo")} className="block">
                 <p className="font-mono text-etiqueta text-atenuado">{hito.periodo[idioma]}</p>
                 {hito.actual ? (
                   <p className="mt-2 inline-flex items-center gap-1.5 font-mono text-etiqueta text-ok">
@@ -52,14 +52,14 @@ export function Experiencia({ idioma, t }: Props) {
               </div>
             </div>
             <div>
-              <h3 {...pieza(`hito-rol-${hito.id}`, "h3")} className="block text-[1.1875rem] font-semibold tracking-[-0.02em] text-texto">
+              <h3 {...pieza("h3")} className="block text-[1.1875rem] font-semibold tracking-[-0.02em] text-texto">
                 {hito.rol[idioma]}
               </h3>
-              <p {...pieza(`hito-org-${hito.id}`, "org")} className="mt-1 block text-menor text-tenue">
+              <p {...pieza("org")} className="mt-1 block text-menor text-tenue">
                 {hito.organizacion}
                 {hito.lugar ? ` · ${hito.lugar}` : ""}
               </p>
-              <p {...pieza(`hito-desc-${hito.id}`, "texto")} className="mt-3 block max-w-[70ch] text-menor text-atenuado">
+              <p {...pieza("texto")} className="mt-3 block max-w-[70ch] text-menor text-atenuado">
                 {hito.descripcion[idioma]}
               </p>
             </div>

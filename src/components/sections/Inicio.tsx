@@ -44,7 +44,7 @@ export function Inicio({ t }: Props) {
     >
       <div>
         <p
-          {...pieza("inicio-disponible", "badge")}
+          {...pieza("badge")}
           className="inline-flex items-center gap-2 rounded-full border border-borde bg-superficie px-3 py-1.5 font-mono text-etiqueta text-atenuado"
         >
           <span className="size-1.5 rounded-full bg-ok" aria-hidden="true" />
@@ -55,23 +55,23 @@ export function Inicio({ t }: Props) {
           id="titulo-inicio"
           className="mt-6 text-t1 font-semibold tracking-[-0.045em] text-texto"
         >
-          <span {...pieza("inicio-nombre", "h1")} className="inline-block">
+          <span {...pieza("h1")} className="inline-block">
             Benjamín
           </span>{" "}
-          <span {...pieza("inicio-apellido", "h1")} className="inline-block">
+          <span {...pieza("h1")} className="inline-block">
             Peña
           </span>
         </h1>
 
         <p
-          {...pieza("inicio-rol", "h2")}
+          {...pieza("h2")}
           className="mt-5 block text-t3 font-medium tracking-[-0.02em] text-texto"
         >
           {t.inicio.rol}
         </p>
 
         <p
-          {...pieza("inicio-intro", "párrafo")}
+          {...pieza("párrafo")}
           className="mt-4 block max-w-[52ch] text-cuerpo text-atenuado"
         >
           {t.inicio.intro}
@@ -79,7 +79,7 @@ export function Inicio({ t }: Props) {
 
         <div className="mt-8 flex flex-wrap gap-3">
           <a
-            {...pieza("inicio-boton-1", "botón")}
+            {...pieza("botón")}
             href="#proyectos"
             className="boton boton-primario"
           >
@@ -87,7 +87,7 @@ export function Inicio({ t }: Props) {
             <ArrowDown aria-hidden="true" className="size-4" />
           </a>
           <a
-            {...pieza("inicio-boton-2", "botón")}
+            {...pieza("botón")}
             href={perfil.cv}
             download={perfil.cvArchivo}
             className="boton boton-secundario"
@@ -98,13 +98,13 @@ export function Inicio({ t }: Props) {
           </a>
         </div>
 
-        <p {...pieza("inicio-base", "meta")} className="etiqueta mt-8 block normal-case tracking-normal">
+        <p {...pieza("meta")} className="etiqueta mt-8 block normal-case tracking-normal">
           {t.inicio.base}
         </p>
       </div>
 
-      <div {...pieza("inicio-panel", "panel", "caja")} className="panel p-4 sm:p-6">
-        <div {...pieza("panel-cabecera", "cabecera")} className="flex items-baseline justify-between gap-3">
+      <div {...pieza("panel", "caja")} className="panel p-4 sm:p-6">
+        <div {...pieza("cabecera")} className="flex items-baseline justify-between gap-3">
           <h2 className="text-t3 font-semibold tracking-[-0.02em]">{panel.titulo}</h2>
           <p className="font-mono text-etiqueta text-tenue">{panel.fuente}</p>
         </div>
@@ -117,7 +117,7 @@ export function Inicio({ t }: Props) {
           ].map((dato) => (
             <div
               key={dato.id}
-              {...pieza(`panel-dato-${dato.id}`, "métrica", "caja")}
+              {...pieza("métrica", "caja")}
               className="flex flex-col-reverse justify-end rounded-[10px] border border-borde bg-elevado p-3"
             >
               <dt className="mt-1 text-[0.75rem] leading-snug text-atenuado">{dato.rotulo}</dt>
@@ -128,7 +128,7 @@ export function Inicio({ t }: Props) {
           ))}
         </dl>
 
-        <figure {...pieza("panel-grafico", "gráfico", "caja")} className="mt-3 rounded-[10px] border border-borde p-3 sm:p-4">
+        <figure {...pieza("gráfico", "caja")} className="mt-3 rounded-[10px] border border-borde p-3 sm:p-4">
           <figcaption className="text-menor font-medium text-texto">{panel.grafico}</figcaption>
           <ul className="mt-3 space-y-2">
             {top.map(([nombre, n]) => (

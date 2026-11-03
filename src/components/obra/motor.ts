@@ -195,7 +195,8 @@ export class Motor {
     html.setAttribute("data-obra-instante", "");
     for (const p of this.piezas) {
       p.el.removeAttribute("data-armada");
-      p.el.removeAttribute("data-tomada");
+      p.el.removeAttribute("data-oculta");
+      this.limpiarEscritura(p);
     }
     html.setAttribute("data-obra", "completa");
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
@@ -442,6 +443,13 @@ export class Motor {
     this.enIntro = false;
     const html = document.documentElement;
 
+    // El titular esperó visible bajo el telón (así el navegador lo pinta en
+    // el primer cuadro). Antes de levantarlo se esconde para que los agentes
+    // lo escriban frente a quien visita.
+    for (const p of this.piezas) {
+      if (p.seccion.id === "inicio" && p.estado === 0) p.el.setAttribute("data-oculta", "");
+    }
+
     const terminarTelon = () => {
       html.setAttribute("data-intro-hecha", "");
       this.refs.telon.removeAttribute("data-saliendo");
@@ -515,7 +523,7 @@ export class Motor {
     // quede se arma solo: nadie espera más de unos segundos por contenido.
     s.respaldo = window.setTimeout(() => {
       for (const p of s.piezas) if (p.estado === 0) this.asentarSinAgente(p);
-    }, 4500);
+    }, 6500);
     this.despachar();
   }
 
@@ -591,34 +599,71 @@ export class Motor {
       return;
     }
 
-    // Texto: lo toma donde está tirado y lo arrastra a su lugar.
-    const desplazamiento = new DOMMatrixReadOnly(getComputedStyle(p.el).transform);
-    const dx = desplazamiento.e;
-    const dy = desplazamiento.f;
-    const ini = {
-      x: r.left + sx + Math.min(22, r.width * 0.25),
-      y: r.top + sy + Math.min(14, r.height * 0.45),
-    };
+    // Texto: el agente lo escribe. Se revela línea a línea bajo el cursor,
+    // de izquierda a derecha, como si lo estuviera tipeando.
+    const ini = { x: r.left + sx, y: r.top + sy + Math.min(r.height / 2, this.altoLinea(p.el) / 2) };
     this.mover(a, ini, this.duracionHasta(a, ini), facilSuave, () => {
       if (p.estado === 2) return this.liberar(a);
-      p.el.setAttribute("data-tomada", "");
-      this.despues(50, () => {
-        p.el.setAttribute("data-armada", "");
-        this.mover(a, { x: ini.x - dx, y: ini.y - dy }, T_ARMAR, facilSalida, () => {
-          const f = p.el.getBoundingClientRect();
-          const marco = this.mostrarMarco(
-            f.left + window.scrollX,
-            f.top + window.scrollY,
-            f.width,
-            f.height,
-            `${a.nombre} · ${p.etiqueta} ${Math.round(f.width)}×${Math.round(f.height)}`,
-          );
-          this.ocultarMarco(marco, 520);
-          this.asentar(p);
-          this.liberar(a);
-        });
+      this.escribir(a, p, () => {
+        this.asentar(p);
+        this.liberar(a);
       });
     });
+  }
+
+  private altoLinea(el: HTMLElement) {
+    const cs = getComputedStyle(el);
+    const lh = parseFloat(cs.lineHeight);
+    return Number.isFinite(lh) ? lh : parseFloat(cs.fontSize) * 1.4;
+  }
+
+  /**
+   * Revela una pieza de texto con un clip-path poligonal: las líneas ya
+   * escritas completas y la actual hasta la punta del cursor. No parte el
+   * texto en spans (los lectores de pantalla lo siguen leyendo entero) y
+   * sirve igual para un chip de una palabra que para un párrafo.
+   */
+  private escribir(a: Agente, p: Pieza, fin: () => void) {
+    const el = p.el;
+    const r = el.getBoundingClientRect();
+    const lh = this.altoLinea(el);
+    const lineas = Math.max(1, Math.round(r.height / lh));
+    const alto = r.height / lineas;
+    const ancho = r.width;
+    const holgura = alto * 0.3; // acentos y descendentes que asoman de la caja
+    const caracteres = (el.textContent ?? "").trim().length;
+    const dur = Math.min(1500, 240 + caracteres * 11) * this.velocidad;
+    const x0 = r.left + window.scrollX;
+    const y0 = r.top + window.scrollY;
+
+    el.style.transition = "none";
+    el.setAttribute("data-escribiendo", "");
+    const marco = this.mostrarMarco(x0, y0, ancho, r.height, `${a.nombre} · ${p.etiqueta} ${Math.round(ancho)}×${Math.round(r.height)}`);
+
+    this.tween(dur, (t) => {
+      if (p.estado === 2) return;
+      const avance = t * lineas;
+      const i = Math.min(lineas - 1, Math.floor(avance));
+      const x = t >= 1 ? ancho : (avance - i) * ancho;
+      const arriba = i === 0 ? -holgura : i * alto;
+      const abajo = i === lineas - 1 ? r.height + holgura : (i + 1) * alto;
+      const h = -holgura;
+      const w = ancho + holgura;
+      el.style.clipPath = `polygon(${h}px ${h}px, ${w}px ${h}px, ${w}px ${arriba}px, ${x}px ${arriba}px, ${x}px ${abajo}px, ${h}px ${abajo}px)`;
+      a.x = x0 + x;
+      a.y = y0 + i * alto + alto * 0.55;
+      this.ubicar(a);
+    }, () => {
+      this.limpiarEscritura(p);
+      this.ocultarMarco(marco, 260);
+      fin();
+    });
+  }
+
+  private limpiarEscritura(p: Pieza) {
+    p.el.style.clipPath = "";
+    p.el.style.transition = "";
+    p.el.removeAttribute("data-escribiendo");
   }
 
   private liberar(a: Agente) {
@@ -640,7 +685,7 @@ export class Motor {
   private asentarSinAgente(p: Pieza) {
     // Una pieza no puede quedar armada dentro de un padre sin armar.
     if (p.padre && p.padre.estado !== 2) this.asentarSinAgente(p.padre);
-    p.el.setAttribute("data-tomada", "");
+    this.limpiarEscritura(p);
     this.asentar(p);
   }
 
@@ -656,6 +701,7 @@ export class Motor {
     for (const p of s.piezas) {
       if (p.estado !== 2) {
         p.estado = 2;
+        this.limpiarEscritura(p);
         p.el.setAttribute("data-armada", "");
         this.capas++;
       }
@@ -668,6 +714,8 @@ export class Motor {
   private armarTodo() {
     const html = document.documentElement;
     html.setAttribute("data-obra-instante", "");
+    // Las escrituras a medias no deben seguir pintando recortes encima.
+    this.tweens.clear();
     for (const s of this.secciones) if (!s.fusionada) this.fusionarDeUna(s);
     this.agentes.forEach((a) => this.ocultar(a));
     this.marcos.forEach((m) => m.removeAttribute("data-visible"));

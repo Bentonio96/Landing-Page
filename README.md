@@ -15,9 +15,10 @@ de Claude Code en paralelo), así que la página se arma frente al visitante:
    `front`, `api`, `jarvis`, `datos`, `qa`): `infra` arrastra la ficha desde la
    esquina, `front` dibuja la P y `api` la D siguiendo la punta del trazo, y
    `jarvis` da el visto bueno a «B = P + D». El logo vuela al encabezado.
-2. **Obra:** 28 agentes (16 en tablet, 10 en móvil) toman cada capa tirada en
-   la página y la arrastran a su lugar, o dibujan las cajas desde la esquina
-   como un rectángulo en Figma. Cada pieza deja un marco de selección azul con
+2. **Obra:** 28 agentes (16 en tablet, 10 en móvil) revelan la página pieza
+   por pieza. Nada aparece hecho: los textos los escriben línea a línea bajo
+   el cursor y las cajas las dibujan desde la esquina, como un rectángulo en
+   Figma. Cada pieza deja un marco de selección azul con
    el agente, la etiqueta y las medidas reales.
 3. **Scroll:** cada sección la terminan de armar al entrar en pantalla.
 4. **Píldora de estado:** agentes, capas armadas sobre el total y PRs (una
@@ -43,9 +44,8 @@ de Claude Code en paralelo), así que la página se arma frente al visitante:
 
 - **Motor propio, sin GSAP ni Lenis** (`src/components/obra/motor.ts`). Un solo `requestAnimationFrame` que escribe un `transform` por agente en movimiento y se apaga cuando todos se esconden. Nada pasa por el estado de React.
 - **Capa de agentes en coordenadas de documento**, no fija: el scroll los arrastra sin JavaScript y nunca traba el scroll.
-- **Las piezas son CSS**: `[data-pieza]` espera desplazada y girada (texto) o recortada con `clip-path` (cajas); el agente solo pone `data-armada` y la transición hace el resto.
-- **Desorden determinista** (`src/lib/pieza.ts`): hash del id, no `Math.random`, para que el HTML del servidor y el del cliente coincidan.
-- **LCP:** el titular está desarmado pero visible bajo el telón desde el primer cuadro; el navegador lo pinta de inmediato aunque la intro dure 3 s.
+- **Revelado con `clip-path`**: los textos esperan recortados y el motor anima un polígono que deja ver las líneas ya escritas y la actual hasta la punta del cursor. No parte el texto en spans, así que los lectores de pantalla lo leen entero desde el principio. Las cajas se abren con `inset()` desde la esquina.
+- **LCP:** en la primera visita el titular espera visible bajo el telón, así que el navegador lo pinta en el primer cuadro. Justo antes de levantar el telón, el motor lo esconde (`data-oculta`) y los agentes lo escriben.
 - **CLS 0:** ningún cursor sale del viewport (en móvil ensanchaba el layout) y las piezas viven en contenedores con `overflow-x: clip`.
 - Logos de UNAB y CMPC desde Wikimedia Commons (`public/logos`).
 

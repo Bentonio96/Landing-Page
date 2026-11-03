@@ -34,7 +34,7 @@ export function Contacto({ t }: Props) {
       <div>
         <Titulo id="contacto" etiqueta={tc.etiqueta} titulo={tc.titulo} bajada={tc.bajada} />
         <div className="mt-8 flex flex-wrap gap-3">
-          <span {...pieza("contacto-copiar", "botón")} className="inline-block">
+          <span {...pieza("botón")} className="inline-block">
             <BotonCorreo
               email={perfil.email}
               texto={tc.botonCorreo}
@@ -43,7 +43,7 @@ export function Contacto({ t }: Props) {
             />
           </span>
           <a
-            {...pieza("contacto-cv", "botón")}
+            {...pieza("botón")}
             href={perfil.cv}
             download={perfil.cvArchivo}
             className="boton boton-secundario"
@@ -55,7 +55,7 @@ export function Contacto({ t }: Props) {
         </div>
       </div>
 
-      <ul {...pieza("contacto-ficha", "ficha", "caja")} className="panel self-start divide-y divide-borde">
+      <ul {...pieza("ficha", "caja")} className="panel self-start divide-y divide-borde">
         {filas.map((f) => {
           const Icono = f.icono;
           const contenido = (
@@ -69,7 +69,7 @@ export function Contacto({ t }: Props) {
             </>
           );
           return (
-            <li key={f.id} {...pieza(`contacto-${f.id}`, "fila")} className="block">
+            <li key={f.id} {...pieza("fila")} className="block">
               {f.href ? (
                 <a
                   href={f.href}
