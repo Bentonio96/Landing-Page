@@ -83,7 +83,6 @@ const diccionario = {
       bajada:
         "¿Tienes un proyecto en mente? Escríbeme y te respondo dentro de un día hábil.",
       email: "Correo",
-      telefono: "Teléfono",
       ubicacion: "Ubicación",
       botonCorreo: "Copiar mi correo",
       correoCopiado: "Dirección de correo copiada al portapapeles.",
@@ -184,7 +183,6 @@ const diccionario = {
       bajada:
         "Have a project in mind? Send me a note and I'll reply within one business day.",
       email: "Email",
-      telefono: "Phone",
       ubicacion: "Location",
       botonCorreo: "Copy my email",
       correoCopiado: "Email address copied to your clipboard.",

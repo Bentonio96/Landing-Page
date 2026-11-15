@@ -37,13 +37,6 @@ export function Contacto({ t }: Props) {
       icono: ArrowUpRight,
     },
     {
-      id: "telefono",
-      etiqueta: t.contacto.telefono,
-      valor: perfil.telefono,
-      href: `tel:${perfil.telefonoEnlace}`,
-      icono: ArrowUpRight,
-    },
-    {
       id: "linkedin",
       etiqueta: "LinkedIn",
       valor: perfil.linkedinVisible,

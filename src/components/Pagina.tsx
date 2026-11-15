@@ -50,7 +50,6 @@ export function Pagina({ idioma }: Props) {
     url: SITIO_URL,
     image: `${SITIO_URL}/benjamin-pena.jpg`,
     email: `mailto:${perfil.email}`,
-    telephone: perfil.telefonoEnlace,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Ñuñoa",
