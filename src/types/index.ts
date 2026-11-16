@@ -65,6 +65,8 @@ export type Hito = {
   descripcion: Texto;
   /** Marca el hito como en curso (punto acentuado en la línea de tiempo). */
   actual?: boolean;
+  /** Enlaces opcionales bajo la descripción (dataset, paper, código). */
+  enlaces?: { etiqueta: Texto; url: string }[];
 };
 
 /** Un idioma hablado y su nivel. */

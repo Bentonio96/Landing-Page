@@ -1,7 +1,9 @@
+import { ArrowUpRight } from "lucide-react";
 import type { Idioma } from "@/types";
 import type { Diccionario } from "@/i18n/diccionario";
 import { experiencia } from "@/data/experiencia";
 import { Seccion } from "@/components/ui/Seccion";
+import { Boton } from "@/components/ui/Boton";
 
 type Props = { idioma: Idioma; t: Diccionario };
 
@@ -48,9 +50,32 @@ export function Experiencia({ idioma, t }: Props) {
                 </span>
               </p>
 
-              <p className="text-base leading-relaxed text-atenuado md:col-span-4 md:pt-1.5">
-                {hito.descripcion[idioma]}
-              </p>
+              <div className="md:col-span-4 md:pt-1.5">
+                <p className="text-base leading-relaxed text-atenuado">
+                  {hito.descripcion[idioma]}
+                </p>
+                {hito.enlaces?.length ? (
+                  <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+                    {hito.enlaces.map((enlace) => (
+                      <li key={enlace.url}>
+                        <Boton
+                          href={enlace.url}
+                          variante="enlace"
+                          externo
+                          etiquetaAccesible={`${enlace.etiqueta[idioma]}: ${hito.organizacion}`}
+                          avisoExterno={t.proyectos.enlaceExterno}
+                        >
+                          {enlace.etiqueta[idioma]}
+                          <ArrowUpRight
+                            aria-hidden="true"
+                            className="size-4 transition-transform duration-200 group-hover/boton:translate-x-0.5 group-hover/boton:-translate-y-0.5"
+                          />
+                        </Boton>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
             </div>
           </li>
         ))}

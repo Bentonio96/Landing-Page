@@ -15,10 +15,24 @@ export const experiencia: Hito[] = [
     },
     lugar: "Santiago, Chile",
     descripcion: {
-      es: "Triple Resolutive Approach: metaheurística TDHC adaptada a cinco problemas de optimización combinatoria, con un algoritmo genético memético en Python. Profesor guía: Gustavo Gatica. En paralelo, tomo proyectos freelance de frontend.",
-      en: "Triple Resolutive Approach: a TDHC metaheuristic adapted to five combinatorial optimisation problems, with a memetic genetic algorithm in Python. Supervisor: Gustavo Gatica. In parallel, I take on freelance frontend work.",
+      es: "Triple Resolutive Approach: tres configuraciones de Búsqueda Tabú (básica, intermedia y avanzada) para cinco problemas de optimización combinatoria, en Python. La avanzada baja la brecha promedio de 6,50 % a 3,40 %. Presentado en ECP 2026 y publicado como dataset con DOI. Profesor guía: Gustavo Gatica. En paralelo, tomo proyectos freelance de frontend.",
+      en: "Triple Resolutive Approach: three Tabu Search configurations (basic, intermediate and advanced) for five combinatorial optimisation problems, in Python. The advanced one cuts the average gap from 6.50% to 3.40%. Presented at ECP 2026 and published as a dataset with a DOI. Supervisor: Gustavo Gatica. In parallel, I take on freelance frontend work.",
     },
     actual: true,
+    enlaces: [
+      {
+        etiqueta: { es: "Dataset (DOI)", en: "Dataset (DOI)" },
+        url: "https://doi.org/10.60483/UNAB/HYCFL7",
+      },
+      {
+        etiqueta: { es: "Paper ECP 2026", en: "ECP 2026 paper" },
+        url: "https://sciforum.net/paper/35126",
+      },
+      {
+        etiqueta: { es: "Código", en: "Code" },
+        url: "https://github.com/gustavgatica/Triple-Resolutive-Approach",
+      },
+    ],
   },
   {
     id: "cmpc-ciberseguridad",
