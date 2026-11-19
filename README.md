@@ -19,16 +19,21 @@ centro de la pantalla:
 | Sección | Figura |
 |---|---|
 | Inicio | Su retrato (o «BENJAMÍN», con el botón o un clic) |
-| Sobre mí | «¡HOLA!» / «HELLO.» |
+| Sobre mí | «SOBRE MÍ» / «ABOUT ME» |
 | Stack | `</>` |
 | Proyectos | Cuatro carpetas |
 | Experiencia | La onda de la línea de tiempo |
 | Contacto | `@` (solo escritorio) |
 | Pie | «BENJAMÍN.» |
 
-Mientras la sección no cambia, los puntos van pegados a la página; al pasar a
-la siguiente, viajan en bandada a su figura. El cursor (o el dedo) los aparta y
-vuelven a su lugar.
+El viaje va atado al scroll: entre dos secciones, a medida que se baja, los
+puntos se sueltan de a poco de la figura de arriba y caen en una nube que se
+abre a los lados hasta armar la de abajo (si el scroll se detiene, la nube
+queda a medio camino). Cerca de cada sección la figura queda armada para
+leerla. Solo viajan los puntos que la figura de destino necesita y en el aire
+van atenuados; el canvas va detrás del contenido, así que tarjetas y textos lo
+tapan. Cada punto es un círculo con halo suave. El cursor (o el dedo) los
+aparta y vuelven a su lugar.
 
 | Inicio | Claro | En vuelo |
 |---|---|---|

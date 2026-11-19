@@ -6,12 +6,13 @@ import { useEffect, useRef } from "react";
  * Un solo campo de partículas para toda la página.
  *
  * El canvas está fijo sobre la ventana. Cada sección marca una zona con
- * `data-particulas="<escena>"`; los puntos forman la figura de la escena que
- * está al centro de la pantalla. Mientras la escena no cambia, los puntos
- * acompañan el scroll como si estuvieran pegados a la página; cuando cambia,
- * viajan en bandada a la figura de la sección siguiente.
+ * `data-particulas="<escena>"` y tiene su figura. El viaje va atado al
+ * scroll: entre dos zonas, a medida que se baja, los puntos se sueltan de a
+ * poco de la figura de arriba y caen en una nube que se abre a los lados
+ * hasta armar la de abajo. Si el scroll se detiene a medio camino, la nube
+ * queda a medio camino; cerca de cada zona la figura queda armada.
  *
- * Escenas: el retrato (o el nombre) en el inicio, «Hola» en Sobre mí, «</>»
+ * Escenas: el retrato (o el nombre) en el inicio, «Sobre mí», «</>»
  * en el stack, cuatro carpetas en proyectos, la onda en experiencia, «@» en
  * contacto y el nombre en el pie.
  *
@@ -85,7 +86,7 @@ function formasDe(escena: string, idioma: string): Forma[] {
         { tipo: "texto", texto: "BENJAMÍN" },
       ];
     case "sobre":
-      return [{ tipo: "texto", texto: idioma === "en" ? "HELLO." : "¡HOLA!" }];
+      return [{ tipo: "texto", texto: idioma === "en" ? "ABOUT ME" : "SOBRE MÍ" }];
     case "stack":
       return [{ tipo: "texto", texto: "</>" }];
     case "proyectos":
@@ -151,7 +152,7 @@ function muestrear(forma: Forma, img: HTMLImageElement | null, W: number, H: num
   }
 
   // Lo dibujado pide puntos más separados que el retrato, para que se lean como puntos.
-  const minimo = forma.tipo === "imagen" ? 2 : 4;
+  const minimo = forma.tipo === "imagen" ? 3 : 5;
   const paso = Math.max(minimo, Math.min(10, Math.round(Math.sqrt((rw * rh * cobertura) / objetivo))));
   const datos = c.getImageData(0, 0, lienzo.width, lienzo.height).data;
   const puntos: Punto[] = [];
@@ -187,6 +188,11 @@ type Zona = {
   oscuroFijo: boolean;
 };
 
+/** Suave al salir y al llegar. */
+function suave(x: number) {
+  return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+}
+
 export function CampoParticulas({ idioma }: { idioma: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
@@ -202,73 +208,58 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
     let W = 0;
     let H = 0;
     let zonas: Zona[] = [];
-    let activa: Zona | null = null;
-    let forma = 0;
     let formaInicio = 0;
-    let ultimoY = 0;
     let n = 0;
     let px = new Float32Array(0);
     let py = new Float32Array(0);
     let vx = new Float32Array(0);
     let vy = new Float32Array(0);
-    let lx = new Float32Array(0);
-    let ly = new Float32Array(0);
+    // Por partícula: cuándo sale en el viaje (0 = primera, 1 = última) y
+    // cuánto se abre hacia los lados y en vertical a mitad de camino.
+    let turno = new Float32Array(0);
+    let desvioX = new Float32Array(0);
+    let desvioY = new Float32Array(0);
+    let escala = new Float32Array(0);
     let nivel = new Uint8Array(0);
-    let porNivel: Uint32Array[] = [];
-    let tam = 1.6;
-    let color = "#f2f2f2";
+    let orden = new Uint32Array(0);
+    let scrollPrevio = 0;
     let cuadro = 0;
     let ultimo = 0;
     let llegando = 0;
     let vivo = true;
     const imagenes = new Map<string, HTMLImageElement | null>();
     const puntero = { x: -9999, y: -9999, activo: false };
+    let colorPagina = "#f2f2f2";
 
-    function oscuro(z: Zona) {
-      return z.oscuroFijo || raiz.getAttribute("data-tema") !== "light";
+    function forma(z: Zona) {
+      return z.escena === "inicio" ? Math.min(formaInicio, z.formas.length - 1) : 0;
     }
 
-    /** Pasa los puntos a la forma f de la zona z; los que sobran se apilan sobre otros. */
-    function asignar(z: Zona, f: number, patada: boolean) {
-      const lista = z.formas[f];
-      if (!lista?.length) return;
-      color = z.oscuroFijo ? "#F2F2F2" : getComputedStyle(canvas!).color;
-      const inv = z.invierte[f] && !oscuro(z);
-      const m = lista.length;
-      for (let k = 0; k < n; k++) {
-        const d = lista[k % m];
-        lx[k] = d.x;
-        ly[k] = d.y;
-        const v = inv ? 1 - d.b : d.b;
-        nivel[k] = Math.min(NIVELES, 1 + Math.floor(v * NIVELES));
-        if (patada) {
-          vx[k] += (Math.random() - 0.5) * 10;
-          vy[k] += (Math.random() - 0.5) * 10;
-        }
-      }
-      const cuentas = new Array(NIVELES + 1).fill(0);
-      for (let k = 0; k < n; k++) cuentas[nivel[k]]++;
-      porNivel = cuentas.map((c) => new Uint32Array(c));
-      const llenos = new Array(NIVELES + 1).fill(0);
-      for (let k = 0; k < n; k++) porNivel[nivel[k]][llenos[nivel[k]]++] = k;
-      tam = Math.max(1.1, Math.min(3, (z.pasos[f] ?? 5) * (z.invierte[f] ? 0.48 : 0.42)));
-    }
-
-    /** La zona activa es la más cercana al centro de la pantalla. */
-    function elegir(): Zona | null {
-      let mejor: Zona | null = null;
-      let distancia = Infinity;
-      const centro = H * 0.5;
-      for (const z of zonas) {
+    /**
+     * El tramo del scroll: la zona de arriba (A), la de abajo (B) y cuánto se
+     * avanzó entre sus centros, medido en el centro de la pantalla.
+     */
+    function tramo(): [Zona, Zona, number] | null {
+      if (!zonas.length) return null;
+      const centros = zonas.map((z) => {
         const r = z.el.getBoundingClientRect();
-        if (r.bottom < 0 || r.top > H || r.height === 0) continue;
-        const d = Math.abs(r.top + r.height / 2 - centro);
-        if (d < distancia) {
-          distancia = d;
-          mejor = z;
+        return r.top + r.height / 2;
+      });
+      // La última zona (el pie) puede quedar bajo el centro aunque la página
+      // ya no baje más: en la última pantalla de scroll el punto de lectura
+      // se desliza hacia abajo y llega justo a ella al final.
+      let centro = H * 0.5;
+      const ultimoCentro = centros[centros.length - 1];
+      const falta = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+      if (ultimoCentro > centro) centro += (ultimoCentro - centro) * Math.min(1, Math.max(0, 1 - falta / H));
+      if (centro <= centros[0]) return [zonas[0], zonas[0], 0];
+      for (let i = 0; i < zonas.length - 1; i++) {
+        if (centro <= centros[i + 1]) {
+          return [zonas[i], zonas[i + 1], (centro - centros[i]) / Math.max(1, centros[i + 1] - centros[i])];
         }
       }
-      return mejor ?? activa;
+      const u = zonas[zonas.length - 1];
+      return [u, u, 0];
     }
 
     async function preparar() {
@@ -288,7 +279,7 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
         const r = el.getBoundingClientRect();
         if (!formas.length || r.width < 20 || r.height < 20) continue;
         const margen = (ancho ? el.dataset.margen : el.dataset.margenMovil ?? el.dataset.margen)?.split(",").map(Number) ?? [0, 0, 0, 0];
-        const objetivoBase = escena === "inicio" ? 14000 : 3200;
+        const objetivoBase = escena === "inicio" ? 7000 : 2200;
         const objetivo = Math.max(500, Math.round(objetivoBase * Math.min(1, (r.width * r.height) / (900 * 700)) ** 0.5 * (tactil ? 0.7 : 1)));
         const muestras = [];
         for (const f of formas) {
@@ -299,6 +290,7 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
           }
           muestras.push(muestrear(f, img, r.width, r.height, margen, objetivo, fuente));
         }
+        if (!muestras.some((m) => m.puntos.length)) continue;
         nuevas.push({
           el,
           escena,
@@ -309,6 +301,8 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
         });
       }
       if (!vivo) return;
+      // En orden de la página, de arriba a abajo.
+      nuevas.sort((a, b) => a.el.getBoundingClientRect().top - b.el.getBoundingClientRect().top);
       zonas = nuevas;
       const total = Math.max(1, ...zonas.flatMap((z) => z.formas.map((f) => f.length)));
       const primeraVez = n === 0;
@@ -318,19 +312,18 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
       py = new Float32Array(n);
       vx = new Float32Array(n);
       vy = new Float32Array(n);
-      lx = new Float32Array(n);
-      ly = new Float32Array(n);
+      turno = new Float32Array(n);
+      desvioX = new Float32Array(n);
+      desvioY = new Float32Array(n);
+      escala = new Float32Array(n);
       nivel = new Uint8Array(n);
-      activa = elegir();
-      forma = activa?.escena === "inicio" ? formaInicio : 0;
-      if (activa) asignar(activa, forma, false);
-      const r = activa?.el.getBoundingClientRect();
-      ultimoY = r?.top ?? 0;
+      orden = new Uint32Array(n);
       for (let k = 0; k < n; k++) {
-        if (reducido && r) {
-          px[k] = r.left + lx[k];
-          py[k] = r.top + ly[k];
-        } else if (primeraVez || k >= viejo) {
+        turno[k] = Math.random();
+        desvioX[k] = (Math.random() - 0.5) * W * 0.22;
+        desvioY[k] = (Math.random() - 0.5) * H * 0.12;
+        escala[k] = 0.8 + Math.random() * 0.45;
+        if (primeraVez || k >= viejo) {
           // Entrada: los puntos llegan desde toda la pantalla.
           px[k] = Math.random() * W;
           py[k] = Math.random() * H;
@@ -339,27 +332,58 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
           py[k] = oy[k];
         }
       }
-      if (primeraVez && !reducido) llegando = 80;
+      scrollPrevio = window.scrollY;
+      colorPagina = getComputedStyle(canvas!).color;
+      if (primeraVez && !reducido) llegando = 90;
+      if (reducido) {
+        paso(0);
+        return;
+      }
       despertar();
     }
 
-    function dibujar() {
+    // Cada punto es un círculo con un halo suave (un sprite pintado una vez
+    // por color), no un cuadrado: se ve como luz, no como arena.
+    const sprites = new Map<string, HTMLCanvasElement>();
+    function sprite(color: string) {
+      let sp = sprites.get(color);
+      if (sp) return sp;
+      sp = document.createElement("canvas");
+      sp.width = sp.height = 32;
+      const c = sp.getContext("2d")!;
+      const g = c.createRadialGradient(16, 16, 0, 16, 16, 16);
+      g.addColorStop(0, color);
+      g.addColorStop(0.32, color);
+      g.addColorStop(0.42, color.startsWith("rgb(") ? color.replace("rgb(", "rgba(").replace(")", ", 0.35)") : color + "59");
+      g.addColorStop(1, color.startsWith("rgb(") ? color.replace("rgb(", "rgba(").replace(")", ", 0)") : color + "00");
+      c.fillStyle = g;
+      c.fillRect(0, 0, 32, 32);
+      sprites.set(color, sp);
+      return sp;
+    }
+
+    function dibujar(tam: number, color: string) {
       ctx!.clearRect(0, 0, W, H);
-      ctx!.fillStyle = color;
+      const sp = sprite(color);
+      // Orden por nivel de brillo (conteo): un recorrido por punto.
+      const cuentas = new Uint32Array(NIVELES + 2);
+      for (let k = 0; k < n; k++) cuentas[nivel[k] + 1]++;
+      for (let l = 1; l <= NIVELES + 1; l++) cuentas[l] += cuentas[l - 1];
+      const inicio = cuentas.slice();
+      for (let k = 0; k < n; k++) orden[inicio[nivel[k]]++] = k;
       for (let l = 1; l <= NIVELES; l++) {
-        const lista = porNivel[l];
-        if (!lista?.length) continue;
-        ctx!.globalAlpha = 0.16 + (l / NIVELES) * 0.84;
-        const s = tam * (0.6 + (l / NIVELES) * 0.6);
-        const m = s / 2;
-        ctx!.beginPath();
-        for (let j = 0; j < lista.length; j++) {
-          const k = lista[j];
+        const desde = cuentas[l];
+        const hasta = cuentas[l + 1];
+        if (hasta <= desde) continue;
+        ctx!.globalAlpha = 0.22 + (l / NIVELES) * 0.78;
+        for (let j = desde; j < hasta; j++) {
+          const k = orden[j];
           const y = py[k];
-          if (y < -8 || y > H + 8) continue;
-          ctx!.rect(px[k] - m, y - m, s, s);
+          if (y < -12 || y > H + 12) continue;
+          // El diámetro del núcleo es ~1/3 del sprite; el resto es halo.
+          const d = tam * (0.75 + (l / NIVELES) * 0.6) * escala[k] * 3;
+          ctx!.drawImage(sp, px[k] - d / 2, y - d / 2, d, d);
         }
-        ctx!.fill();
       }
       ctx!.globalAlpha = 1;
     }
@@ -367,70 +391,98 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
     function paso(ahora: number) {
       cuadro = 0;
       if (!vivo || document.hidden) return;
+      const t = tramo();
+      if (!t) return;
+      const [A, B, avance] = t;
+      const rA = A.el.getBoundingClientRect();
+      const rB = B.el.getBoundingClientRect();
+      const fA = A.formas[forma(A)];
+      const fB = B.formas[forma(B)];
+      const mA = fA.length || 1;
+      const mB = fB.length || 1;
+      const claro = raiz.getAttribute("data-tema") === "light";
+      const invA = A.invierte[forma(A)] && claro && !A.oscuroFijo;
+      const invB = B.invierte[forma(B)] && claro && !B.oscuroFijo;
 
-      // ¿Cambió la sección del centro? Los puntos vuelan a la figura nueva.
-      const z = elegir();
-      if (z && z !== activa) {
-        activa = z;
-        forma = z.escena === "inicio" ? formaInicio : 0;
-        asignar(z, forma, !reducido);
-        ultimoY = z.el.getBoundingClientRect().top;
-      }
-      if (!activa) return;
-      const r = activa.el.getBoundingClientRect();
-      // Mientras la sección no cambia, los puntos van pegados a la página.
-      const dy = r.top - ultimoY;
-      ultimoY = r.top;
-      const ox = r.left;
-      const oy = r.top;
+      // El viaje usa el tramo central del scroll entre las dos zonas: cerca
+      // de cada una, la figura se queda armada para leerla.
+      const viaje = reducido ? (avance < 0.5 ? 0 : 1) : Math.min(1, Math.max(0, (avance - 0.28) / 0.44));
+      const tamA = Math.max(1.4, Math.min(3.2, (A.pasos[forma(A)] ?? 5) * 0.42));
+      const tamB = Math.max(1.4, Math.min(3.2, (B.pasos[forma(B)] ?? 5) * 0.42));
+      const tam = tamA + (tamB - tamA) * viaje;
+      const color = (viaje < 0.5 ? A : B).oscuroFijo ? "#F2F2F2" : colorPagina;
 
-      if (reducido) {
-        for (let k = 0; k < n; k++) {
-          px[k] = ox + lx[k];
-          py[k] = oy + ly[k];
-        }
-        dibujar();
-        return;
-      }
+      // El scroll mueve los puntos junto con la página; la física solo corrige.
+      const dScroll = window.scrollY - scrollPrevio;
+      scrollPrevio = window.scrollY;
 
-      // Física a 60 pasos por segundo aunque el equipo dibuje menos cuadros.
-      const iteraciones = ultimo ? Math.max(1, Math.min(3, Math.round((ahora - ultimo) / 16.7))) : 1;
+      const iteraciones = reducido ? 1 : ultimo ? Math.max(1, Math.min(3, Math.round((ahora - ultimo) / 16.7))) : 1;
       ultimo = ahora;
       const r2 = radio * radio;
       let energia = 0;
       let resto = 0;
-      if (dy) for (let k = 0; k < n; k++) py[k] += dy;
+      if (dScroll && !reducido) for (let k = 0; k < n; k++) py[k] -= dScroll;
+
       for (let it = 0; it < iteraciones; it++) {
-        const K = llegando > 0 ? 0.03 : 0.05;
-        const D = llegando > 0 ? 0.86 : 0.84;
+        // Resortes blandos: los puntos se deslizan en vez de saltar.
+        const K = llegando > 0 ? 0.026 : 0.06;
+        const D = llegando > 0 ? 0.87 : 0.8;
         if (llegando > 0) llegando--;
         energia = 0;
         resto = 0;
         for (let k = 0; k < n; k++) {
-          const ex = ox + lx[k] - px[k];
-          const ey = oy + ly[k] - py[k];
-          let ax = ex * K;
-          let ay = ey * K;
+          // Cada punto sale en su turno: la figura se desarma de a poco y la
+          // nube cae hacia la sección de abajo abriéndose a los lados.
+          const propio = Math.min(1, Math.max(0, (viaje - turno[k] * 0.3) / 0.7));
+          const e = reducido ? viaje : suave(propio);
+          const a = fA[k % mA];
+          const b = fB[k % mB];
+          const ax0 = rA.left + (a ? a.x : 0);
+          const ay0 = rA.top + (a ? a.y : 0);
+          const bx0 = rB.left + (b ? b.x : 0);
+          const by0 = rB.top + (b ? b.y : 0);
+          const arco = Math.sin(Math.PI * e);
+          const tx = ax0 + (bx0 - ax0) * e + arco * desvioX[k];
+          const ty = ay0 + (by0 - ay0) * e + arco * desvioY[k];
+          const brillo = e < 0.5 ? (a ? (invA ? 1 - a.b : a.b) : 0.5) : b ? (invB ? 1 - b.b : b.b) : 0.5;
+          // Solo viajan los puntos que la figura de destino necesita; los que
+          // sobran se apagan donde están. Así la nube es liviana y las letras
+          // no se empastan con puntos apilados.
+          const enA = k < mA;
+          const enB = k < mB;
+          const visible = e <= 0.02 ? enA : e >= 0.98 ? enB : enA && enB;
+          // En el aire se atenúan: la nube pasa detrás del texto sin taparlo.
+          nivel[k] = visible ? Math.max(1, Math.round(Math.min(NIVELES, 1 + Math.floor(brillo * NIVELES)) * (1 - 0.65 * arco))) : 0;
+          if (reducido) {
+            px[k] = tx;
+            py[k] = ty;
+            continue;
+          }
+          const ex = tx - px[k];
+          const ey = ty - py[k];
+          let fx = ex * K;
+          let fy = ey * K;
           if (puntero.activo) {
             const dx = px[k] - puntero.x;
-            const dyp = py[k] - puntero.y;
-            const d2 = dx * dx + dyp * dyp;
+            const dy = py[k] - puntero.y;
+            const d2 = dx * dx + dy * dy;
             if (d2 < r2) {
               const d = Math.sqrt(d2) || 1;
               const f = (1 - d / radio) * 5.5;
-              ax += (dx / d) * f;
-              ay += (dyp / d) * f;
+              fx += (dx / d) * f;
+              fy += (dy / d) * f;
             }
           }
-          vx[k] = (vx[k] + ax) * D;
-          vy[k] = (vy[k] + ay) * D;
+          vx[k] = (vx[k] + fx) * D;
+          vy[k] = (vy[k] + fy) * D;
           px[k] += vx[k];
           py[k] += vy[k];
           energia += Math.abs(vx[k]) + Math.abs(vy[k]);
           resto += Math.abs(ex) + Math.abs(ey);
         }
       }
-      dibujar();
+      dibujar(tam, color);
+      if (reducido) return;
       // Quieto, en su lugar y sin cursor: se apaga hasta el próximo scroll.
       // (Mirar solo la velocidad no basta: los puntos oscilan en fase y en el
       // punto de giro todos están quietos a la vez, lejos de su destino.)
@@ -442,6 +494,10 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
     }
 
     function despertar() {
+      if (reducido) {
+        if (!cuadro && vivo) cuadro = requestAnimationFrame(paso);
+        return;
+      }
       if (!cuadro && vivo) cuadro = requestAnimationFrame(paso);
     }
 
@@ -473,9 +529,11 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
     // El botón del inicio alterna entre el retrato y el nombre.
     const alCambiarForma = (e: Event) => {
       formaInicio = (e as CustomEvent<number>).detail;
-      if (activa?.escena === "inicio") {
-        forma = formaInicio;
-        asignar(activa, forma, !reducido);
+      if (!reducido) {
+        for (let k = 0; k < n; k++) {
+          vx[k] += (Math.random() - 0.5) * 8;
+          vy[k] += (Math.random() - 0.5) * 8;
+        }
       }
       despertar();
     };
@@ -483,7 +541,7 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
 
     // Si cambia el tema, cambian el color y la lectura del retrato.
     const mo = new MutationObserver(() => {
-      if (activa) asignar(activa, forma, false);
+      colorPagina = getComputedStyle(canvas!).color;
       despertar();
     });
     mo.observe(raiz, { attributes: true, attributeFilter: ["data-tema"] });

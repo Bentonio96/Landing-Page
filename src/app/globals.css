@@ -243,10 +243,21 @@
    puntos forman el retrato o el nombre y se apartan del cursor.
    ============================================================ */
 
+/* El campo va detrás del contenido: las tarjetas y el texto lo tapan. El pie
+   va un piso más abajo, para que su nombre de puntos se vea sobre el negro. */
+#contenido { position: relative; z-index: 1; }
+#pie { position: relative; z-index: -1; }
+/* Con el pie por debajo, el body se quedaría con sus clics: el body los deja
+   pasar y todo lo de adentro los recupera. Va en la capa base para que
+   utilidades como pointer-events-none sigan mandando. */
+@layer base {
+  body { pointer-events: none; }
+  body * { pointer-events: auto; }
+}
 .campo-particulas {
   position: fixed;
   inset: 0;
-  z-index: 5;
+  z-index: 0;
   display: block;
   width: 100vw;
   height: 100vh;
