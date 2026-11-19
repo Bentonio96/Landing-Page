@@ -8,8 +8,8 @@ import type { ReactNode } from "react";
  *
  * Gente dibujada a línea, en blanco y negro, generada aquí mismo con una
  * semilla (no es la ilustración del reel: cada persona sale de combinar
- * peinados, ropa, caras y accesorios). Benjamín va al centro, de negro, de
- * cuerpo entero, con su pelo liso y texturizado y lentes de sol.
+ * peinados, ropa, caras y accesorios). Benjamín va al centro, ilustrado en
+ * tinta a partir de su foto: copete, lentes de sol y polerón negro.
  *
  * - Al entrar en pantalla, las filas suben desde abajo, de atrás hacia
  *   adelante.
@@ -239,60 +239,17 @@ function DibujoPersona({ p }: { p: Persona }) {
   );
 }
 
-/**
- * El pelo de Benjamín: liso y texturizado, con volumen arriba peinado hacia
- * un lado, puntas desordenadas y los lados cortos. El borde de arriba son
- * mechones en punta; las líneas blancas marcan la dirección del peinado.
- */
-const PELO_BENJAMIN =
-  "M -23 -350 Q -26 -364 -18 -373 Q -16 -378 -11 -378 Q -8 -383 -2 -382 Q 2 -386 8 -384 Q 12 -387 17 -383 " +
-  "Q 22 -383 24 -378 Q 29 -375 28 -369 Q 30 -360 24 -350 " +
-  "Q 21 -357 17 -360 L 15 -356 L 11 -361 L 7 -358 L 3 -363 Q -10 -364 -18 -358 Q -21 -355 -23 -350 Z";
-const MECHAS_BENJAMIN =
-  "M -14 -372 Q -6 -378 4 -380 M -8 -367 Q 2 -374 13 -377 M 0 -365 Q 8 -370 19 -372 M 9 -363 Q 15 -366 23 -365";
-
-/** Benjamín de cuerpo entero: polerón y pantalón negros, pelo texturizado y lentes de sol. */
-function DibujoBenjamin() {
-  return (
-    <g strokeLinecap="round" strokeLinejoin="round" stroke={TINTA}>
-      {/* piernas y zapatillas */}
-      <path d="M -24 -128 L -25 -14 L -5 -14 L -3 -128 Z M 3 -128 L 5 -14 L 25 -14 L 24 -128 Z" fill={TINTA} />
-      <path d="M -30 -14 L -4 -14 L -2 0 L -34 0 Q -36 -8 -30 -14 Z M 4 -14 L 30 -14 Q 36 -8 34 0 L 2 0 Z" fill={PAPEL} />
-      <g transform="translate(0 22)">
-        {/* brazos */}
-        <path d="M -40 -290 Q -56 -250 -54 -168 L -40 -166 Q -38 -236 -32 -262 Z M 40 -290 Q 56 -250 54 -168 L 40 -166 Q 38 -236 32 -262 Z" fill={TINTA} />
-        <path d="M -54 -168 Q -56 -154 -47 -152 Q -39 -154 -40 -166 Z M 54 -168 Q 56 -154 47 -152 Q 39 -154 40 -166 Z" fill={PAPEL} />
-        {/* polerón */}
-        <path d="M -42 -290 Q -42 -304 -20 -307 L 20 -307 Q 42 -304 42 -290 L 40 -150 L -40 -150 Z" fill={TINTA} />
-        <path d="M -24 -303 Q 0 -280 24 -303" fill="none" stroke={PAPEL} />
-        <path d="M -6 -290 L -7 -262 M 6 -290 L 7 -262" stroke={PAPEL} />
-        <path d="M -32 -166 L 32 -166" stroke={PAPEL} />
-        <rect x={10} y={-236} width={22} height={6} fill={PAPEL} stroke="none" transform="rotate(8 21 -233)" />
-        {/* cuello y cabeza */}
-        <path d="M -9 -320 L -9 -305 L 9 -305 L 9 -320" fill={PAPEL} />
-        <ellipse cx={-22} cy={-342} rx={4.5} ry={7} fill={PAPEL} />
-        <ellipse cx={22} cy={-342} rx={4.5} ry={7} fill={PAPEL} />
-        <circle cx={22} cy={-332} r={2.5} fill="none" />
-        <ellipse cx={0} cy={-342} rx={22} ry={27} fill={PAPEL} />
-        {/* lados más cortos, pegados a la cabeza */}
-        <path d="M -23 -354 Q -25 -346 -23 -341 L -20 -342 Q -21 -348 -19 -354 Z M 23 -354 Q 25 -346 23 -341 L 20 -342 Q 21 -348 19 -354 Z" fill={TINTA} />
-        {/* pelo liso y texturizado, con volumen peinado hacia un lado */}
-        <path d={PELO_BENJAMIN} fill={TINTA} />
-        <path d={MECHAS_BENJAMIN} fill="none" stroke={PAPEL} strokeWidth={1.1} />
-        {/* lentes de sol, como en su foto */}
-        <path d="M -17 -348 L -3 -348 Q -2 -336 -10 -335 Q -18 -336 -17 -348 Z M 4 -348 L 19 -348 Q 20 -336 11 -335 Q 3 -336 4 -348 Z M -3 -345 L 4 -345 M 19 -346 L 23 -344" fill={TINTA} />
-        <path d="M 1 -341 Q 4 -334 -1 -332" fill="none" />
-        <path d="M -6 -324 Q 0 -321 6 -324" fill="none" />
-      </g>
-    </g>
-  );
-}
+/** Proporción del retrato ilustrado (public/benjamin-ilustrado.png, 887 × 862). */
+const RETRATO = { w: 887, h: 862 };
 
 type Lugar = { id: number; x: number; y: number; s: number; fila: number };
 
 function armar(W: number, H: number, semilla: number) {
   const k = H / 480;
   const centro = W / 2;
+  // Benjamín: el retrato ilustrado, apoyado abajo al centro.
+  const benjaAlto = Math.min(H * 0.78, (W * 0.62 * RETRATO.h) / RETRATO.w);
+  const benjaAncho = (benjaAlto * RETRATO.w) / RETRATO.h;
   const lugares: Lugar[] = [];
   const filas = [
     { y: H - 150 * k, s: 0.95 * k, paso: 74 * k, fila: 0 },
@@ -304,7 +261,7 @@ function armar(W: number, H: number, semilla: number) {
   for (const f of filas) {
     let x = -f.paso * (0.2 + r() * 0.5);
     while (x < W + f.paso) {
-      const hueco = f.fila === 2 ? 64 * k : f.fila === 1 ? 30 * k : 0;
+      const hueco = f.fila === 2 ? benjaAncho * 0.42 : f.fila === 1 ? benjaAncho * 0.22 : 0;
       if (Math.abs(x - centro) > hueco) {
         const s = f.s * (r() < 0.12 && f.fila === 2 ? 0.78 : 0.94 + r() * 0.12);
         lugares.push({ id: id++, x: x + (r() - 0.5) * f.paso * 0.3, y: f.y, s, fila: f.fila });
@@ -312,7 +269,7 @@ function armar(W: number, H: number, semilla: number) {
       x += f.paso * (0.85 + r() * 0.3);
     }
   }
-  return { lugares, k };
+  return { lugares, k, benja: { x: centro - benjaAncho / 2, y: H - benjaAlto, w: benjaAncho, h: benjaAlto } };
 }
 
 export function Multitud({ trafico, descripcion }: { trafico: string; descripcion: string }) {
@@ -406,10 +363,15 @@ export function Multitud({ trafico, descripcion }: { trafico: string; descripcio
                   </g>
                 )),
             )}
-            <g transform={`translate(${tam.W / 2} ${tam.H - 4 * plano.k}) scale(${Math.min(plano.k * 1.2, (tam.H * 0.86) / 400)})`}>
-              <g className="persona persona--benja" style={{ ["--fila" as string]: 1.5, ["--retraso" as string]: "0.1s" }}>
-                <DibujoBenjamin />
-              </g>
+            {/* Benjamín, ilustrado a partir de su foto (scripts/ilustrar-retrato.mjs) */}
+            <g className="persona persona--benja" style={{ ["--fila" as string]: 1.5, ["--retraso" as string]: "0.1s" }}>
+              <image
+                href="/benjamin-ilustrado.png"
+                x={plano.benja.x}
+                y={plano.benja.y}
+                width={plano.benja.w}
+                height={plano.benja.h}
+              />
             </g>
             {plano.lugares
               .filter((l) => l.fila === 2)
