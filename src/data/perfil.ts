@@ -77,17 +77,17 @@ export const seo: Record<"es" | "en", { titulo: string; descripcion: string }> &
   palabrasClave: Texto;
 } = {
   es: {
-    titulo: "Benjamín Peña — Desarrollador Frontend & Data Analyst",
+    titulo: "Benjamín Peña — Desarrollador Full Stack & Data Analyst",
     descripcion:
-      "Desarrollador frontend y analista de datos en Santiago de Chile. Interfaces con React, TypeScript y Tailwind; datos con Power BI, Power Apps y Python. Disponible para full-time y freelance.",
+      "Desarrollador full stack y analista de datos en Santiago de Chile. Interfaces con React, TypeScript y Tailwind; datos con Power BI, Power Apps y Python. Disponible para full-time y freelance.",
   },
   en: {
-    titulo: "Benjamín Peña — Frontend Developer & Data Analyst",
+    titulo: "Benjamín Peña — Full Stack Developer & Data Analyst",
     descripcion:
-      "Frontend developer and data analyst in Santiago, Chile. Interfaces with React, TypeScript and Tailwind; data with Power BI, Power Apps and Python. Available for full-time and freelance work.",
+      "Full stack developer and data analyst in Santiago, Chile. Interfaces with React, TypeScript and Tailwind; data with Power BI, Power Apps and Python. Available for full-time and freelance work.",
   },
   palabrasClave: {
-    es: "desarrollador frontend, analista de datos, React, TypeScript, Tailwind, Next.js, Power Apps, Power BI, Power Pages, Python, full-time, freelance, Santiago, Chile",
-    en: "frontend developer, data analyst, React, TypeScript, Tailwind, Next.js, Power Apps, Power BI, Power Pages, Python, full-time, freelance, Santiago, Chile",
+    es: "desarrollador full stack, analista de datos, React, TypeScript, Tailwind, Next.js, Power Apps, Power BI, Power Pages, Python, full-time, freelance, Santiago, Chile",
+    en: "full stack developer, data analyst, React, TypeScript, Tailwind, Next.js, Power Apps, Power BI, Power Pages, Python, full-time, freelance, Santiago, Chile",
   },
 };

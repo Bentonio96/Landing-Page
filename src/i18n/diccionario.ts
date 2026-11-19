@@ -26,7 +26,7 @@ const diccionario = {
       codigo: "EN",
     },
     hero: {
-      rol: "Desarrollador Frontend & Data Analyst",
+      rol: "Desarrollador Full Stack & Data Analyst",
       /** Segunda mitad del titular: las tres herramientas del lado de datos. */
       herramientas: "Power Apps · Power BI · Python",
       disponible: "Disponible para full-time y freelance",
@@ -40,10 +40,10 @@ const diccionario = {
       etiqueta: "Sobre mí",
       titulo: "Quién soy",
       parrafos: [
-        "Soy desarrollador frontend y analista de datos. Estoy terminando Ingeniería Civil en Informática en la Universidad Andrés Bello, egreso en noviembre de 2026, y busco mi próximo rol full-time mientras tomo proyectos freelance.",
+        "Soy desarrollador full stack y analista de datos. Estoy terminando Ingeniería Civil en Informática en la Universidad Andrés Bello, egreso en noviembre de 2026, y busco mi próximo rol full-time mientras tomo proyectos freelance.",
         "Pasé un año y medio en CMPC: primero como analista de datos, armando tableros en Power BI, y después en Cybersecurity Operations TI/OT, donde diseñé y construí el portal interno del área, desde la arquitectura de la interfaz hasta su puesta en marcha.",
         "Entrego interfaces terminadas, no maquetas. Traduzco un diseño de Figma a una interfaz responsive y accesible, y defino la jerarquía visual cuando el diseño todavía no existe.",
-        "El frontend es mi foco, pero también tomo un tablero en Power BI, una app interna en Power Apps o un script en Python. Haber trabajado de los dos lados me ayuda a construir interfaces que entienden los datos que muestran.",
+        "Construyo de punta a punta, del frontend al backend, y también tomo un tablero en Power BI, una app interna en Power Apps o un script en Python. Haber trabajado de los dos lados me ayuda a construir interfaces que entienden los datos que muestran.",
       ],
       /** La frase que cierra el tercer párrafo, sacada a cita de cartel. */
       cita: {
@@ -128,7 +128,7 @@ const diccionario = {
       codigo: "ES",
     },
     hero: {
-      rol: "Frontend Developer & Data Analyst",
+      rol: "Full Stack Developer & Data Analyst",
       herramientas: "Power Apps · Power BI · Python",
       disponible: "Available for full-time and freelance work",
       intro:
@@ -141,10 +141,10 @@ const diccionario = {
       etiqueta: "About",
       titulo: "Who I am",
       parrafos: [
-        "I'm a frontend developer and data analyst. I'm finishing a Computer Engineering degree at Universidad Andrés Bello in Santiago, graduating in November 2026, and I'm looking for my next full-time role while taking on freelance work.",
+        "I'm a full stack developer and data analyst. I'm finishing a Computer Engineering degree at Universidad Andrés Bello in Santiago, graduating in November 2026, and I'm looking for my next full-time role while taking on freelance work.",
         "I spent a year and a half at CMPC: first as a data analyst building Power BI dashboards, then in IT/OT Cybersecurity Operations, where I designed and built the team's internal portal, from the interface architecture through to launch.",
         "I ship finished interfaces, not mockups. I turn a Figma design into a responsive, accessible interface — and define the visual hierarchy myself when the design doesn't exist yet.",
-        "Frontend is my focus, but I'll also take on a Power BI dashboard, an internal Power Apps tool or a Python script. Having worked on both sides helps me build interfaces that understand the data they show.",
+        "I build end to end, from frontend to backend, and I'll also take on a Power BI dashboard, an internal Power Apps tool or a Python script. Having worked on both sides helps me build interfaces that understand the data they show.",
       ],
       cita: {
         antes: "“I make sure the final product looks good and ",

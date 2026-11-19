@@ -1,6 +1,6 @@
 # Portafolio · Benjamín Peña Díaz
 
-Sitio personal de **Benjamín Peña Díaz**, desarrollador frontend en Santiago de Chile.
+Sitio personal de **Benjamín Peña Díaz**, desarrollador full stack en Santiago de Chile.
 Español en `/`, inglés en `/en`, modo claro y oscuro, y todo el contenido en archivos de datos tipados.
 
 Paleta tomada del CV, titulares de cartel, scroll suave con Lenis y animaciones 3D con GSAP.

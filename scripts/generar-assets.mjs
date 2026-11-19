@@ -220,11 +220,11 @@ async function tarjetasSociales(limpia) {
   // 19 px por carácter, así que el corte es obligado, no estético.
   const textos = {
     es: {
-      rol: ["Desarrollador Frontend", "& Data Analyst"],
+      rol: ["Desarrollador Full Stack", "& Data Analyst"],
       sitio: "Santiago de Chile",
     },
     en: {
-      rol: ["Frontend Developer", "& Data Analyst"],
+      rol: ["Full Stack Developer", "& Data Analyst"],
       sitio: "Santiago, Chile",
     },
   };
