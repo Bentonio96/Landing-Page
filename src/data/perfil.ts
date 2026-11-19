@@ -40,6 +40,13 @@ function resolverUrlDelSitio(): string {
 
 export const SITIO_URL = resolverUrlDelSitio();
 
+/**
+ * La v5 es una propuesta paralela publicada en benjamin-pena-v5.vercel.app.
+ * El sitio oficial sigue siendo el de `main`, así que la canónica y el
+ * hreflang apuntan allá: los buscadores indexan una sola versión.
+ */
+export const CANONICA_URL = "https://benjamin-pena.vercel.app";
+
 export const perfil = {
   nombre: "Benjamín Peña Díaz",
   nombreCorto: "Benjamín Peña",
@@ -77,17 +84,17 @@ export const seo: Record<"es" | "en", { titulo: string; descripcion: string }> &
   palabrasClave: Texto;
 } = {
   es: {
-    titulo: "Benjamín Peña — Desarrollador Full Stack & Data Analyst",
+    titulo: "Benjamín Peña — Software Engineer",
     descripcion:
-      "Desarrollador full stack y analista de datos en Santiago de Chile. Interfaces con React, TypeScript y Tailwind; datos con Power BI, Power Apps y Python. Disponible para proyectos freelance.",
+      "Software Engineer en Santiago de Chile. Interfaces con React, TypeScript y Tailwind; datos con Power BI, Power Apps y Python. Disponible para proyectos freelance.",
   },
   en: {
-    titulo: "Benjamín Peña — Full Stack Developer & Data Analyst",
+    titulo: "Benjamín Peña — Software Engineer",
     descripcion:
-      "Full stack developer and data analyst in Santiago, Chile. Interfaces with React, TypeScript and Tailwind; data with Power BI, Power Apps and Python. Available for freelance projects.",
+      "Software Engineer in Santiago, Chile. Interfaces with React, TypeScript and Tailwind; data with Power BI, Power Apps and Python. Available for freelance projects.",
   },
   palabrasClave: {
-    es: "desarrollador full stack, analista de datos, React, TypeScript, Tailwind, Next.js, Power Apps, Power BI, Power Pages, Python, freelance, Santiago, Chile",
-    en: "full stack developer, data analyst, React, TypeScript, Tailwind, Next.js, Power Apps, Power BI, Power Pages, Python, freelance, Santiago, Chile",
+    es: "software engineer, ingeniero de software, desarrollador full stack, React, TypeScript, Tailwind, Next.js, Power Apps, Power BI, Power Pages, Python, freelance, Santiago, Chile",
+    en: "software engineer, full stack developer, React, TypeScript, Tailwind, Next.js, Power Apps, Power BI, Power Pages, Python, freelance, Santiago, Chile",
   },
 };

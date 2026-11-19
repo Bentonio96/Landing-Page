@@ -1,146 +1,57 @@
-import type { LucideIcon } from "lucide-react";
-import { ArrowDown, ArrowUpRight, Copy } from "lucide-react";
+import { ArrowUpRight, Download, Github, Linkedin } from "lucide-react";
 import type { Diccionario } from "@/i18n/diccionario";
 import { perfil } from "@/data/perfil";
-import { BotonCorreo } from "@/components/ui/BotonCorreo";
-import { EnlaceCorreo } from "@/components/ui/EnlaceCorreo";
-import { Reveal } from "@/components/ui/Reveal";
-import { Seccion } from "@/components/ui/Seccion";
+import { BotonCopiar } from "@/components/ui/BotonCopiar";
+import { FormularioCorreo } from "@/components/ui/FormularioCorreo";
 
 type Props = { t: Diccionario };
 
-const claseFila =
-  "group grid grid-cols-[4.5rem_1fr_auto] items-center gap-4 py-5 transition-colors sm:grid-cols-[6.5rem_1fr_auto]";
-const claseValor =
-  "break-words text-base text-texto transition-colors group-hover:text-acento sm:text-lg";
-const claseIcono =
-  "size-4 text-tenue transition-[color,transform] duration-200 group-hover:text-acento group-hover:translate-x-0.5 group-hover:-translate-y-0.5";
-
-type Fila = {
-  id: string;
-  etiqueta: string;
-  valor: string;
-  href: string;
-  icono: LucideIcon;
-  externo?: boolean;
-  /** Nombre con el que se guarda el archivo; si falta, el enlace navega. */
-  descargar?: string;
-};
-
 export function Contacto({ t }: Props) {
-  const filas: Fila[] = [
-    {
-      id: "email",
-      etiqueta: t.contacto.email,
-      valor: perfil.email,
-      href: `mailto:${perfil.email}`,
-      icono: ArrowUpRight,
-    },
-    {
-      id: "linkedin",
-      etiqueta: "LinkedIn",
-      valor: perfil.linkedinVisible,
-      href: perfil.linkedin,
-      icono: ArrowUpRight,
-      externo: true,
-    },
-    {
-      id: "github",
-      etiqueta: "GitHub",
-      valor: `github.com/${perfil.githubUsuario}`,
-      href: perfil.github,
-      icono: ArrowUpRight,
-      externo: true,
-    },
-    {
-      id: "cv",
-      etiqueta: "CV",
-      valor: `${t.contacto.descargarCV} ${t.contacto.cvFormato}`,
-      href: perfil.cv,
-      icono: ArrowDown,
-      descargar: perfil.cvArchivo,
-    },
-  ];
-
   return (
-    <Seccion
-      id="contacto"
-      numero="05"
-      etiqueta={t.contacto.etiqueta}
-      titulo={t.contacto.titulo}
-    >
-      <div className="grid gap-x-canal gap-y-14 md:grid-cols-12">
-        <Reveal className="md:col-span-5">
-          <p className="text-t3 font-light uppercase text-texto">
-            {t.contacto.bajada}
-          </p>
-          <p className="etiqueta mt-6">
-            {t.contacto.ubicacion} · {perfil.ubicacion}
-          </p>
-          <BotonCorreo
-            email={perfil.email}
-            texto={t.contacto.botonCorreo}
-            avisoCopiado={t.contacto.correoCopiado}
-            avisoFallo={t.contacto.correoFallo}
-            className="mt-10 w-full sm:w-auto"
-          />
-        </Reveal>
+    <section id="contacto" aria-labelledby="contacto-titulo" className="lienzo py-seccion">
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-16">
+        <div>
+          <h2 id="contacto-titulo" className="ancho text-[clamp(3rem,1.5rem+4.2vw,5.25rem)] font-bold leading-[0.95] tracking-[-0.04em]">
+            {t.contacto.titulo}
+          </h2>
+          <p className="mt-6 max-w-[36ch] text-guia text-atenuado">{t.contacto.bajada}</p>
 
-        {/* Filas enteras pulsables, como un índice: la etiqueta a la
-            izquierda, el dato y la flecha que indica qué pasa al pulsar. */}
-        <Reveal retardo={0.08} className="md:col-span-6 md:col-start-7">
-          <ul data-trazo="" data-escalonar="x" className="trazo-superior">
-            {filas.map(
-              ({ id, etiqueta, valor, href, icono: Icono, externo, descargar }) => (
-                <li key={id} data-trazo="" className="trazo-inferior">
-                  {id === "email" ? (
-                    // En escritorio copia en vez de abrir un mailto: que sin
-                    // app de correo deja una pestaña en blanco (EnlaceCorreo).
-                    <EnlaceCorreo
-                      email={perfil.email}
-                      avisoCopiado={t.contacto.correoCopiado}
-                      avisoFallo={t.contacto.correoFallo}
-                      className={claseFila}
-                    >
-                      <span className="etiqueta">{etiqueta}</span>
-                      <span className={claseValor}>{valor}</span>
-                      <Copy
-                        aria-hidden="true"
-                        className={`${claseIcono} hidden pointer-fine:block`}
-                      />
-                      <Icono
-                        aria-hidden="true"
-                        className={`${claseIcono} pointer-fine:hidden`}
-                      />
-                      <span className="sr-only hidden pointer-fine:inline">
-                        {t.contacto.correoFilaCopia}
-                      </span>
-                    </EnlaceCorreo>
-                  ) : (
-                    <a
-                      href={href}
-                      {...(externo
-                        ? { target: "_blank", rel: "noopener noreferrer" }
-                        : {})}
-                      {...(descargar ? { download: descargar } : {})}
-                      className={claseFila}
-                    >
-                      <span className="etiqueta">{etiqueta}</span>
-                      <span className={claseValor}>{valor}</span>
-                      <Icono aria-hidden="true" className={claseIcono} />
-                      {externo ? (
-                        <span className="sr-only">
-                          {t.proyectos.enlaceExterno}
-                        </span>
-                      ) : null}
-                    </a>
-                  )}
-                </li>
-              ),
-            )}
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <a href={`mailto:${perfil.email}`} className="inline-flex min-h-11 items-center gap-2 text-t3 font-semibold break-all">
+              <span className="enlace">{perfil.email}</span>
+              <ArrowUpRight aria-hidden="true" className="size-5 shrink-0" />
+            </a>
+            <BotonCopiar
+              email={perfil.email}
+              texto={t.contacto.copiar}
+              avisoCopiado={t.contacto.correoCopiado}
+              avisoFallo={t.contacto.correoFallo}
+            />
+          </div>
+
+          <ul className="mt-8 flex flex-wrap gap-2.5">
+            <li>
+              <a href={perfil.linkedin} target="_blank" rel="noopener noreferrer" className="boton">
+                <Linkedin aria-hidden="true" className="size-4" />
+                LinkedIn
+              </a>
+            </li>
+            <li>
+              <a href={perfil.github} target="_blank" rel="noopener noreferrer" className="boton">
+                <Github aria-hidden="true" className="size-4" />
+                GitHub
+              </a>
+            </li>
+            <li>
+              <a href={perfil.cv} download={perfil.cvArchivo} className="boton">
+                <Download aria-hidden="true" className="size-4" />
+                {t.contacto.descargarCV} <span className="font-normal text-tenue">{t.contacto.cvFormato}</span>
+              </a>
+            </li>
           </ul>
-        </Reveal>
+        </div>
+        <FormularioCorreo email={perfil.email} t={t} />
       </div>
-    </Seccion>
+    </section>
   );
 }

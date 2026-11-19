@@ -1,11 +1,8 @@
-type Props = { texto: string };
-
-/** Primer elemento enfocable de la página: salta el nav y va al contenido. */
-export function SaltarAlContenido({ texto }: Props) {
+export function SaltarAlContenido({ texto }: { texto: string }) {
   return (
     <a
       href="#contenido"
-      className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-pieza focus:bg-acento focus:px-4 focus:py-3 focus:font-mono focus:text-etiqueta focus:uppercase focus:tracking-[0.12em] focus:text-acentosobre"
+      className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-md bg-texto px-4 py-2.5 text-menor font-semibold text-fondo transition-transform focus:translate-y-0"
     >
       {texto}
     </a>

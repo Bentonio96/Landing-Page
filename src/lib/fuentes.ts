@@ -1,91 +1,50 @@
-import { Bebas_Neue, Inter_Tight, JetBrains_Mono } from "next/font/google";
+import { Archivo, JetBrains_Mono } from "next/font/google";
 
 /**
- * Las tres se sirven autoalojadas por next/font: cero requests a Google en
- * producción y `size-adjust` automático en la fuente de respaldo, que es lo
- * que evita el salto de layout mientras cargan.
+ * Una sola familia con dos voces, más una mono para la voz de terminal.
  *
- * Solo se pide lo que el sistema de diseño usa de verdad. Cada peso extra son
- * ~20 KB en la ruta crítica compitiendo con la foto del hero por ancho de
- * banda, y eso empuja el LCP en móvil.
+ * Archivo es variable en peso y en ancho. El titular «< Software Engineer />»
+ * y los títulos de sección van anchos (wdth 118–125) y pesados, como el reel;
+ * el cuerpo va al ancho normal. Así el carácter sale del eje de ancho y no de
+ * sumar una segunda familia.
  */
-
-/**
- * Titulares. Una grotesca condensada de un solo peso: a tamaño de cartel es
- * lo que da el impacto, y al ser estrecha deja escribir el nombre enorme sin
- * que desborde en un teléfono. Solo tiene mayúsculas, así que los titulares
- * se escriben normal en el diccionario y se versalizan con CSS: los lectores
- * de pantalla siguen leyendo "Quién soy" y no "QUIÉN SOY" deletreado.
- */
-export const fuenteDisplay = Bebas_Neue({
+export const fuenteSans = Archivo({
   subsets: ["latin"],
-  weight: "400",
-  display: "swap",
-  variable: "--fuente-display",
-});
-
-/** Cuerpo. El 300 es para los subtítulos grandes y ligeros de las filas. */
-export const fuenteSans = Inter_Tight({
-  subsets: ["latin"],
-  weight: ["300", "400"],
+  axes: ["wdth"],
   display: "swap",
   variable: "--fuente-sans",
 });
 
 /**
- * La mono es el único caso donde el respaldo automático de next/font hace
- * daño. Lo genera a partir de `local("Arial")` con `size-adjust: 134.59%`:
- * ajusta las métricas verticales, pero Arial es proporcional y estirarla un
- * 35 % deja cada carácter casi un 30 % más ancho que JetBrains Mono. Las
- * líneas largas de versales del hero envolvían con el respaldo y se
- * recolocaban al llegar la tipografía real, que es de donde salía el CLS
- * en móvil.
- *
- * Con `adjustFontFallback: false` se cae a monoespaciadas de verdad, cuyo
- * avance (~0.6em) es prácticamente el de JetBrains Mono. Se pierde el ajuste
- * vertical automático, pero aquí no hace falta: todo lo que usa la mono
- * declara su propio line-height en globals.css.
+ * La mono es la voz de terminal: el código del fondo del hero, la etiqueta
+ * entre llaves y la ruta de la píldora. Con `adjustFontFallback: false` cae a
+ * monoespaciadas de verdad, cuyo avance es casi el de JetBrains Mono (el
+ * respaldo automático estira Arial y hacía envolver las líneas).
  */
 export const fuenteMono = JetBrains_Mono({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "500"],
   display: "swap",
   variable: "--fuente-mono",
   adjustFontFallback: false,
-  fallback: [
-    "ui-monospace",
-    "SFMono-Regular",
-    "Menlo",
-    "Consolas",
-    "monospace",
-  ],
+  fallback: ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
 });
 
-export const clasesFuentes = `${fuenteDisplay.variable} ${fuenteSans.variable} ${fuenteMono.variable}`;
+export const clasesFuentes = `${fuenteSans.variable} ${fuenteMono.variable}`;
 
 /**
- * Script bloqueante de <head> que retiene la entrada 3D del nombre hasta que
- * carga la condensada.
- *
- * Cada letra del hero es su propia caja. Con la fuente de respaldo (más
- * ancha) ocupan otro sitio, y al llegar Bebas Neue todas se recolocaban de
- * golpe: el CLS subía de 0.002 a 0.03. Mientras dura la espera las letras
- * están de canto (el primer fotograma de la animación, en pausa), así que
- * no se ven ni cuentan como desplazamiento visible.
- *
- * Tres redes: sin JavaScript el atributo nunca se pone y la animación corre
- * sola; si la fuente falla o tarda, a los 2 s se suelta igual; y va en un
- * atributo data-* y no en una clase, porque React gestiona el className de
- * <html> (ver lib/tema.ts).
- *
- * `document.fonts.load` se llama en DOMContentLoaded y no antes: hasta que
- * el CSS está aplicado el @font-face no existe y la promesa se resolvería al
- * instante, sin esperar nada. Debe ser ES5.
+ * Retiene la entrada de las letras del titular hasta que carga Archivo: cada
+ * letra es su propia caja y con la fuente de respaldo quedan en otro sitio.
+ * Mientras espera, la animación está en su primer fotograma (en pausa). Sin
+ * JS nunca se pone el atributo; si la fuente tarda, a los 2 s se suelta igual.
+ * Debe ser ES5.
  */
 export const scriptFuentes = `
 (function () {
   try {
     var h = document.documentElement;
+    h.setAttribute('data-js', '');
+    if (/[?&]reduced=1/.test(location.search)) h.setAttribute('data-reducido', '');
     if (!document.fonts || !document.fonts.load) return;
     h.setAttribute('data-fuentes', 'pendientes');
     var hecho = false;
@@ -94,9 +53,9 @@ export const scriptFuentes = `
       hecho = true;
       h.removeAttribute('data-fuentes');
     };
-    setTimeout(listo, 2000);
+    setTimeout(listo, 1200);
     var cargar = function () {
-      document.fonts.load('1em ' + ${JSON.stringify(fuenteDisplay.style.fontFamily)})
+      document.fonts.load('800 1em ' + ${JSON.stringify(fuenteSans.style.fontFamily)})
         .then(function () { return document.fonts.ready; })
         .then(listo, listo);
     };

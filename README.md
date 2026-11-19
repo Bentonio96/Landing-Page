@@ -1,3 +1,75 @@
+# Portafolio · Benjamín Peña Díaz — v5 «Ciudad»
+
+> **Rama `v5`.** Propuesta paralela del portafolio, publicada aparte en
+> **https://benjamin-pena-v5.vercel.app**. La versión principal vive en `main`
+> (https://benjamin-pena.vercel.app), y la canónica y el hreflang de la v5
+> apuntan allá. Todo lo que sigue después de esta sección describe la versión
+> de `main`, de la que la v5 hereda los datos (`src/data`) y el CV.
+
+## La idea
+
+Sigue un reel de un portafolio de desarrollador que abre con «The footer is the
+main character now» y termina con «empezó como un footer y terminó siendo una
+ciudad». Se tomó la estructura y el movimiento; los colores son los de Benjamín
+(«Obsidiana», del CV) y la ciudad es Santiago, con autos.
+
+1. **Píldora flotante** arriba al centro: nombre, tema y menú. Al lado del
+   nombre va la ruta de la sección en voz de terminal (`~/proyectos`), que rueda
+   hacia arriba al cambiar.
+2. **Hero:** «< SOFTWARE ENGINEER />» en Archivo ancha (eje `wdth`), con las
+   letras que se encienden de gris a tinta; detrás, código tenue que sube en
+   bucle y sale del propio contenido del sitio (perfil, proyectos, stack).
+3. **Transición:** en escritorio el inicio queda fijo; el titular sube, la
+   foto crece hasta el centro y «Hola, soy Benjamín.» se revela a sus lados.
+4. **Stack** en columnas con regla superior y chips; los principales, rellenos.
+5. **Proyectos en carpetas:** la captura es la hoja que sale de la carpeta al
+   apuntar o al llevar el foco adentro.
+6. **Experiencia** en una línea de tiempo ondulada que se dibuja con el scroll.
+7. **Contacto** con un formulario que arma un borrador de correo (no envía nada
+   a ningún servidor).
+8. **El pie es el protagonista:** banda de tinta con «Nos vemos.» y, abajo, una
+   cuadra de Santiago dibujada en canvas: la cordillera, una torre alta, una
+   torre de antena, edificios que se levantan uno a uno, autos en la avenida y
+   Benjamín junto a su auto violeta. El cursor enciende las ventanas por donde
+   pasa; «Construir otra cuadra» genera otra.
+
+| Hero | Saludo | Proyectos |
+|---|---|---|
+| ![Hero](docs/capturas-v5/v5-hero-oscuro.jpg) | ![Saludo](docs/capturas-v5/v5-saludo-claro.jpg) | ![Proyectos](docs/capturas-v5/v5-proyectos-claro.jpg) |
+
+| Ciudad | Móvil | Móvil, ciudad |
+|---|---|---|
+| ![Ciudad](docs/capturas-v5/v5-ciudad-oscuro.jpg) | ![Móvil](docs/capturas-v5/v5-movil-hero-claro.jpg) | ![Móvil ciudad](docs/capturas-v5/v5-movil-ciudad-claro.jpg) |
+
+## Decisiones
+
+- **Rol «Software Engineer»** en los dos idiomas: titular, `<title>`, metadatos,
+  JSON-LD e imágenes OG (`scripts/og-v5.mjs`). La disponibilidad es solo
+  freelance.
+- **Sin GSAP ni Lenis:** un oyente de scroll con un rAF escribe `--p` y el CSS
+  calcula el resto (`Movimiento.tsx`). El canvas de la ciudad corre solo
+  mientras está en pantalla y, ya armada, dibuja una imagen guardada más los
+  autos y las ventanas encendidas.
+- **El modo fijo del inicio** solo se activa desde 1024 px de ancho y 620 px de
+  alto, con JavaScript y sin movimiento reducido. En los demás casos el hero y
+  el saludo van uno debajo del otro.
+- **Movimiento reducido** (`prefers-reduced-motion` o `?reduced=1`): titular
+  encendido, sin código en movimiento, sin tramo fijo y la ciudad armada con
+  los autos quietos; el cursor igual enciende ventanas.
+- **Nada se corta:** el tamaño del titular y del nombre de fondo se calculan del
+  ancho útil (medidos en em), y se revisó que ningún texto salga del viewport en
+  375, 768 y 1440 px.
+
+## Cómo correrlo
+
+```bash
+npm install
+npm run dev
+npm run build && npm start
+```
+
+---
+
 # Portafolio · Benjamín Peña Díaz
 
 Sitio personal de **Benjamín Peña Díaz**, desarrollador full stack en Santiago de Chile.

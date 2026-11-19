@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { Idioma } from "@/types";
-import { perfil, seo, SITIO_URL } from "@/data/perfil";
+import { CANONICA_URL, perfil, seo, SITIO_URL } from "@/data/perfil";
 
 export const viewportBase: Viewport = {
   themeColor: [
@@ -24,15 +24,16 @@ export function construirMetadata(idioma: Idioma): Metadata {
     title: titulo,
     description: descripcion,
     keywords: seo.palabrasClave[idioma],
-    authors: [{ name: perfil.nombre, url: SITIO_URL }],
+    authors: [{ name: perfil.nombre, url: CANONICA_URL }],
     creator: perfil.nombre,
     applicationName: titulo,
     alternates: {
-      canonical: ruta,
+      // Absolutas al sitio oficial: la v5 no compite con él en buscadores.
+      canonical: `${CANONICA_URL}${ruta === "/" ? "" : ruta}`,
       languages: {
-        es: "/",
-        en: "/en",
-        "x-default": "/",
+        es: `${CANONICA_URL}/`,
+        en: `${CANONICA_URL}/en`,
+        "x-default": `${CANONICA_URL}/`,
       },
     },
     openGraph: {
