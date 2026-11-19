@@ -8,8 +8,9 @@ import type { ReactNode } from "react";
  *
  * Gente dibujada a línea, en blanco y negro, generada aquí mismo con una
  * semilla (no es la ilustración del reel: cada persona sale de combinar
- * peinados, ropa, caras y accesorios). Benjamín va al centro, ilustrado en
- * tinta a partir de su foto: copete, lentes de sol y polerón negro.
+ * peinados, ropa, caras y accesorios). Benjamín va al centro, de frente y
+ * aislado, dibujado con el mismo trazo a partir de su foto; la gente pasa
+ * caminando por delante de él.
  *
  * - Al entrar en pantalla, las filas suben desde abajo, de atrás hacia
  *   adelante.
@@ -239,43 +240,105 @@ function DibujoPersona({ p }: { p: Persona }) {
   );
 }
 
-/** Proporción del retrato ilustrado (public/benjamin-ilustrado.png, 887 × 862). */
-const RETRATO = { w: 887, h: 862 };
+/**
+ * Benjamín de frente, con el mismo trazo que la multitud y sacado de su foto
+ * en el cerro: pelo corto oscuro y texturizado con un flequillo desordenado,
+ * lentes de sol rectangulares, polerón con capucha, cordones y la etiqueta
+ * blanca en el pecho. (0, 0) es el punto entre sus pies; mide ~400 de alto.
+ */
+function DibujoBenjamin() {
+  return (
+    <g strokeLinecap="round" strokeLinejoin="round" stroke={TINTA} strokeWidth={1.6}>
+      {/* piernas y zapatillas */}
+      <path d="M -27 -150 L -27 -14 L -5 -14 L -2 -150 Z M 2 -150 L 5 -14 L 27 -14 L 27 -150 Z" fill={TINTA} />
+      <path d="M -6 -100 L -4 -14 M 6 -100 L 4 -14" stroke={PAPEL} strokeWidth={1} />
+      <path d="M -31 -14 L -4 -14 L -3 0 L -36 0 Q -38 -9 -31 -14 Z M 4 -14 L 31 -14 Q 38 -9 36 0 L 3 0 Z" fill={PAPEL} />
+      {/* brazos (mangas) y manos */}
+      <path d="M -46 -282 Q -62 -240 -60 -170 L -44 -168 Q -44 -226 -38 -256 Z M 46 -282 Q 62 -240 60 -170 L 44 -168 Q 44 -226 38 -256 Z" fill={TINTA} />
+      <path d="M -60 -172 L -44 -170 M 60 -172 L 44 -170" stroke={PAPEL} strokeWidth={1} />
+      <path d="M -60 -170 Q -62 -152 -52 -150 Q -43 -152 -44 -168 Z M 60 -170 Q 62 -152 52 -150 Q 43 -152 44 -168 Z" fill={PAPEL} />
+      {/* polerón */}
+      <path d="M -46 -280 Q -46 -298 -24 -303 L 24 -303 Q 46 -298 46 -280 L 47 -146 Q 0 -140 -47 -146 Z" fill={TINTA} />
+      <path d="M -45 -160 Q 0 -154 45 -160" fill="none" stroke={PAPEL} strokeWidth={1} />
+      <path d="M -40 -232 L -38 -160 M 40 -232 L 38 -160" fill="none" stroke={PAPEL} strokeWidth={0.8} opacity={0.6} />
+      {/* etiqueta blanca del pecho */}
+      <rect x={13} y={-252} width={24} height={6} fill={PAPEL} stroke="none" />
+      {/* cuello */}
+      <path d="M -8 -318 L -8 -298 L 8 -298 L 8 -318" fill={PAPEL} />
+      {/* capucha alrededor del cuello */}
+      <path d="M -28 -304 Q -34 -290 -18 -282 Q 0 -274 18 -282 Q 34 -290 28 -304 Q 14 -296 0 -296 Q -14 -296 -28 -304 Z" fill={TINTA} />
+      <path d="M -22 -296 Q 0 -286 22 -296" fill="none" stroke={PAPEL} strokeWidth={1} />
+      {/* cordones con sus puntas */}
+      <path d="M -7 -288 Q -9 -260 -11 -232 M 7 -288 Q 9 -256 12 -224" fill="none" stroke={PAPEL} strokeWidth={1.6} />
+      <path d="M -11 -232 L -11 -226 M 12 -224 L 12 -218" stroke={PAPEL} strokeWidth={3} />
+      {/* orejas y cara */}
+      <ellipse cx={-22} cy={-342} rx={4.5} ry={7} fill={PAPEL} />
+      <ellipse cx={22} cy={-342} rx={4.5} ry={7} fill={PAPEL} />
+      <path d="M -22 -350 Q -23 -322 -12 -315 Q 0 -310 12 -315 Q 23 -322 22 -350 Q 22 -372 0 -373 Q -22 -372 -22 -350 Z" fill={PAPEL} />
+      {/* pelo corto texturizado: volumen arriba, flequillo desordenado, lados cortos */}
+      <path
+        d="M -23 -346 Q -26 -362 -20 -371 Q -19 -380 -10 -381 Q -6 -388 1 -385 Q 6 -390 12 -385 Q 20 -387 22 -379 Q 28 -373 26 -362 Q 27 -352 23 -346 Q 22 -356 18 -359 Q 16 -353 13 -357 Q 11 -362 8 -357 Q 5 -363 1 -359 Q -3 -363 -7 -360 Q -11 -363 -14 -361 Q -20 -357 -23 -346 Z"
+        fill={TINTA}
+      />
+      <path d="M -14 -373 q 4 -4 8 -2 M -2 -378 q 4 -3 8 -1 M 9 -374 q 4 -2 7 1 M -18 -365 q 3 -3 6 -2 M 15 -366 q 3 -2 5 1" fill="none" stroke={PAPEL} strokeWidth={1} />
+      {/* lentes de sol rectangulares */}
+      <path d="M -21 -350 L -2 -350 L -3 -339 Q -10 -334 -18 -337 Q -21 -342 -21 -350 Z M 2 -350 L 21 -350 Q 21 -342 18 -337 Q 10 -334 3 -339 Z" fill={TINTA} />
+      <path d="M -2 -348 L 2 -348 M -21 -349 L -23 -347 M 21 -349 L 23 -347" />
+      <path d="M -16 -347 L -12 -341 M 7 -347 L 11 -341" stroke={PAPEL} strokeWidth={1} />
+      {/* nariz, boca seria y mentón */}
+      <path d="M 0 -336 Q 2 -329 -2 -327" fill="none" />
+      <path d="M -6 -321 Q 0 -319 6 -321" fill="none" />
+    </g>
+  );
+}
+
+/** Alto y ancho de Benjamín en sus coordenadas locales. */
+const BENJA = { alto: 392, ancho: 124 };
 
 type Lugar = { id: number; x: number; y: number; s: number; fila: number };
 
 function armar(W: number, H: number, semilla: number) {
   const k = H / 480;
   const centro = W / 2;
-  // Benjamín: el retrato ilustrado, apoyado abajo al centro.
-  const benjaAlto = Math.min(H * 0.78, (W * 0.62 * RETRATO.h) / RETRATO.w);
-  const benjaAncho = (benjaAlto * RETRATO.w) / RETRATO.h;
+  // Benjamín, de pie al centro y aislado: la gente deja un claro a su
+  // alrededor, como en el reel.
+  const benjaEscala = Math.min((H * 0.9) / BENJA.alto, k * 1.18);
+  const claro = BENJA.ancho * benjaEscala;
   const lugares: Lugar[] = [];
   const filas = [
-    { y: H - 150 * k, s: 0.95 * k, paso: 74 * k, fila: 0 },
-    { y: H - 70 * k, s: 1.08 * k, paso: 86 * k, fila: 1 },
-    { y: H + 6 * k, s: 1.25 * k, paso: 100 * k, fila: 2 },
+    { y: H - 150 * k, s: 0.95 * k, paso: 74 * k, fila: 0, hueco: claro * 0.95 },
+    { y: H - 70 * k, s: 1.08 * k, paso: 86 * k, fila: 1, hueco: claro * 1.15 },
+    { y: H + 6 * k, s: 1.25 * k, paso: 100 * k, fila: 2, hueco: claro * 1.4 },
   ];
   const r = azar(semilla);
   let id = 0;
   for (const f of filas) {
     let x = -f.paso * (0.2 + r() * 0.5);
     while (x < W + f.paso) {
-      const hueco = f.fila === 2 ? benjaAncho * 0.42 : f.fila === 1 ? benjaAncho * 0.22 : 0;
-      if (Math.abs(x - centro) > hueco) {
+      if (Math.abs(x - centro) > f.hueco) {
         const s = f.s * (r() < 0.12 && f.fila === 2 ? 0.78 : 0.94 + r() * 0.12);
         lugares.push({ id: id++, x: x + (r() - 0.5) * f.paso * 0.3, y: f.y, s, fila: f.fila });
       }
       x += f.paso * (0.85 + r() * 0.3);
     }
   }
-  return { lugares, k, benja: { x: centro - benjaAncho / 2, y: H - benjaAlto, w: benjaAncho, h: benjaAlto } };
+  // Gente que pasa caminando por delante de él, de un lado al otro.
+  const caminantes = [0, 1, 2].map((i) => ({
+    i,
+    s: 1.32 * k * (0.92 + r() * 0.12),
+    y: H + 12 * k,
+    sentido: i % 2 === 0 ? 1 : -1,
+    duracion: (W + 320 * k) / ((52 + r() * 26) * k),
+    retraso: -r() * 18 - i * 6,
+  }));
+  return { lugares, k, centro, benjaEscala, caminantes };
 }
 
 export function Multitud({ trafico, descripcion }: { trafico: string; descripcion: string }) {
   const caja = useRef<HTMLDivElement>(null);
   const [tam, setTam] = useState<{ W: number; H: number } | null>(null);
   const [semillas, setSemillas] = useState<number[]>([]);
+  const [paseantes, setPaseantes] = useState<number[]>([777, 31337, 4242]);
   const [visible, setVisible] = useState(false);
   const [quieta, setQuieta] = useState(false);
 
@@ -305,7 +368,6 @@ export function Multitud({ trafico, descripcion }: { trafico: string; descripcio
   const plano = tam ? armar(tam.W, tam.H, 2911) : null;
   const total = plano?.lugares.length ?? 0;
 
-  // Una semilla por lugar; se conservan al cambiar de tamaño.
   useEffect(() => {
     if (!total) return;
     setSemillas((prev) => Array.from({ length: total }, (_, i) => prev[i] ?? 1000 + i * 7919));
@@ -333,6 +395,23 @@ export function Multitud({ trafico, descripcion }: { trafico: string; descripcio
     });
   }
 
+  const fila = (n: number) =>
+    plano!.lugares
+      .filter((l) => l.fila === n)
+      .map((l) => (
+        <g key={l.id} transform={`translate(${l.x} ${l.y}) scale(${l.s})`}>
+          <g
+            className="persona"
+            style={{ ["--fila" as string]: n, ["--retraso" as string]: `${(l.id % 9) * 0.05}s` }}
+            onClick={() => cambiar(l.id)}
+          >
+            <g key={semillas[l.id]} className="persona__entra">
+              {semillas[l.id] !== undefined ? <DibujoPersona p={crearPersona(semillas[l.id])} /> : null}
+            </g>
+          </g>
+        </g>
+      ));
+
   return (
     <div className="banda-ciudad relative overflow-hidden">
       <p aria-hidden="true" className="marca-agua pointer-events-none absolute left-1/2 top-[4%] -translate-x-1/2 select-none">
@@ -342,52 +421,42 @@ export function Multitud({ trafico, descripcion }: { trafico: string; descripcio
         ref={caja}
         role="img"
         aria-label={descripcion}
-        className={`multitud relative h-[clamp(20rem,40vw,34rem)] w-full ${visible || quieta ? "multitud--llega" : ""}`}
+        className={`multitud relative h-[clamp(20rem,40vw,34rem)] w-full ${visible || quieta ? "multitud--llega" : ""} ${visible && !quieta ? "multitud--camina" : ""}`}
       >
         {tam && plano ? (
           <svg aria-hidden="true" width={tam.W} height={tam.H} viewBox={`0 0 ${tam.W} ${tam.H}`} className="absolute inset-0 block">
-            {[0, 1].map((fila) =>
-              plano.lugares
-                .filter((l) => l.fila === fila)
-                .map((l) => (
-                  <g key={l.id} transform={`translate(${l.x} ${l.y}) scale(${l.s})`}>
-                    <g
-                      className="persona"
-                      style={{ ["--fila" as string]: fila, ["--retraso" as string]: `${(l.id % 9) * 0.05}s` }}
-                      onClick={() => cambiar(l.id)}
-                    >
-                      <g key={semillas[l.id]} className="persona__entra">
-                        {semillas[l.id] !== undefined ? <DibujoPersona p={crearPersona(semillas[l.id])} /> : null}
+            {fila(0)}
+            {fila(1)}
+            <g transform={`translate(${plano.centro} ${tam.H - 2 * plano.k}) scale(${plano.benjaEscala})`}>
+              <g className="persona persona--benja" style={{ ["--fila" as string]: 1.5, ["--retraso" as string]: "0.1s" }}>
+                <DibujoBenjamin />
+              </g>
+            </g>
+            {fila(2)}
+            {/* Los que pasan caminando por delante. Cada vuelta llega otra persona. */}
+            {quieta
+              ? null
+              : plano.caminantes.map((c) => (
+                  <g
+                    key={c.i}
+                    className="caminante"
+                    style={{
+                      ["--desde" as string]: `${c.sentido > 0 ? -160 * plano.k : tam.W + 160 * plano.k}px`,
+                      ["--hasta" as string]: `${c.sentido > 0 ? tam.W + 160 * plano.k : -160 * plano.k}px`,
+                      animationDuration: `${c.duracion}s`,
+                      animationDelay: `${c.retraso}s`,
+                    }}
+                    onAnimationIteration={() =>
+                      setPaseantes((prev) => prev.map((v, j) => (j === c.i ? Math.floor(Math.random() * 1e9) : v)))
+                    }
+                  >
+                    <g transform={`translate(0 ${c.y}) scale(${c.s})`}>
+                      <g className="caminante__paso">
+                        <DibujoPersona p={{ ...crearPersona(paseantes[c.i]), giro: c.sentido * 8 }} />
                       </g>
                     </g>
                   </g>
-                )),
-            )}
-            {/* Benjamín, ilustrado a partir de su foto (scripts/ilustrar-retrato.mjs) */}
-            <g className="persona persona--benja" style={{ ["--fila" as string]: 1.5, ["--retraso" as string]: "0.1s" }}>
-              <image
-                href="/benjamin-ilustrado.png"
-                x={plano.benja.x}
-                y={plano.benja.y}
-                width={plano.benja.w}
-                height={plano.benja.h}
-              />
-            </g>
-            {plano.lugares
-              .filter((l) => l.fila === 2)
-              .map((l) => (
-                <g key={l.id} transform={`translate(${l.x} ${l.y}) scale(${l.s})`}>
-                  <g
-                    className="persona"
-                    style={{ ["--fila" as string]: 2, ["--retraso" as string]: `${(l.id % 9) * 0.05}s` }}
-                    onClick={() => cambiar(l.id)}
-                  >
-                    <g key={semillas[l.id]} className="persona__entra">
-                      {semillas[l.id] !== undefined ? <DibujoPersona p={crearPersona(semillas[l.id])} /> : null}
-                    </g>
-                  </g>
-                </g>
-              ))}
+                ))}
           </svg>
         ) : null}
       </div>

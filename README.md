@@ -32,8 +32,9 @@ pero es propia: no se copió la ilustración del reel (es arte de otra persona).
 8. **Pie:** banda negra con «Nos vemos.» y, abajo, la banda blanca con
    «BENJAMÍN.» gigante y una **multitud ilustrada a línea**, generada en SVG
    combinando peinados, ropa, caras y accesorios. Benjamín está al centro, de
-   ilustrado en tinta a partir de su foto (copete, lentes de sol y polerón negro;
-   `scripts/ilustrar-retrato.mjs`). Las filas suben al entrar,
+   de frente y aislado, dibujado con el mismo trazo a partir de su foto (pelo
+   corto texturizado, lentes de sol y polerón con cordones); la gente pasa
+   caminando por delante de él. Las filas suben al entrar,
    cada 2,4 s alguien se va y llega otra persona, al apuntar dan un saltito y un
    clic cambia a quien tocas. Cierra con «Por fin, algo de tráfico en mi sitio.».
 9. **Preguntar:** el «Ask AI» del reel, sin modelo detrás. Responde con los

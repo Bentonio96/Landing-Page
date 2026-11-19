@@ -539,6 +539,30 @@
 @keyframes persona-llega {
   from { transform: translateY(105%); }
 }
+/* Los que pasan por delante: cruzan de un lado al otro con un leve vaivén. */
+.multitud .caminante {
+  transform: translateX(var(--desde));
+  visibility: hidden;
+}
+.multitud--camina .caminante {
+  visibility: visible;
+  animation-name: caminar;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.multitud .caminante__paso {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: paso 0.55s ease-in-out infinite alternate;
+}
+@keyframes caminar {
+  from { transform: translateX(var(--desde)); }
+  to { transform: translateX(var(--hasta)); }
+}
+@keyframes paso {
+  from { transform: translateY(0) rotate(-1.5deg); }
+  to { transform: translateY(-3%) rotate(1.5deg); }
+}
 @media (prefers-reduced-motion: reduce) {
   .multitud .persona,
   .multitud .persona__entra { transform: none !important; animation: none !important; }
