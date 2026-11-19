@@ -9,7 +9,7 @@ import type { ReactNode } from "react";
  * Gente dibujada a línea, en blanco y negro, generada aquí mismo con una
  * semilla (no es la ilustración del reel: cada persona sale de combinar
  * peinados, ropa, caras y accesorios). Benjamín va al centro, de negro, de
- * cuerpo entero, con sus rulos y lentes de sol.
+ * cuerpo entero, con su pelo liso y texturizado y lentes de sol.
  *
  * - Al entrar en pantalla, las filas suben desde abajo, de atrás hacia
  *   adelante.
@@ -240,23 +240,18 @@ function DibujoPersona({ p }: { p: Persona }) {
 }
 
 /**
- * El pelo de Benjamín, sacado de sus fotos: rulos oscuros con volumen arriba,
- * algunos que caen sobre la frente hacia un lado, lados más cortos y rulos
- * en la nuca. Son círculos sobre una base, en coordenadas de su cabeza.
+ * El pelo de Benjamín: liso y texturizado, con volumen arriba peinado hacia
+ * un lado, puntas desordenadas y los lados cortos. El borde de arriba son
+ * mechones en punta; las líneas blancas marcan la dirección del peinado.
  */
-const RULOS_ARRIBA: [number, number, number][] = [
-  [-21, -357, 5], [-18, -364, 5.5], [-11, -369, 6], [-3, -373, 6.5], [6, -375, 7], [14, -373, 7],
-  [21, -368, 6.5], [25, -360, 5], [-6, -366, 5], [4, -368, 5.5], [13, -365, 5.5], [20, -361, 5],
-];
-const RULOS_FRENTE: [number, number, number][] = [
-  [9, -358, 4.5], [14, -355, 4.2], [19, -352, 3.8], [4, -360, 3.8], [23, -354, 3.5],
-];
-// Rulos de la nuca: asoman apenas detrás de las orejas.
-const RULOS_NUCA: [number, number, number][] = [
-  [-24, -349, 4.5], [24, -349, 4.5], [25, -343, 3.5],
-];
+const PELO_BENJAMIN =
+  "M -23 -350 Q -26 -364 -18 -373 Q -16 -378 -11 -378 Q -8 -383 -2 -382 Q 2 -386 8 -384 Q 12 -387 17 -383 " +
+  "Q 22 -383 24 -378 Q 29 -375 28 -369 Q 30 -360 24 -350 " +
+  "Q 21 -357 17 -360 L 15 -356 L 11 -361 L 7 -358 L 3 -363 Q -10 -364 -18 -358 Q -21 -355 -23 -350 Z";
+const MECHAS_BENJAMIN =
+  "M -14 -372 Q -6 -378 4 -380 M -8 -367 Q 2 -374 13 -377 M 0 -365 Q 8 -370 19 -372 M 9 -363 Q 15 -366 23 -365";
 
-/** Benjamín de cuerpo entero: polerón y pantalón negros, rulos y lentes de sol. */
+/** Benjamín de cuerpo entero: polerón y pantalón negros, pelo texturizado y lentes de sol. */
 function DibujoBenjamin() {
   return (
     <g strokeLinecap="round" strokeLinejoin="round" stroke={TINTA}>
@@ -275,26 +270,15 @@ function DibujoBenjamin() {
         <rect x={10} y={-236} width={22} height={6} fill={PAPEL} stroke="none" transform="rotate(8 21 -233)" />
         {/* cuello y cabeza */}
         <path d="M -9 -320 L -9 -305 L 9 -305 L 9 -320" fill={PAPEL} />
-        {/* rulos de la nuca, detrás de la cara */}
-        {RULOS_NUCA.map(([x, y, r]) => (
-          <circle key={`n${x}${y}`} cx={x} cy={y} r={r} fill={TINTA} />
-        ))}
         <ellipse cx={-22} cy={-342} rx={4.5} ry={7} fill={PAPEL} />
         <ellipse cx={22} cy={-342} rx={4.5} ry={7} fill={PAPEL} />
         <circle cx={22} cy={-332} r={2.5} fill="none" />
         <ellipse cx={0} cy={-342} rx={22} ry={27} fill={PAPEL} />
         {/* lados más cortos, pegados a la cabeza */}
         <path d="M -23 -354 Q -25 -346 -23 -341 L -20 -342 Q -21 -348 -19 -354 Z M 23 -354 Q 25 -346 23 -341 L 20 -342 Q 21 -348 19 -354 Z" fill={TINTA} />
-        {/* volumen de rulos arriba y los que caen sobre la frente */}
-        <ellipse cx={2} cy={-362} rx={23} ry={10} fill={TINTA} stroke="none" />
-        {RULOS_ARRIBA.map(([x, y, r]) => (
-          <circle key={`a${x}${y}`} cx={x} cy={y} r={r} fill={TINTA} />
-        ))}
-        {RULOS_FRENTE.map(([x, y, r]) => (
-          <circle key={`f${x}${y}`} cx={x} cy={y} r={r} fill={TINTA} />
-        ))}
-        <path d="M 21 -350 q 4 3 1 7 q -3 1 -3 -2" fill="none" />
-        <path d="M -10 -369 q 3 -3 6 -1 M 4 -372 q 4 -4 8 0 M 15 -369 q 3 -3 6 1 M -17 -362 q 2 -3 5 -2" fill="none" stroke={PAPEL} strokeWidth={1.1} />
+        {/* pelo liso y texturizado, con volumen peinado hacia un lado */}
+        <path d={PELO_BENJAMIN} fill={TINTA} />
+        <path d={MECHAS_BENJAMIN} fill="none" stroke={PAPEL} strokeWidth={1.1} />
         {/* lentes de sol, como en su foto */}
         <path d="M -17 -348 L -3 -348 Q -2 -336 -10 -335 Q -18 -336 -17 -348 Z M 4 -348 L 19 -348 Q 20 -336 11 -335 Q 3 -336 4 -348 Z M -3 -345 L 4 -345 M 19 -346 L 23 -344" fill={TINTA} />
         <path d="M 1 -341 Q 4 -334 -1 -332" fill="none" />
