@@ -164,12 +164,13 @@ export function Movimiento() {
               "--p": 1,
               ease: "none",
               stagger: 0.12,
-              scrollTrigger: { trigger: cita, start: "top 82%", end: "bottom 50%", scrub: 0.4 },
+              scrollTrigger: { trigger: cita, start: "top 85%", end: "center 60%", scrub: 0.4 },
             },
           );
 
           // El subrayado se traza detrás de las palabras, cuando la frase
-          // ya está casi encendida: primero se lee, después se subraya.
+          // ya está casi encendida: primero se lee, después se subraya. Queda
+          // completo cuando el centro de la frase llega a la mitad de la pantalla.
           const subrayado = cita.querySelector("[data-subrayado]");
           if (subrayado) {
             gsap.fromTo(
@@ -178,7 +179,7 @@ export function Movimiento() {
               {
                 "--trazo": 1,
                 ease: "none",
-                scrollTrigger: { trigger: cita, start: "top 60%", end: "bottom 40%", scrub: 0.5 },
+                scrollTrigger: { trigger: cita, start: "top 70%", end: "center 50%", scrub: 0.3 },
               },
             );
           }
