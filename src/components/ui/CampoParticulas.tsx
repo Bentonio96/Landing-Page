@@ -322,7 +322,7 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
         turno[k] = Math.random();
         desvioX[k] = (Math.random() - 0.5) * W * 0.22;
         desvioY[k] = (Math.random() - 0.5) * H * 0.12;
-        escala[k] = 0.8 + Math.random() * 0.45;
+        escala[k] = 0.85 + Math.random() * 0.3;
         if (primeraVez || k >= viejo) {
           // Entrada: los puntos llegan desde toda la pantalla.
           px[k] = Math.random() * W;
@@ -342,29 +342,10 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
       despertar();
     }
 
-    // Cada punto es un círculo con un halo suave (un sprite pintado una vez
-    // por color), no un cuadrado: se ve como luz, no como arena.
-    const sprites = new Map<string, HTMLCanvasElement>();
-    function sprite(color: string) {
-      let sp = sprites.get(color);
-      if (sp) return sp;
-      sp = document.createElement("canvas");
-      sp.width = sp.height = 32;
-      const c = sp.getContext("2d")!;
-      const g = c.createRadialGradient(16, 16, 0, 16, 16, 16);
-      g.addColorStop(0, color);
-      g.addColorStop(0.32, color);
-      g.addColorStop(0.42, color.startsWith("rgb(") ? color.replace("rgb(", "rgba(").replace(")", ", 0.35)") : color + "59");
-      g.addColorStop(1, color.startsWith("rgb(") ? color.replace("rgb(", "rgba(").replace(")", ", 0)") : color + "00");
-      c.fillStyle = g;
-      c.fillRect(0, 0, 32, 32);
-      sprites.set(color, sp);
-      return sp;
-    }
-
+    // Cada punto es un círculo limpio y sólido, con aire entre ellos.
     function dibujar(tam: number, color: string) {
       ctx!.clearRect(0, 0, W, H);
-      const sp = sprite(color);
+      ctx!.fillStyle = color;
       // Orden por nivel de brillo (conteo): un recorrido por punto.
       const cuentas = new Uint32Array(NIVELES + 2);
       for (let k = 0; k < n; k++) cuentas[nivel[k] + 1]++;
@@ -375,15 +356,18 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
         const desde = cuentas[l];
         const hasta = cuentas[l + 1];
         if (hasta <= desde) continue;
-        ctx!.globalAlpha = 0.22 + (l / NIVELES) * 0.78;
+        ctx!.globalAlpha = 0.25 + (l / NIVELES) * 0.75;
+        const base = tam * (0.75 + (l / NIVELES) * 0.45) * 0.58;
+        ctx!.beginPath();
         for (let j = desde; j < hasta; j++) {
           const k = orden[j];
           const y = py[k];
-          if (y < -12 || y > H + 12) continue;
-          // El diámetro del núcleo es ~1/3 del sprite; el resto es halo.
-          const d = tam * (0.75 + (l / NIVELES) * 0.6) * escala[k] * 3;
-          ctx!.drawImage(sp, px[k] - d / 2, y - d / 2, d, d);
+          if (y < -8 || y > H + 8) continue;
+          const r = base * escala[k];
+          ctx!.moveTo(px[k] + r, y);
+          ctx!.arc(px[k], y, r, 0, Math.PI * 2);
         }
+        ctx!.fill();
       }
       ctx!.globalAlpha = 1;
     }
@@ -406,7 +390,7 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
 
       // El viaje usa el tramo central del scroll entre las dos zonas: cerca
       // de cada una, la figura se queda armada para leerla.
-      const viaje = reducido ? (avance < 0.5 ? 0 : 1) : Math.min(1, Math.max(0, (avance - 0.28) / 0.44));
+      const viaje = reducido ? (avance < 0.5 ? 0 : 1) : Math.min(1, Math.max(0, (avance - 0.15) / 0.7));
       const tamA = Math.max(1.4, Math.min(3.2, (A.pasos[forma(A)] ?? 5) * 0.42));
       const tamB = Math.max(1.4, Math.min(3.2, (B.pasos[forma(B)] ?? 5) * 0.42));
       const tam = tamA + (tamB - tamA) * viaje;
@@ -425,15 +409,17 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
 
       for (let it = 0; it < iteraciones; it++) {
         // Resortes blandos: los puntos se deslizan en vez de saltar.
-        const K = llegando > 0 ? 0.026 : 0.06;
-        const D = llegando > 0 ? 0.87 : 0.8;
+        // Blandos y bien amortiguados: los puntos flotan detrás del scroll,
+        // sin rebotar, y tardan cerca de un segundo en asentarse.
+        const K = llegando > 0 ? 0.022 : 0.015;
+        const D = llegando > 0 ? 0.88 : 0.86;
         if (llegando > 0) llegando--;
         energia = 0;
         resto = 0;
         for (let k = 0; k < n; k++) {
           // Cada punto sale en su turno: la figura se desarma de a poco y la
           // nube cae hacia la sección de abajo abriéndose a los lados.
-          const propio = Math.min(1, Math.max(0, (viaje - turno[k] * 0.3) / 0.7));
+          const propio = Math.min(1, Math.max(0, (viaje - turno[k] * 0.4) / 0.6));
           const e = reducido ? viaje : suave(propio);
           const a = fA[k % mA];
           const b = fB[k % mB];

@@ -32,7 +32,9 @@ abre a los lados hasta armar la de abajo (si el scroll se detiene, la nube
 queda a medio camino). Cerca de cada sección la figura queda armada para
 leerla. Solo viajan los puntos que la figura de destino necesita y en el aire
 van atenuados; el canvas va detrás del contenido, así que tarjetas y textos lo
-tapan. Cada punto es un círculo con halo suave. El cursor (o el dedo) los
+tapan. Cada punto es un círculo limpio, con aire entre ellos, y el viaje es
+lento: los puntos flotan detrás del scroll y tardan cerca de un segundo en
+asentarse. El cursor (o el dedo) los
 aparta y vuelven a su lugar.
 
 | Inicio | Claro | En vuelo |
