@@ -9,7 +9,7 @@ import type { ReactNode } from "react";
  * Gente dibujada a línea, en blanco y negro, generada aquí mismo con una
  * semilla (no es la ilustración del reel: cada persona sale de combinar
  * peinados, ropa, caras y accesorios). Benjamín va al centro, de negro, de
- * cuerpo entero y con el pelo de la foto del CV.
+ * cuerpo entero, con sus rulos y lentes de sol.
  *
  * - Al entrar en pantalla, las filas suben desde abajo, de atrás hacia
  *   adelante.
@@ -240,30 +240,23 @@ function DibujoPersona({ p }: { p: Persona }) {
 }
 
 /**
- * Contorno del pelo de Benjamín: rizos alrededor de la coronilla (bultos sobre
- * una elipse) y un borde de flequillo con mechones en punta sobre la frente.
+ * El pelo de Benjamín, sacado de sus fotos: rulos oscuros con volumen arriba,
+ * algunos que caen sobre la frente hacia un lado, lados más cortos y rulos
+ * en la nuca. Son círculos sobre una base, en coordenadas de su cabeza.
  */
-const PELO_BENJAMIN = (() => {
-  const cx = 1;
-  const cy = -358;
-  const rx = 28;
-  const ry = 19;
-  const desde = (168 * Math.PI) / 180;
-  const hasta = (372 * Math.PI) / 180;
-  const n = 15;
-  const punto = (a: number, f = 1) => [cx + Math.cos(a) * rx * f, cy + Math.sin(a) * ry * f].map((v) => v.toFixed(1)).join(" ");
-  let d = `M ${punto(desde)}`;
-  for (let i = 0; i < n; i++) {
-    const a0 = desde + ((hasta - desde) * i) / n;
-    const a1 = desde + ((hasta - desde) * (i + 1)) / n;
-    d += ` Q ${punto((a0 + a1) / 2, 1.13)} ${punto(a1)}`;
-  }
-  // flequillo de derecha a izquierda, con puntas que caen sobre la frente
-  d += " L 24 -348 Q 20 -352 17 -356 Q 14 -346 9 -359 Q 5 -349 1 -361 Q -4 -350 -8 -360 Q -13 -351 -17 -359 Q -21 -351 -25 -347 Z";
-  return d;
-})();
+const RULOS_ARRIBA: [number, number, number][] = [
+  [-21, -357, 5], [-18, -364, 5.5], [-11, -369, 6], [-3, -373, 6.5], [6, -375, 7], [14, -373, 7],
+  [21, -368, 6.5], [25, -360, 5], [-6, -366, 5], [4, -368, 5.5], [13, -365, 5.5], [20, -361, 5],
+];
+const RULOS_FRENTE: [number, number, number][] = [
+  [9, -358, 4.5], [14, -355, 4.2], [19, -352, 3.8], [4, -360, 3.8], [23, -354, 3.5],
+];
+// Rulos de la nuca: asoman apenas detrás de las orejas.
+const RULOS_NUCA: [number, number, number][] = [
+  [-24, -349, 4.5], [24, -349, 4.5], [25, -343, 3.5],
+];
 
-/** Benjamín de cuerpo entero: polerón y pantalón negros, pelo como en la foto del CV. */
+/** Benjamín de cuerpo entero: polerón y pantalón negros, rulos y lentes de sol. */
 function DibujoBenjamin() {
   return (
     <g strokeLinecap="round" strokeLinejoin="round" stroke={TINTA}>
@@ -282,21 +275,28 @@ function DibujoBenjamin() {
         <rect x={10} y={-236} width={22} height={6} fill={PAPEL} stroke="none" transform="rotate(8 21 -233)" />
         {/* cuello y cabeza */}
         <path d="M -9 -320 L -9 -305 L 9 -305 L 9 -320" fill={PAPEL} />
+        {/* rulos de la nuca, detrás de la cara */}
+        {RULOS_NUCA.map(([x, y, r]) => (
+          <circle key={`n${x}${y}`} cx={x} cy={y} r={r} fill={TINTA} />
+        ))}
         <ellipse cx={-22} cy={-342} rx={4.5} ry={7} fill={PAPEL} />
         <ellipse cx={22} cy={-342} rx={4.5} ry={7} fill={PAPEL} />
         <circle cx={22} cy={-332} r={2.5} fill="none" />
         <ellipse cx={0} cy={-342} rx={22} ry={27} fill={PAPEL} />
-        {/* pelo como en la foto del CV: ondulado y desordenado arriba, con
-            mechones que caen sobre la frente y los lados cortos */}
-        <path d={PELO_BENJAMIN} fill={TINTA} />
-        <path d="M -14 -372 q 4 -6 9 -2 M 2 -376 q 5 -5 10 0 M 14 -368 q 4 -4 7 1 M -20 -360 q 2 -6 7 -5" fill="none" stroke={PAPEL} strokeWidth={1.2} />
-        {/* cejas gruesas y ojos, como en la foto del CV */}
-        <path d="M -16 -350 Q -10 -354 -4 -351 L -4 -348 Q -10 -351 -16 -347 Z M 4 -351 Q 10 -354 16 -350 L 16 -347 Q 10 -351 4 -348 Z" fill={TINTA} />
-        <path d="M -14 -343 Q -10 -346 -6 -343 M 6 -343 Q 10 -346 14 -343" fill="none" />
-        <circle cx={-10} cy={-342} r={2} fill={TINTA} />
-        <circle cx={10} cy={-342} r={2} fill={TINTA} />
-        {/* barba de pocos días */}
-        <path d="M -18 -330 Q -14 -318 0 -317 Q 14 -318 18 -330" fill="none" stroke={TINTA} strokeDasharray="1.5 3" />
+        {/* lados más cortos, pegados a la cabeza */}
+        <path d="M -23 -354 Q -25 -346 -23 -341 L -20 -342 Q -21 -348 -19 -354 Z M 23 -354 Q 25 -346 23 -341 L 20 -342 Q 21 -348 19 -354 Z" fill={TINTA} />
+        {/* volumen de rulos arriba y los que caen sobre la frente */}
+        <ellipse cx={2} cy={-362} rx={23} ry={10} fill={TINTA} stroke="none" />
+        {RULOS_ARRIBA.map(([x, y, r]) => (
+          <circle key={`a${x}${y}`} cx={x} cy={y} r={r} fill={TINTA} />
+        ))}
+        {RULOS_FRENTE.map(([x, y, r]) => (
+          <circle key={`f${x}${y}`} cx={x} cy={y} r={r} fill={TINTA} />
+        ))}
+        <path d="M 21 -350 q 4 3 1 7 q -3 1 -3 -2" fill="none" />
+        <path d="M -10 -369 q 3 -3 6 -1 M 4 -372 q 4 -4 8 0 M 15 -369 q 3 -3 6 1 M -17 -362 q 2 -3 5 -2" fill="none" stroke={PAPEL} strokeWidth={1.1} />
+        {/* lentes de sol, como en su foto */}
+        <path d="M -17 -348 L -3 -348 Q -2 -336 -10 -335 Q -18 -336 -17 -348 Z M 4 -348 L 19 -348 Q 20 -336 11 -335 Q 3 -336 4 -348 Z M -3 -345 L 4 -345 M 19 -346 L 23 -344" fill={TINTA} />
         <path d="M 1 -341 Q 4 -334 -1 -332" fill="none" />
         <path d="M -6 -324 Q 0 -321 6 -324" fill="none" />
       </g>

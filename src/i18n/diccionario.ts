@@ -122,7 +122,7 @@ const diccionario = {
       ciudad: {
         trafico: "Por fin, algo de tráfico en mi sitio.",
         descripcion:
-          "Ilustración a línea de una multitud de personas que va cambiando, con Benjamín al centro, vestido de negro.",
+          "Ilustración a línea de una multitud de personas que va cambiando, con Benjamín al centro, vestido de negro y con lentes de sol.",
       },
     },
     preguntas: {
@@ -257,7 +257,7 @@ const diccionario = {
       ciudad: {
         trafico: "Finally, some traffic on my website.",
         descripcion:
-          "Line illustration of a changing crowd of people, with Benjamín in the middle, dressed in black.",
+          "Line illustration of a changing crowd of people, with Benjamín in the middle, dressed in black and wearing sunglasses.",
       },
     },
     preguntas: {
