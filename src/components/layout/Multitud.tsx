@@ -85,7 +85,7 @@ function DibujoPersona({ p }: { p: Persona }) {
   const linea = p.tonoRopa === "negro" ? PAPEL : TINTA;
   const colorPelo = p.canas ? GRIS : TINTA;
   const w = 44 * p.ancho;
-  const torso = `M ${-w - 2} 2 L ${-w} -58 Q ${-w + 2} -78 -20 -82 L 20 -82 Q ${w - 2} -78 ${w} -58 L ${w + 2} 2 Z`;
+  const torso = `M ${-w - 3} 60 L ${-w} -58 Q ${-w + 2} -78 -20 -82 L 20 -82 Q ${w - 2} -78 ${w} -58 L ${w + 3} 60 Z`;
 
   const cabezaY = -122;
   const ropa: ReactNode[] = [];
@@ -103,18 +103,18 @@ function DibujoPersona({ p }: { p: Persona }) {
   }
   if (p.ropa === "camisa") {
     ropa.push(<path key="cl" d="M -13 -82 L -17 -68 L -3 -73 L 0 -82 L 3 -73 L 17 -68 L 13 -82" fill={relleno} stroke={linea} />);
-    ropa.push(<path key="bt" d="M 0 -73 L 0 2" stroke={linea} />);
+    ropa.push(<path key="bt" d="M 0 -73 L 0 60" stroke={linea} />);
   }
   if (p.ropa === "rayas") {
-    for (let y = -64; y < 0; y += 11) ropa.push(<path key={`r${y}`} d={`M ${-w + 3} ${y} L ${w - 3} ${y}`} stroke={linea} />);
+    for (let y = -64; y < 60; y += 11) ropa.push(<path key={`r${y}`} d={`M ${-w + 3} ${y} L ${w - 3} ${y}`} stroke={linea} />);
     ropa.push(<path key="cu" d="M -12 -82 Q 0 -72 12 -82" fill="none" stroke={linea} />);
   }
   if (p.ropa === "chaqueta") {
-    ropa.push(<path key="in" d="M -12 -82 L -8 2 L 8 2 L 12 -82 Z" fill={p.tonoRopa === "negro" ? PAPEL : "#EDEDED"} stroke={TINTA} />);
+    ropa.push(<path key="in" d="M -12 -82 L -8 60 L 8 60 L 12 -82 Z" fill={p.tonoRopa === "negro" ? PAPEL : "#EDEDED"} stroke={TINTA} />);
     ropa.push(<path key="so" d="M -12 -82 L -20 -56 L -10 -50 M 12 -82 L 20 -56 L 10 -50" fill="none" stroke={linea} />);
   }
   // pliegues de los brazos
-  ropa.push(<path key="br" d={`M ${-w + 10} -48 L ${-w + 11} 2 M ${w - 10} -48 L ${w - 11} 2`} stroke={linea} />);
+  ropa.push(<path key="br" d={`M ${-w + 10} -48 L ${-w + 11} 60 M ${w - 10} -48 L ${w - 11} 60`} stroke={linea} />);
 
   const extra: ReactNode[] = [];
   if (p.extra === "audifonos") {
@@ -132,7 +132,7 @@ function DibujoPersona({ p }: { p: Persona }) {
     extra.push(<path key="mn" d="M 6 -30 Q 2 -24 10 -18" fill="none" stroke={TINTA} />);
   }
   if (p.extra === "mochila") {
-    extra.push(<path key="ti" d={`M ${-w + 10} -76 L ${-w + 16} 2 M ${w - 10} -76 L ${w - 16} 2`} stroke={TINTA} strokeWidth={5} />);
+    extra.push(<path key="ti" d={`M ${-w + 10} -76 L ${-w + 16} 60 M ${w - 10} -76 L ${w - 16} 60`} stroke={TINTA} strokeWidth={5} />);
   }
 
   // Pelo de atrás (cae sobre los hombros) y de adelante.
@@ -297,41 +297,51 @@ const BENJA = { alto: 392, ancho: 124 };
 
 type Lugar = { id: number; x: number; y: number; s: number; fila: number };
 
+/**
+ * La composición del reel: una fila de atrás que corta a la altura de la
+ * cintura (el «suelo» blanco la tapa), Benjamín de cuerpo entero en un claro
+ * al centro y una fila de adelante con cabezas grandes que el borde corta en
+ * los hombros. La gente va en grupos chicos con aire entre ellos, no en muro.
+ */
 function armar(W: number, H: number, semilla: number) {
   const k = H / 480;
   const centro = W / 2;
-  // Benjamín, de pie al centro y aislado: la gente deja un claro a su
-  // alrededor, como en el reel.
-  const benjaEscala = Math.min((H * 0.9) / BENJA.alto, k * 1.18);
-  const claro = BENJA.ancho * benjaEscala;
-  const lugares: Lugar[] = [];
-  const filas = [
-    { y: H - 150 * k, s: 0.95 * k, paso: 74 * k, fila: 0, hueco: claro * 0.95 },
-    { y: H - 70 * k, s: 1.08 * k, paso: 86 * k, fila: 1, hueco: claro * 1.15 },
-    { y: H + 6 * k, s: 1.25 * k, paso: 100 * k, fila: 2, hueco: claro * 1.4 },
-  ];
+  const suelo = Math.round(H * 0.7);
+  const benjaEscala = (H * 0.72) / BENJA.alto;
+  const claro = (BENJA.ancho / 2) * benjaEscala;
   const r = azar(semilla);
+  const lugares: Lugar[] = [];
   let id = 0;
-  for (const f of filas) {
-    let x = -f.paso * (0.2 + r() * 0.5);
-    while (x < W + f.paso) {
-      if (Math.abs(x - centro) > f.hueco) {
-        const s = f.s * (r() < 0.12 && f.fila === 2 ? 0.78 : 0.94 + r() * 0.12);
-        lugares.push({ id: id++, x: x + (r() - 0.5) * f.paso * 0.3, y: f.y, s, fila: f.fila });
+  const hilera = (fila: number, y: number, s: number, hueco: number, grupo: [number, number], aire: [number, number]) => {
+    const ancho = 92 * s;
+    let x = -ancho * (0.1 + r() * 0.4);
+    while (x < W + ancho * 0.5) {
+      const n = grupo[0] + Math.floor(r() * (grupo[1] - grupo[0] + 1));
+      for (let j = 0; j < n && x < W + ancho * 0.5; j++) {
+        if (Math.abs(x - centro) > hueco + ancho * 0.45) {
+          lugares.push({ id: id++, x, y: y + (r() - 0.5) * 6 * k, s: s * (0.93 + r() * 0.14), fila });
+        }
+        x += ancho * (0.66 + r() * 0.14);
       }
-      x += f.paso * (0.85 + r() * 0.3);
+      x += ancho * (aire[0] + r() * (aire[1] - aire[0]));
     }
-  }
+  };
+  // Atrás: busto más chico, cortado por el suelo.
+  hilera(0, suelo, 1.12 * k, claro * 2.1, [2, 4], [0.35, 1.1]);
+  // Adelante: cabezas grandes, cortadas por el borde de abajo.
+  const sAdelante = 1.42 * k;
+  const yAdelante = H * 0.68 + 160 * sAdelante;
+  hilera(2, yAdelante, sAdelante, claro * 0.55, [1, 3], [0.25, 1.2]);
   // Gente que pasa caminando por delante de él, de un lado al otro.
   const caminantes = [0, 1, 2].map((i) => ({
     i,
-    s: 1.32 * k * (0.92 + r() * 0.12),
-    y: H + 12 * k,
+    s: sAdelante * (0.95 + r() * 0.1),
+    y: yAdelante + 8 * k,
     sentido: i % 2 === 0 ? 1 : -1,
-    duracion: (W + 320 * k) / ((52 + r() * 26) * k),
+    duracion: (W + 360 * k) / ((52 + r() * 26) * k),
     retraso: -r() * 18 - i * 6,
   }));
-  return { lugares, k, centro, benjaEscala, caminantes };
+  return { lugares, k, centro, suelo, benjaEscala, caminantes };
 }
 
 export function Multitud({ trafico, descripcion }: { trafico: string; descripcion: string }) {
@@ -421,13 +431,13 @@ export function Multitud({ trafico, descripcion }: { trafico: string; descripcio
         ref={caja}
         role="img"
         aria-label={descripcion}
-        className={`multitud relative h-[clamp(20rem,40vw,34rem)] w-full ${visible || quieta ? "multitud--llega" : ""} ${visible && !quieta ? "multitud--camina" : ""}`}
+        className={`multitud relative h-[clamp(15rem,34vw,30rem)] w-full ${visible || quieta ? "multitud--llega" : ""} ${visible && !quieta ? "multitud--camina" : ""}`}
       >
         {tam && plano ? (
           <svg aria-hidden="true" width={tam.W} height={tam.H} viewBox={`0 0 ${tam.W} ${tam.H}`} className="absolute inset-0 block">
             {fila(0)}
-            {fila(1)}
-            <g transform={`translate(${plano.centro} ${tam.H - 2 * plano.k}) scale(${plano.benjaEscala})`}>
+            <rect x={0} y={plano.suelo} width={tam.W} height={tam.H - plano.suelo} fill={PAPEL} />
+            <g transform={`translate(${plano.centro} ${tam.H - 3 * plano.k}) scale(${plano.benjaEscala})`}>
               <g className="persona persona--benja" style={{ ["--fila" as string]: 1.5, ["--retraso" as string]: "0.1s" }}>
                 <DibujoBenjamin />
               </g>
@@ -441,8 +451,8 @@ export function Multitud({ trafico, descripcion }: { trafico: string; descripcio
                     key={c.i}
                     className="caminante"
                     style={{
-                      ["--desde" as string]: `${c.sentido > 0 ? -160 * plano.k : tam.W + 160 * plano.k}px`,
-                      ["--hasta" as string]: `${c.sentido > 0 ? tam.W + 160 * plano.k : -160 * plano.k}px`,
+                      ["--desde" as string]: `${c.sentido > 0 ? -180 * plano.k : tam.W + 180 * plano.k}px`,
+                      ["--hasta" as string]: `${c.sentido > 0 ? tam.W + 180 * plano.k : -180 * plano.k}px`,
                       animationDuration: `${c.duracion}s`,
                       animationDelay: `${c.retraso}s`,
                     }}
