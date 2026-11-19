@@ -22,6 +22,7 @@ export function Proyectos({ idioma, t }: Props) {
         titulo={t.proyectos.titulo}
         bajada={t.proyectos.bajada}
         bajadaAbajo
+        figura="proyectos"
         extra={
           <a
             href={perfil.github}

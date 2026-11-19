@@ -49,6 +49,7 @@ export function Contacto({ t }: Props) {
               </a>
             </li>
           </ul>
+          <div aria-hidden="true" data-particulas="contacto" className="mt-10 hidden h-48 lg:block" />
         </div>
         <FormularioCorreo email={perfil.email} t={t} />
       </div>

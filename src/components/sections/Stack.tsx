@@ -16,7 +16,7 @@ export function Stack({ idioma, t }: Props) {
   const categorias = t.stack.categorias as Record<string, string>;
   return (
     <section id="stack" aria-labelledby="stack-titulo" className="lienzo py-seccion">
-      <EncabezadoSeccion id="stack-titulo" titulo={t.stack.titulo} bajada={t.stack.bajada} />
+      <EncabezadoSeccion id="stack-titulo" titulo={t.stack.titulo} bajada={t.stack.bajada} figura="stack" />
       <div className="mt-16 grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
         {stack.map((categoria, i) => (
           <div key={categoria.id} className={CASCADA[i % CASCADA.length]}>

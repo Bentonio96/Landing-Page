@@ -20,7 +20,7 @@ export function Experiencia({ idioma, t }: Props) {
   const n = experiencia.length;
   return (
     <section id="experiencia" aria-labelledby="experiencia-titulo" className="lienzo py-seccion" data-progreso="entrada">
-      <EncabezadoSeccion id="experiencia-titulo" titulo={t.experiencia.titulo} bajada={t.experiencia.bajada} />
+      <EncabezadoSeccion id="experiencia-titulo" titulo={t.experiencia.titulo} bajada={t.experiencia.bajada} figura="experiencia" />
 
       <div className="relative mt-14 hidden h-[7.5rem] lg:block" aria-hidden="true">
         <svg viewBox="0 0 1000 100" preserveAspectRatio="none" className="onda absolute inset-0 size-full overflow-visible">

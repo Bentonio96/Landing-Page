@@ -35,26 +35,17 @@ export function Pildora({ idioma, t }: Props) {
   const boton = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
 
-  // Sección actual: la última cuyo borde superior ya pasó el centro de la
-  // pantalla. El saludo vive dentro del tramo fijo del inicio, así que
-  // «empieza» cuando el tramo va en un 60 %.
+  // Sección actual: la última cuyo borde superior ya pasó el 45 % de la
+  // pantalla.
   useEffect(() => {
     let pendiente = 0;
     function medir() {
       pendiente = 0;
       const linea = window.scrollY + window.innerHeight * 0.45;
-      const escenario = document.getElementById("inicio");
       const marcas: [string, number][] = [["inicio", 0]];
-      if (escenario) {
-        const tramo = Math.max(0, escenario.offsetHeight - window.innerHeight);
-        const inicioSaludo = tramo > 0
-          ? escenario.offsetTop + tramo * 0.6 + window.innerHeight * 0.45
-          : (document.getElementById("sobre-mi")?.getBoundingClientRect().top ?? 0) + window.scrollY;
-        marcas.push(["sobre-mi", inicioSaludo]);
-      }
-      for (const id of ["quien-soy", "stack", "proyectos", "experiencia", "contacto"]) {
+      for (const id of ["sobre-mi", "stack", "proyectos", "experiencia", "contacto"]) {
         const el = document.getElementById(id);
-        if (el) marcas.push([id === "quien-soy" ? "sobre-mi" : id, el.getBoundingClientRect().top + window.scrollY]);
+        if (el) marcas.push([id, el.getBoundingClientRect().top + window.scrollY]);
       }
       let actual = "inicio";
       for (const [id, y] of marcas) if (y <= linea) actual = id;

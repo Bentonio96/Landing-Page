@@ -1,11 +1,10 @@
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 import type { Diccionario } from "@/i18n/diccionario";
 import { perfil } from "@/data/perfil";
-import { Multitud } from "./Multitud";
 
 type Props = { t: Diccionario };
 
-/** «The footer is the main character now»: banda negra y, abajo, la ciudad. */
+/** Banda negra con enlaces y, abajo, su nombre hecho de puntos que se apartan del cursor. */
 export function Pie({ t }: Props) {
   const enlaces = [
     { href: "#sobre-mi", texto: t.nav.sobreMi },
@@ -56,7 +55,13 @@ export function Pie({ t }: Props) {
           </div>
         </div>
       </div>
-      <Multitud trafico={t.pie.ciudad.trafico} descripcion={t.pie.ciudad.descripcion} />
+      <div className="bg-black pb-4 text-[#F2F2F2]">
+        <div className="lienzo">
+          <div className="relative h-[clamp(8rem,22vw,20rem)] border-t border-[#2A2A2A]">
+            <div data-particulas="pie" data-oscuro data-margen="16,0,8,0" role="img" aria-label={t.pie.particulas} className="absolute inset-0" />
+          </div>
+        </div>
+      </div>
     </footer>
   );
 }

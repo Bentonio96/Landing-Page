@@ -37,7 +37,7 @@ const diccionario = {
       etiqueta: "desarrollo full stack y datos",
       disponible: "Disponible para proyectos freelance",
       saludo: "Hola, soy Benjamín.",
-      subtitulo: "Software Engineer, de las interfaces a los datos.",
+      subtitulo: "De las interfaces a los datos: construyo productos web de punta a punta.",
       actualmente: "Ahora mismo",
       actual: "Universidad Andrés Bello",
       actualRol: "Tesista · Ingeniería Civil en Informática",
@@ -48,6 +48,13 @@ const diccionario = {
       descargarCV: "Descargar CV",
       altFoto:
         "Benjamín Peña Díaz, de perfil y con lentes de sol, frente a un cerro. Fotografía en blanco y negro.",
+      particulas: {
+        descripcion: "Retrato de Benjamín Peña Díaz dibujado con miles de puntos blancos y grises que se apartan del cursor y vuelven a armarse.",
+        aNombre: "Armar mi nombre",
+        aRetrato: "Armar mi retrato",
+        ayudaCursor: "Pasa el cursor por los puntos.",
+        ayudaToque: "Toca los puntos.",
+      },
     },
     sobreMi: {
       titulo: "Quién soy",
@@ -119,11 +126,7 @@ const diccionario = {
       volverArriba: "Volver arriba",
       derechos: "Benjamín Peña Díaz",
       construidoCon: "Hecho con Next.js y Tailwind CSS.",
-      ciudad: {
-        trafico: "Por fin, algo de tráfico en mi sitio.",
-        descripcion:
-          "Ilustración a línea de una multitud de personas que va cambiando, con Benjamín al centro, vestido de negro y con lentes de sol.",
-      },
+      particulas: "El nombre «Benjamín» escrito con puntos que se apartan al pasar el cursor y vuelven a su lugar.",
     },
     preguntas: {
       boton: "Preguntar",
@@ -172,7 +175,7 @@ const diccionario = {
       etiqueta: "full-stack & data development",
       disponible: "Available for freelance projects",
       saludo: "Hi, I'm Benjamín.",
-      subtitulo: "Software Engineer, from interfaces to data.",
+      subtitulo: "From interfaces to data: I build web products end to end.",
       actualmente: "Right now",
       actual: "Universidad Andrés Bello",
       actualRol: "Thesis student · Computer Engineering",
@@ -183,6 +186,13 @@ const diccionario = {
       descargarCV: "Download CV",
       altFoto:
         "Benjamín Peña Díaz in profile, wearing sunglasses, in front of a hillside. Black and white photograph.",
+      particulas: {
+        descripcion: "Portrait of Benjamín Peña Díaz drawn with thousands of white and grey dots that move away from the cursor and come back together.",
+        aNombre: "Spell my name",
+        aRetrato: "Draw my portrait",
+        ayudaCursor: "Move your cursor over the dots.",
+        ayudaToque: "Tap the dots.",
+      },
     },
     sobreMi: {
       titulo: "Who I am",
@@ -254,11 +264,7 @@ const diccionario = {
       volverArriba: "Back to top",
       derechos: "Benjamín Peña Díaz",
       construidoCon: "Built with Next.js and Tailwind CSS.",
-      ciudad: {
-        trafico: "Finally, some traffic on my website.",
-        descripcion:
-          "Line illustration of a changing crowd of people, with Benjamín in the middle, dressed in black and wearing sunglasses.",
-      },
+      particulas: "The name “Benjamín” written in dots that move aside under the cursor and settle back into place.",
     },
     preguntas: {
       boton: "Ask me",

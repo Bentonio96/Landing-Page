@@ -1,73 +1,65 @@
-# Portafolio · Benjamín Peña Díaz — v5 «Ciudad»
+# Portafolio · Benjamín Peña Díaz — v5 «Partículas»
 
 > **Rama `v5`.** Propuesta paralela del portafolio, publicada aparte en
 > **https://benjamin-pena-v5.vercel.app**. La versión principal vive en `main`
 > (https://benjamin-pena.vercel.app), y la canónica y el hreflang de la v5
 > apuntan allá. Todo lo que sigue después de esta sección describe la versión
-> de `main`, de la que la v5 hereda los datos (`src/data`) y el CV.
+> de `main`, de la que la v5 hereda los datos (`src/data`) y el CV. La versión
+> anterior de la v5 («Ciudad», con la multitud del pie) queda en el historial
+> de git.
 
 ## La idea
 
-Calcada del reel de un portafolio de desarrollador que abre con «The footer is
-the main character now» y termina con «empezó como un footer y terminó siendo
-una ciudad». Benjamín pidió que fuera igual al reel: misma paleta monocroma
-(casi negra por defecto, con modo claro a un clic), misma estructura y mismos
-movimientos, con su contenido. La multitud del pie sigue el mismo concepto,
-pero es propia: no se copió la ilustración del reel (es arte de otra persona).
+Monocroma estricta (negro, blanco y grises, sin acento) y una sola pieza
+protagonista: **un campo de partículas que recorre toda la página**. Es un solo
+canvas fijo sobre la ventana con miles de puntos. Cada sección marca una zona
+(`data-particulas`) y los puntos arman la figura de la sección que está al
+centro de la pantalla:
 
-1. **Píldora flotante** arriba al centro: nombre, tema y menú. El nombre gira
-   sobre su eje cada vez que cambia la sección.
-2. **Hero:** «< SOFTWARE ENGINEER />» con letras que entran extruidas (copias
-   grises corridas que se recogen), código tenue que sube detrás y rayas
-   verticales finas. Abajo, «©2026», la etiqueta entre llaves y el retrato
-   **recortado con BiRefNet** (sin el cerro de fondo) sobre un fondo claro.
-3. **Transición:** en escritorio el inicio queda fijo; el titular sube, la
-   foto crece hasta el centro y «Hola, soy Benjamín.» se revela a sus lados.
-4. **Stack tecnológico** en columnas en cascada, con regla, bajada y chips; los
-   principales, rellenos.
-5. **Proyectos destacados** en carpetas: hojas que asoman y una tapa de vidrio
-   esmerilado; al apuntar, las hojas se abren en abanico.
-6. **Experiencia.** en una onda que se dibuja con el scroll, con nodos de anillo.
-7. **Hablemos.** con un formulario de líneas que arma un borrador de correo.
-8. **Pie:** banda negra con «Nos vemos.» y, abajo, la banda blanca con
-   «BENJAMÍN.» gigante y una **multitud ilustrada a línea**, generada en SVG
-   combinando peinados, ropa, caras y accesorios. Benjamín está al centro, de
-   de frente y aislado, dibujado con el mismo trazo a partir de su foto (pelo
-   corto texturizado, lentes de sol y polerón con cordones); la gente pasa
-   caminando por delante de él. Las filas suben al entrar,
-   cada 2,4 s alguien se va y llega otra persona, al apuntar dan un saltito y un
-   clic cambia a quien tocas. Cierra con «Por fin, algo de tráfico en mi sitio.».
-9. **Preguntar:** el «Ask AI» del reel, sin modelo detrás. Responde con los
-   datos del sitio por palabras clave y lo dice en el panel.
+| Sección | Figura |
+|---|---|
+| Inicio | Su retrato (o «BENJAMÍN», con el botón o un clic) |
+| Sobre mí | «¡HOLA!» / «HELLO.» |
+| Stack | `</>` |
+| Proyectos | Cuatro carpetas |
+| Experiencia | La onda de la línea de tiempo |
+| Contacto | `@` (solo escritorio) |
+| Pie | «BENJAMÍN.» |
 
-| Hero | Saludo | Proyectos |
+Mientras la sección no cambia, los puntos van pegados a la página; al pasar a
+la siguiente, viajan en bandada a su figura. El cursor (o el dedo) los aparta y
+vuelven a su lugar.
+
+| Inicio | Claro | En vuelo |
 |---|---|---|
-| ![Hero](docs/capturas-v5/v5-hero-oscuro.jpg) | ![Saludo](docs/capturas-v5/v5-saludo-oscuro.jpg) | ![Proyectos](docs/capturas-v5/v5-proyectos-oscuro.jpg) |
+| ![Inicio](docs/capturas-v5/v5-inicio-oscuro.jpg) | ![Claro](docs/capturas-v5/v5-inicio-claro.jpg) | ![Vuelo](docs/capturas-v5/v5-vuelo.jpg) |
 
-| Multitud | Móvil | Preguntar |
-|---|---|---|
-| ![Multitud](docs/capturas-v5/v5-multitud.jpg) | ![Móvil](docs/capturas-v5/v5-movil-oscuro.jpg) | ![Preguntar](docs/capturas-v5/v5-preguntar.jpg) |
+| Proyectos | Experiencia | Pie | Celular |
+|---|---|---|---|
+| ![Proyectos](docs/capturas-v5/v5-proyectos.jpg) | ![Experiencia](docs/capturas-v5/v5-experiencia.jpg) | ![Pie](docs/capturas-v5/v5-pie.jpg) | ![Celular](docs/capturas-v5/v5-movil.jpg) |
 
 ## Decisiones
 
-- **Rol «Software Engineer»** en los dos idiomas: titular, `<title>`, metadatos,
-  JSON-LD e imágenes OG (`scripts/og-v5.mjs`). La disponibilidad es solo
-  freelance.
-- **Sin GSAP ni Lenis:** un oyente de scroll con un rAF escribe `--p` y el CSS
-  calcula el resto (`Movimiento.tsx`). La multitud es SVG estático: solo se
-  anima la persona que cambia o la que apuntas, y el cambio automático corre
-  solo con la banda en pantalla.
-- **El modo fijo del inicio** solo se activa desde 1024 px de ancho y 620 px de
-  alto, con JavaScript y sin movimiento reducido. En los demás casos el hero y
-  el saludo van uno debajo del otro.
-- **Movimiento reducido** (`prefers-reduced-motion` o `?reduced=1`): titular
-  quieto, sin código en movimiento, sin tramo fijo y la multitud armada y
-  quieta; el clic igual cambia a una persona.
-- **Oscuro por defecto**, como el reel; el modo claro queda guardado si se
-  elige. La banda de la multitud es blanca en los dos temas.
-- **Nada se corta:** el tamaño del titular y del nombre de fondo se calculan del
-  ancho útil (medidos en em), y se revisó que ningún texto salga del viewport en
-  375, 768 y 1440 px.
+- **Canvas 2D, sin librerías** (`src/components/ui/CampoParticulas.tsx`). Cada
+  figura se dibuja en un canvas fuera de pantalla y se muestrea en una grilla
+  escalonada; el retrato sale de `public/retrato.webp` (recortado con BiRefNet)
+  y su brillo se vuelve opacidad y tamaño. En tema claro el retrato se lee al
+  revés: puntos oscuros donde hay sombra.
+- **Física por tiempo:** resortes a 60 pasos por segundo aunque el equipo
+  dibuje menos cuadros. El bucle se apaga cuando todo está quieto **y** en su
+  lugar (mirar solo la velocidad falla: los puntos oscilan en fase y en el
+  punto de giro todos parecen quietos).
+- **Rendimiento:** un solo canvas para toda la página, un recorrido por punto
+  al dibujar (índices agrupados por nivel de brillo), menos puntos en pantallas
+  táctiles y nada de trabajo con la pestaña oculta.
+- **Movimiento reducido** (`prefers-reduced-motion` o `?reduced=1`): sin vuelo,
+  sin entrada y sin empuje; los puntos se dibujan en su lugar y el cambio de
+  forma es instantáneo.
+- **Rol «Software Engineer»** en los dos idiomas y disponibilidad solo
+  freelance. El canvas es decorativo para lectores de pantalla; el retrato y
+  el nombre del pie tienen su descripción en la zona.
+- **Nada se corta:** revisado en 375, 768, 1024 y 1440 px, en español, inglés
+  y movimiento reducido, en los dos temas.
 
 ## Cómo correrlo
 
