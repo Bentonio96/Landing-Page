@@ -122,7 +122,7 @@ const diccionario = {
       ciudad: {
         trafico: "Por fin, algo de tráfico en mi sitio.",
         descripcion:
-          "Ilustración de una cuadra de Santiago con la cordillera detrás: los edificios se levantan uno a uno y los autos pasan por la avenida.",
+          "Ilustración a línea de una multitud de personas que va cambiando, con Benjamín al centro, vestido de negro.",
       },
     },
     preguntas: {
@@ -257,7 +257,7 @@ const diccionario = {
       ciudad: {
         trafico: "Finally, some traffic on my website.",
         descripcion:
-          "Illustration of a Santiago block with the Andes behind it: buildings rise one by one and cars drive down the avenue.",
+          "Line illustration of a changing crowd of people, with Benjamín in the middle, dressed in black.",
       },
     },
     preguntas: {

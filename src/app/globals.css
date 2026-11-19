@@ -517,6 +517,35 @@
   white-space: nowrap;
 }
 
+/* La multitud: las filas suben al entrar (de atrás hacia adelante), cada
+   persona nueva sube desde abajo y, al apuntar, da un saltito. */
+.multitud .persona {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transform: translateY(115%);
+  transition: transform 0.9s var(--ease-salida);
+  transition-delay: calc(var(--fila) * 0.16s + var(--retraso));
+  cursor: pointer;
+}
+.multitud .persona--benja { cursor: default; }
+.multitud--llega .persona { transform: none; }
+.multitud .persona__entra {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: persona-llega 0.75s var(--ease-salida) both;
+  transition: transform 0.25s var(--ease-salida);
+}
+.multitud .persona:hover .persona__entra { transform: translateY(-7%); }
+@keyframes persona-llega {
+  from { transform: translateY(105%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .multitud .persona,
+  .multitud .persona__entra { transform: none !important; animation: none !important; }
+}
+:root[data-reducido] .multitud .persona,
+:root[data-reducido] .multitud .persona__entra { transform: none !important; animation: none !important; }
+
 /* Panel de preguntas */
 .panel-preguntas {
   animation: panel-abre 0.32s var(--ease-salida);

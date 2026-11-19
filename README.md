@@ -12,9 +12,8 @@ Calcada del reel de un portafolio de desarrollador que abre con «The footer is
 the main character now» y termina con «empezó como un footer y terminó siendo
 una ciudad». Benjamín pidió que fuera igual al reel: misma paleta monocroma
 (casi negra por defecto, con modo claro a un clic), misma estructura y mismos
-movimientos, con su contenido. Lo único que no se copia es la ilustración de la
-multitud del reel, que es arte de otra persona: en su lugar hay «tráfico» de
-verdad, una cuadra de Santiago con la avenida llena de autos.
+movimientos, con su contenido. La multitud del pie sigue el mismo concepto,
+pero es propia: no se copió la ilustración del reel (es arte de otra persona).
 
 1. **Píldora flotante** arriba al centro: nombre, tema y menú. El nombre gira
    sobre su eje cada vez que cambia la sección.
@@ -31,10 +30,11 @@ verdad, una cuadra de Santiago con la avenida llena de autos.
 6. **Experiencia.** en una onda que se dibuja con el scroll, con nodos de anillo.
 7. **Hablemos.** con un formulario de líneas que arma un borrador de correo.
 8. **Pie:** banda negra con «Nos vemos.» y, abajo, la banda blanca con
-   «BENJAMÍN.» gigante, la cordillera, una torre alta, una torre de antena,
-   tres carriles de autos, peatones y Benjamín junto a su auto. El cursor
-   enciende ventanas; doble clic levanta otra cuadra. Cierra con «Por fin, algo
-   de tráfico en mi sitio.».
+   «BENJAMÍN.» gigante y una **multitud ilustrada a línea**, generada en SVG
+   combinando peinados, ropa, caras y accesorios. Benjamín está al centro, de
+   negro, de cuerpo entero y con el pelo de la foto del CV. Las filas suben al entrar,
+   cada 2,4 s alguien se va y llega otra persona, al apuntar dan un saltito y un
+   clic cambia a quien tocas. Cierra con «Por fin, algo de tráfico en mi sitio.».
 9. **Preguntar:** el «Ask AI» del reel, sin modelo detrás. Responde con los
    datos del sitio por palabras clave y lo dice en el panel.
 
@@ -42,9 +42,9 @@ verdad, una cuadra de Santiago con la avenida llena de autos.
 |---|---|---|
 | ![Hero](docs/capturas-v5/v5-hero-oscuro.jpg) | ![Saludo](docs/capturas-v5/v5-saludo-oscuro.jpg) | ![Proyectos](docs/capturas-v5/v5-proyectos-oscuro.jpg) |
 
-| Ciudad | Móvil | Preguntar |
+| Multitud | Móvil | Preguntar |
 |---|---|---|
-| ![Ciudad](docs/capturas-v5/v5-ciudad.jpg) | ![Móvil](docs/capturas-v5/v5-movil-oscuro.jpg) | ![Preguntar](docs/capturas-v5/v5-preguntar.jpg) |
+| ![Multitud](docs/capturas-v5/v5-multitud.jpg) | ![Móvil](docs/capturas-v5/v5-movil-oscuro.jpg) | ![Preguntar](docs/capturas-v5/v5-preguntar.jpg) |
 
 ## Decisiones
 
@@ -52,17 +52,17 @@ verdad, una cuadra de Santiago con la avenida llena de autos.
   JSON-LD e imágenes OG (`scripts/og-v5.mjs`). La disponibilidad es solo
   freelance.
 - **Sin GSAP ni Lenis:** un oyente de scroll con un rAF escribe `--p` y el CSS
-  calcula el resto (`Movimiento.tsx`). El canvas de la ciudad corre solo
-  mientras está en pantalla y, ya armada, dibuja una imagen guardada más los
-  autos y las ventanas encendidas.
+  calcula el resto (`Movimiento.tsx`). La multitud es SVG estático: solo se
+  anima la persona que cambia o la que apuntas, y el cambio automático corre
+  solo con la banda en pantalla.
 - **El modo fijo del inicio** solo se activa desde 1024 px de ancho y 620 px de
   alto, con JavaScript y sin movimiento reducido. En los demás casos el hero y
   el saludo van uno debajo del otro.
 - **Movimiento reducido** (`prefers-reduced-motion` o `?reduced=1`): titular
-  quieto, sin código en movimiento, sin tramo fijo y la ciudad armada con los
-  autos quietos; el cursor igual enciende ventanas.
+  quieto, sin código en movimiento, sin tramo fijo y la multitud armada y
+  quieta; el clic igual cambia a una persona.
 - **Oscuro por defecto**, como el reel; el modo claro queda guardado si se
-  elige. La banda de la ciudad es blanca en los dos temas.
+  elige. La banda de la multitud es blanca en los dos temas.
 - **Nada se corta:** el tamaño del titular y del nombre de fondo se calculan del
   ancho útil (medidos en em), y se revisó que ningún texto salga del viewport en
   375, 768 y 1440 px.

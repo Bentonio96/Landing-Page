@@ -1,7 +1,7 @@
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 import type { Diccionario } from "@/i18n/diccionario";
 import { perfil } from "@/data/perfil";
-import { Ciudad } from "./Ciudad";
+import { Multitud } from "./Multitud";
 
 type Props = { t: Diccionario };
 
@@ -56,7 +56,7 @@ export function Pie({ t }: Props) {
           </div>
         </div>
       </div>
-      <Ciudad textos={t.pie.ciudad} />
+      <Multitud trafico={t.pie.ciudad.trafico} descripcion={t.pie.ciudad.descripcion} />
     </footer>
   );
 }
