@@ -11,7 +11,7 @@ export function EncabezadoSeccion({ id, titulo, bajada, extra, bajadaAbajo, figu
   // Zona donde el campo de partículas arma la figura de la sección: entre el
   // título y la nota en pantallas anchas, arriba del título en celulares.
   const zona = figura ? (
-    <div aria-hidden="true" data-particulas={figura} className="order-first h-24 w-full md:order-none md:h-36 md:w-auto md:flex-1 md:self-stretch md:mx-8 lg:mx-14" />
+    <div aria-hidden="true" data-particulas={figura} className="order-first h-24 w-full md:order-none md:h-44 md:w-auto md:flex-1 md:self-stretch md:mx-8 lg:mx-14" />
   ) : null;
   if (bajadaAbajo) {
     return (

@@ -21,7 +21,7 @@ export function SobreMi({ t }: Props) {
           </div>
         </div>
         <div className="flex flex-col justify-end gap-8">
-          <div aria-hidden="true" data-particulas="sobre" className="h-32 md:h-44" />
+          <div aria-hidden="true" data-particulas="sobre" className="h-36 md:h-56" />
           <p className="max-w-[28ch] text-guia text-atenuado">
             <Negritas texto={h.intro} />
           </p>

@@ -49,11 +49,11 @@ const diccionario = {
       altFoto:
         "Benjamín Peña Díaz, de perfil y con lentes de sol, frente a un cerro. Fotografía en blanco y negro.",
       particulas: {
-        descripcion: "Retrato de Benjamín Peña Díaz dibujado con miles de puntos blancos y grises que se apartan del cursor y vuelven a armarse.",
+        descripcion: "Retrato de Benjamín Peña Díaz dibujado con miles de caracteres de código que se apartan del cursor y vuelven a armarse.",
         aNombre: "Armar mi nombre",
         aRetrato: "Armar mi retrato",
-        ayudaCursor: "Pasa el cursor por los puntos.",
-        ayudaToque: "Toca los puntos.",
+        ayudaCursor: "Pasa el cursor por el código.",
+        ayudaToque: "Toca el código.",
       },
     },
     sobreMi: {
@@ -126,7 +126,7 @@ const diccionario = {
       volverArriba: "Volver arriba",
       derechos: "Benjamín Peña Díaz",
       construidoCon: "Hecho con Next.js y Tailwind CSS.",
-      particulas: "El nombre «Benjamín» escrito con puntos que se apartan al pasar el cursor y vuelven a su lugar.",
+      particulas: "El nombre «Benjamín» escrito con caracteres de código que se apartan al pasar el cursor y vuelven a su lugar.",
     },
     preguntas: {
       boton: "Preguntar",
@@ -187,11 +187,11 @@ const diccionario = {
       altFoto:
         "Benjamín Peña Díaz in profile, wearing sunglasses, in front of a hillside. Black and white photograph.",
       particulas: {
-        descripcion: "Portrait of Benjamín Peña Díaz drawn with thousands of white and grey dots that move away from the cursor and come back together.",
+        descripcion: "Portrait of Benjamín Peña Díaz drawn with thousands of code characters that move away from the cursor and come back together.",
         aNombre: "Spell my name",
         aRetrato: "Draw my portrait",
-        ayudaCursor: "Move your cursor over the dots.",
-        ayudaToque: "Tap the dots.",
+        ayudaCursor: "Move your cursor over the code.",
+        ayudaToque: "Tap the code.",
       },
     },
     sobreMi: {
@@ -264,7 +264,7 @@ const diccionario = {
       volverArriba: "Back to top",
       derechos: "Benjamín Peña Díaz",
       construidoCon: "Built with Next.js and Tailwind CSS.",
-      particulas: "The name “Benjamín” written in dots that move aside under the cursor and settle back into place.",
+      particulas: "The name “Benjamín” written in code characters that move aside under the cursor and settle back into place.",
     },
     preguntas: {
       boton: "Ask me",

@@ -32,6 +32,12 @@ type Forma = { tipo: "imagen"; src: string } | { tipo: "texto"; texto: string } 
 
 const NIVELES = 6;
 
+/** Los caracteres de código con los que se dibuja todo. */
+const LIVIANOS = "01{}<>/;=()[]*+-#$&|!?:._%@~^";
+/** Las letras y dibujos usan caracteres con más tinta, para que se lean llenos. */
+const PESADOS = "#@%&$08B";
+const GLIFOS = LIVIANOS + PESADOS;
+
 /** Cuatro carpetas, como las tarjetas de proyectos. */
 const carpetas: Dibujo = (c, w, h) => {
   const n = 4;
@@ -152,7 +158,7 @@ function muestrear(forma: Forma, img: HTMLImageElement | null, W: number, H: num
   }
 
   // Lo dibujado pide puntos más separados que el retrato, para que se lean como puntos.
-  const minimo = forma.tipo === "imagen" ? 3 : 5;
+  const minimo = forma.tipo === "imagen" ? 7 : 7;
   const paso = Math.max(minimo, Math.min(10, Math.round(Math.sqrt((rw * rh * cobertura) / objetivo))));
   const datos = c.getImageData(0, 0, lienzo.width, lienzo.height).data;
   const puntos: Punto[] = [];
@@ -220,6 +226,7 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
     let desvioX = new Float32Array(0);
     let desvioY = new Float32Array(0);
     let escala = new Float32Array(0);
+    let glifo = new Uint8Array(0);
     let nivel = new Uint8Array(0);
     let orden = new Uint32Array(0);
     let scrollPrevio = 0;
@@ -271,6 +278,12 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
       if (document.fonts?.ready) await document.fonts.ready;
       const fuente = getComputedStyle(document.body).fontFamily;
+      const prueba = document.createElement("span");
+      prueba.className = "mono";
+      document.body.appendChild(prueba);
+      fuenteMono = getComputedStyle(prueba).fontFamily || "monospace";
+      prueba.remove();
+      tiras.clear();
       const ancho = W >= 1024;
       const nuevas: Zona[] = [];
       for (const el of Array.from(document.querySelectorAll<HTMLElement>("[data-particulas]"))) {
@@ -279,7 +292,7 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
         const r = el.getBoundingClientRect();
         if (!formas.length || r.width < 20 || r.height < 20) continue;
         const margen = (ancho ? el.dataset.margen : el.dataset.margenMovil ?? el.dataset.margen)?.split(",").map(Number) ?? [0, 0, 0, 0];
-        const objetivoBase = escena === "inicio" ? 7000 : 2200;
+        const objetivoBase = escena === "inicio" ? 3400 : 1200;
         const objetivo = Math.max(500, Math.round(objetivoBase * Math.min(1, (r.width * r.height) / (900 * 700)) ** 0.5 * (tactil ? 0.7 : 1)));
         const muestras = [];
         for (const f of formas) {
@@ -316,13 +329,15 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
       desvioX = new Float32Array(n);
       desvioY = new Float32Array(n);
       escala = new Float32Array(n);
+      glifo = new Uint8Array(n);
       nivel = new Uint8Array(n);
       orden = new Uint32Array(n);
       for (let k = 0; k < n; k++) {
         turno[k] = Math.random();
         desvioX[k] = (Math.random() - 0.5) * W * 0.22;
         desvioY[k] = (Math.random() - 0.5) * H * 0.12;
-        escala[k] = 0.85 + Math.random() * 0.3;
+        escala[k] = 0.9 + Math.random() * 0.2;
+        glifo[k] = Math.floor(Math.random() * LIVIANOS.length);
         if (primeraVez || k >= viejo) {
           // Entrada: los puntos llegan desde toda la pantalla.
           px[k] = Math.random() * W;
@@ -342,11 +357,31 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
       despertar();
     }
 
-    // Cada punto es un círculo limpio y sólido, con aire entre ellos.
-    function dibujar(tam: number, color: string) {
+    // Cada partícula es un carácter de código. Los caracteres se pintan una
+    // vez por color en una tira (a 2x) y cada cuadro solo los copia.
+    const TIRA = 32;
+    let fuenteMono = "monospace";
+    const tiras = new Map<string, HTMLCanvasElement>();
+    function tira(color: string) {
+      let t = tiras.get(color);
+      if (t) return t;
+      t = document.createElement("canvas");
+      t.width = TIRA * GLIFOS.length;
+      t.height = TIRA;
+      const c = t.getContext("2d")!;
+      c.fillStyle = color;
+      c.font = `600 ${TIRA * 0.72}px ${fuenteMono}`;
+      c.textAlign = "center";
+      c.textBaseline = "middle";
+      for (let i = 0; i < GLIFOS.length; i++) c.fillText(GLIFOS[i], i * TIRA + TIRA / 2, TIRA / 2 + 1);
+      tiras.set(color, t);
+      return t;
+    }
+
+    function dibujar(tam: number, color: string, pesado: boolean) {
       ctx!.clearRect(0, 0, W, H);
-      ctx!.fillStyle = color;
-      // Orden por nivel de brillo (conteo): un recorrido por punto.
+      const t = tira(color);
+      // Orden por nivel de brillo (conteo): un recorrido por partícula.
       const cuentas = new Uint32Array(NIVELES + 2);
       for (let k = 0; k < n; k++) cuentas[nivel[k] + 1]++;
       for (let l = 1; l <= NIVELES + 1; l++) cuentas[l] += cuentas[l - 1];
@@ -356,18 +391,17 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
         const desde = cuentas[l];
         const hasta = cuentas[l + 1];
         if (hasta <= desde) continue;
-        ctx!.globalAlpha = 0.25 + (l / NIVELES) * 0.75;
-        const base = tam * (0.75 + (l / NIVELES) * 0.45) * 0.58;
-        ctx!.beginPath();
+        ctx!.globalAlpha = 0.2 + (l / NIVELES) * 0.8;
+        // La caja del carácter: el cuerpo es ~72 % de la celda.
+        const base = (tam / 0.72) * (0.85 + (l / NIVELES) * 0.25);
         for (let j = desde; j < hasta; j++) {
           const k = orden[j];
           const y = py[k];
-          if (y < -8 || y > H + 8) continue;
-          const r = base * escala[k];
-          ctx!.moveTo(px[k] + r, y);
-          ctx!.arc(px[k], y, r, 0, Math.PI * 2);
+          if (y < -16 || y > H + 16) continue;
+          const d = base * escala[k];
+          const g = pesado ? LIVIANOS.length + (glifo[k] % PESADOS.length) : glifo[k];
+          ctx!.drawImage(t, g * TIRA, 0, TIRA, TIRA, px[k] - d / 2, y - d / 2, d, d);
         }
-        ctx!.fill();
       }
       ctx!.globalAlpha = 1;
     }
@@ -391,8 +425,8 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
       // El viaje usa el tramo central del scroll entre las dos zonas: cerca
       // de cada una, la figura se queda armada para leerla.
       const viaje = reducido ? (avance < 0.5 ? 0 : 1) : Math.min(1, Math.max(0, (avance - 0.15) / 0.7));
-      const tamA = Math.max(1.4, Math.min(3.2, (A.pasos[forma(A)] ?? 5) * 0.42));
-      const tamB = Math.max(1.4, Math.min(3.2, (B.pasos[forma(B)] ?? 5) * 0.42));
+      const tamA = Math.max(8, Math.min(15, (A.pasos[forma(A)] ?? 9) * 1.15));
+      const tamB = Math.max(8, Math.min(15, (B.pasos[forma(B)] ?? 9) * 1.15));
       const tam = tamA + (tamB - tamA) * viaje;
       const color = (viaje < 0.5 ? A : B).oscuroFijo ? "#F2F2F2" : colorPagina;
 
@@ -467,7 +501,11 @@ export function CampoParticulas({ idioma }: { idioma: string }) {
           resto += Math.abs(ex) + Math.abs(ey);
         }
       }
-      dibujar(tam, color);
+      if (!reducido && viaje > 0 && viaje < 1) {
+        for (let i = 0; i < n * 0.02; i++) glifo[Math.floor(Math.random() * n)] = Math.floor(Math.random() * LIVIANOS.length);
+      }
+      const destino = viaje < 0.5 ? A : B;
+      dibujar(tam, color, !destino.invierte[forma(destino)]);
       if (reducido) return;
       // Quieto, en su lugar y sin cursor: se apaga hasta el próximo scroll.
       // (Mirar solo la velocidad no basta: los puntos oscilan en fase y en el
