@@ -38,51 +38,48 @@ export function FormularioCorreo({ email, t }: Props) {
     avisos?.avisar(f.abierto);
   }
 
-  const campo =
-    "mt-2 w-full rounded-md border border-bordefuerte bg-superficie px-3.5 py-3 text-base text-texto placeholder:text-tenue transition-colors hover:border-texto focus:border-acento focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acento";
-
   return (
-    <form onSubmit={crear} noValidate className="grid gap-5 rounded-xl border border-borde bg-superficie/60 p-5 sm:grid-cols-2 sm:p-7">
+    <form onSubmit={crear} noValidate className="grid content-start gap-x-8 gap-y-9 sm:grid-cols-2 lg:pt-8">
       <div>
-        <label htmlFor={`${id}-n`} className="text-menor font-semibold">
+        <label htmlFor={`${id}-n`} className="text-mini font-semibold">
           {f.nombre}
         </label>
-        <input id={`${id}-n`} name="nombre" autoComplete="name" className={campo} />
+        <input id={`${id}-n`} name="nombre" autoComplete="name" placeholder={f.nombreEjemplo} className="campo" />
       </div>
       <div>
-        <label htmlFor={`${id}-c`} className="text-menor font-semibold">
+        <label htmlFor={`${id}-c`} className="text-mini font-semibold">
           {f.correo}
         </label>
-        <input id={`${id}-c`} name="correo" type="email" autoComplete="email" placeholder={f.correoEjemplo} className={campo} />
+        <input id={`${id}-c`} name="correo" type="email" autoComplete="email" placeholder={f.correoEjemplo} className="campo" />
       </div>
       <div className="sm:col-span-2">
-        <label htmlFor={`${id}-m`} className="text-menor font-semibold">
+        <label htmlFor={`${id}-m`} className="text-mini font-semibold">
           {f.mensaje}
         </label>
         <textarea
           id={`${id}-m`}
           name="mensaje"
-          rows={5}
+          rows={4}
           placeholder={f.mensajeEjemplo}
           aria-invalid={error || undefined}
           aria-describedby={error ? `${id}-e` : `${id}-x`}
-          className={`${campo} resize-y`}
+          className="campo resize-y"
           onInput={() => error && setError(false)}
         />
         {error ? (
-          <p id={`${id}-e`} className="mt-2 text-menor font-semibold text-acento">
+          <p id={`${id}-e`} className="mt-2 text-menor font-semibold">
             {f.falta}
           </p>
         ) : null}
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-4 sm:col-span-2">
-        <p id={`${id}-x`} className="max-w-[34ch] text-menor text-atenuado">
-          {f.nota}
-        </p>
-        <button type="submit" className="boton boton--lleno">
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 sm:col-span-2">
+        <button type="submit" className="boton">
           {f.enviar}
           <ArrowUpRight aria-hidden="true" className="flecha size-4" />
         </button>
+        <p id={`${id}-x`} className="max-w-[34ch] text-mini text-tenue">
+          {f.nota}
+        </p>
       </div>
     </form>
   );

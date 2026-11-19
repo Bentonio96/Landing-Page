@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Building2 } from "lucide-react";
 
-type Textos = { pista: string; pistaTactil: string; otra: string; descripcion: string };
+type Textos = { trafico: string; descripcion: string };
 
 /**
  * «Empezó como un footer y terminó siendo una ciudad.»
@@ -33,7 +32,8 @@ type Edificio = {
   ventanas: Ventana[];
   inicio: number;
 };
-type Auto = { x: number; carril: 0 | 1; v: number; w: number; violeta: boolean };
+type Auto = { x: number; carril: 0 | 1 | 2; v: number; w: number; violeta: boolean };
+type Peaton = { x: number; v: number; fase: number; alto: number };
 type Escena = {
   W: number;
   H: number;
@@ -44,6 +44,7 @@ type Escena = {
   arboles: { x: number; r: number }[];
   faroles: number[];
   autos: Auto[];
+  peatones: Peaton[];
   benja: number;
   fin: number;
 };
@@ -62,7 +63,7 @@ function azar(semilla: number) {
 function generar(semilla: number, W: number, H: number): Escena {
   const r = azar(semilla);
   const k = Math.min(1.25, Math.max(0.62, H / 420));
-  const suelo = H - 96 * k;
+  const suelo = H - 132 * k;
 
   const cerros: [number, number][] = [[-20, suelo * 0.55]];
   const pasos = Math.max(6, Math.round(W / 150));
@@ -139,16 +140,23 @@ function generar(semilla: number, W: number, H: number): Escena {
   const faroles: number[] = [];
   for (let fx = 70 * k; fx < W; fx += 210 * k) if (Math.abs(fx - centro) > 70 * k) faroles.push(fx);
 
+  // Tráfico: tres carriles llenos, cada uno a su velocidad para que
+  // ningún auto alcance al de adelante.
   const autos: Auto[] = [];
-  const cuantos = Math.max(2, Math.round(W / 260));
-  for (let i = 0; i < cuantos; i++) {
-    autos.push({
-      x: r() * W,
-      carril: i % 2 === 0 ? 0 : 1,
-      v: (34 + r() * 40) * k,
-      w: (46 + r() * 14) * k,
-      violeta: false,
-    });
+  const velocidades = [26, 38, 31];
+  for (const carril of [0, 1, 2] as const) {
+    let ax = r() * 40 * k;
+    while (ax < W + 60 * k) {
+      const w = (44 + r() * 16) * k;
+      autos.push({ x: ax, carril, v: velocidades[carril] * k, w, violeta: false });
+      ax += w + (18 + r() * 70) * k;
+    }
+  }
+
+  const peatones: Peaton[] = [];
+  for (let px = r() * 60 * k; px < W; px += (50 + r() * 90) * k) {
+    if (Math.abs(px - centro) < 60 * k) continue;
+    peatones.push({ x: px, v: (r() < 0.5 ? -1 : 1) * (9 + r() * 9) * k, fase: r() * 6.28, alto: (22 + r() * 6) * k });
   }
 
   return {
@@ -161,6 +169,7 @@ function generar(semilla: number, W: number, H: number): Escena {
     arboles,
     faroles,
     autos,
+    peatones,
     benja: centro,
     fin: 250 + edificios.length * 75 + 800,
   };
@@ -168,14 +177,14 @@ function generar(semilla: number, W: number, H: number): Escena {
 
 type Colores = { tinta: string; papel: string; suave: string; luz: string; tenue: string };
 
-function leerColores(): Colores {
-  const s = getComputedStyle(document.documentElement);
+function leerColores(el: Element): Colores {
+  const s = getComputedStyle(el);
   const v = (n: string) => s.getPropertyValue(n).trim();
   return {
     tinta: v("--c-texto"),
     papel: v("--c-fondo"),
     suave: v("--c-borde-fuerte"),
-    luz: v("--c-acento-vivo"),
+    luz: v("--c-texto"),
     tenue: v("--c-tenue"),
   };
 }
@@ -228,6 +237,34 @@ function dibujarAuto(ctx: CanvasRenderingContext2D, a: { x: number; w: number },
   ctx.lineTo(w / 2 - 5 * k, -h);
   ctx.stroke();
   ctx.restore();
+}
+
+/** Línea base de cada carril (las ruedas tocan esta altura). */
+function carriles(vereda: number, H: number, k: number): number[] {
+  return [vereda + 38 * k, vereda + 76 * k, H - 6 * k];
+}
+
+function dibujarPeaton(ctx: CanvasRenderingContext2D, p: Peaton, y: number, c: Colores, t: number) {
+  const a = p.alto;
+  const paso = Math.sin(t * 6 + p.fase) * a * 0.18;
+  ctx.strokeStyle = c.tinta;
+  ctx.fillStyle = c.papel;
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.moveTo(p.x - paso, y);
+  ctx.lineTo(p.x, y - a * 0.42);
+  ctx.lineTo(p.x + paso, y);
+  ctx.moveTo(p.x, y - a * 0.42);
+  ctx.lineTo(p.x, y - a * 0.82);
+  ctx.moveTo(p.x, y - a * 0.74);
+  ctx.lineTo(p.x + paso * 0.8, y - a * 0.5);
+  ctx.moveTo(p.x, y - a * 0.74);
+  ctx.lineTo(p.x - paso * 0.8, y - a * 0.5);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(p.x, y - a * 0.82 - a * 0.13, a * 0.13, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
 }
 
 function dibujarFijo(ctx: CanvasRenderingContext2D, e: Escena, c: Colores, t: number) {
@@ -372,9 +409,10 @@ function dibujarFijo(ctx: CanvasRenderingContext2D, e: Escena, c: Colores, t: nu
   ctx.setLineDash([14 * k, 12 * k]);
   ctx.strokeStyle = c.suave;
   ctx.beginPath();
-  const medio = vereda + (H - vereda) / 2;
-  ctx.moveTo(0, medio);
-  ctx.lineTo(W, medio);
+  for (const y of carriles(vereda, H, k).slice(0, 2)) {
+    ctx.moveTo(0, y + 3 * k);
+    ctx.lineTo(W, y + 3 * k);
+  }
   ctx.stroke();
   ctx.setLineDash([]);
 
@@ -407,9 +445,8 @@ function dibujarFijo(ctx: CanvasRenderingContext2D, e: Escena, c: Colores, t: nu
   // Benjamín y su auto, estacionado en la vereda.
   if (verde > 0) {
     const bx = e.benja;
-    dibujarAuto(ctx, { x: bx + 30 * k, w: 54 * k }, vereda, false, c, k, true);
-    const fy = suelo + 4 * k;
-    const alto = 34 * k * verde;
+    const fy = suelo + 10 * k;
+    const alto = 46 * k * verde;
     ctx.strokeStyle = c.tinta;
     ctx.fillStyle = c.tinta;
     ctx.lineWidth = 1.6;
@@ -435,17 +472,14 @@ function dibujarFijo(ctx: CanvasRenderingContext2D, e: Escena, c: Colores, t: nu
     ctx.lineTo(bx - 13 * k, fy - alto - 3.5 * k);
     ctx.lineWidth = 2.4;
     ctx.stroke();
+    ctx.lineWidth = 1.5;
   }
 }
 
 export function Ciudad({ textos }: { textos: Textos }) {
   const lienzo = useRef<HTMLCanvasElement>(null);
+  // Doble clic en la ciudad levanta otra cuadra.
   const [semilla, setSemilla] = useState(2911);
-  const [tactil, setTactil] = useState(false);
-
-  useEffect(() => {
-    setTactil(window.matchMedia("(hover: none)").matches);
-  }, []);
 
   useEffect(() => {
     const canvas = lienzo.current;
@@ -456,7 +490,7 @@ export function Ciudad({ textos }: { textos: Textos }) {
     const reducido =
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
       document.documentElement.hasAttribute("data-reducido");
-    let colores = leerColores();
+    let colores = leerColores(canvas);
     let escena: Escena | null = null;
     let cache: HTMLCanvasElement | null = null;
     let dpr = 1;
@@ -509,7 +543,7 @@ export function Ciudad({ textos }: { textos: Textos }) {
 
       // Ventanas encendidas: las del cursor (luz) y unas pocas de base.
       let quedaLuz = false;
-      const oscuro = document.documentElement.getAttribute("data-tema") === "dark";
+      const oscuro = true; // ventanas de base, como textura de la cuadra
       ctx!.fillStyle = colores.luz;
       for (const b of escena.edificios) {
         const p = facil((t - b.inicio) / 750);
@@ -529,18 +563,29 @@ export function Ciudad({ textos }: { textos: Textos }) {
 
       // Autos de la avenida
       const vereda = escena.suelo + 12 * k;
-      const medio = vereda + (escena.H - vereda) / 2;
+      const lineas = carriles(vereda, escena.H, k);
       const verde = facil((t - 400) / 900);
       if (verde > 0) {
-        for (const a of escena.autos) {
+        const largo = escena.W + 120 * k;
+        for (const p of escena.peatones) {
           if (!reducido) {
-            a.x += (a.carril === 0 ? 1 : -1) * a.v * dt;
-            if (a.x > escena.W + a.w) a.x = -a.w;
-            if (a.x < -a.w) a.x = escena.W + a.w;
+            p.x += p.v * dt;
+            if (p.x > escena.W + 20) p.x = -20;
+            if (p.x < -20) p.x = escena.W + 20;
           }
-          const y = a.carril === 0 ? medio - 3 * k : escena.H - 5 * k;
-          dibujarAuto(ctx!, a, y, a.carril === 1, colores, k, a.violeta);
+          dibujarPeaton(ctx!, p, vereda - 2 * k, colores, reducido ? 0 : ahora / 1000);
         }
+        for (const a of escena.autos) {
+          const sentido = a.carril === 2 ? -1 : 1;
+          if (!reducido) {
+            a.x += sentido * a.v * dt;
+            if (a.x > escena.W + 60 * k) a.x -= largo;
+            if (a.x < -60 * k) a.x += largo;
+          }
+          dibujarAuto(ctx!, a, lineas[a.carril], sentido < 0, colores, k, false);
+        }
+        // Benjamín y su auto, estacionado junto a la vereda.
+        dibujarAuto(ctx!, { x: escena.benja + 34 * k, w: 58 * k }, vereda + 2 * k, false, colores, k, true);
       }
 
       const sigue = visible && (!armada || !reducido || quedaLuz);
@@ -597,7 +642,7 @@ export function Ciudad({ textos }: { textos: Textos }) {
     tamano.observe(canvas);
 
     const tema = new MutationObserver(() => {
-      colores = leerColores();
+      colores = leerColores(canvas!);
       cache = null;
       pedir();
     });
@@ -617,25 +662,19 @@ export function Ciudad({ textos }: { textos: Textos }) {
   }, [semilla]);
 
   return (
-    <div className="relative overflow-hidden bg-fondo">
-      <p aria-hidden="true" className="marca-agua pointer-events-none absolute left-1/2 top-[3%] -translate-x-1/2 select-none">
+    <div className="banda-ciudad relative overflow-hidden">
+      <p aria-hidden="true" className="marca-agua pointer-events-none absolute left-1/2 top-[4%] -translate-x-1/2 select-none">
         BENJAMÍN.
       </p>
       <canvas
         ref={lienzo}
         role="img"
         aria-label={textos.descripcion}
-        className="relative block h-[clamp(17rem,38vw,32rem)] w-full touch-pan-y"
+        onDoubleClick={() => setSemilla((x) => x + 1)}
+        className="relative block h-[clamp(19rem,40vw,34rem)] w-full touch-pan-y"
       />
-      <div className="lienzo flex flex-wrap items-center justify-between gap-3 border-t border-borde py-4">
-        <p className="mono text-[0.75rem] text-tenue">
-          <span aria-hidden="true">{"// "}</span>
-          {tactil ? textos.pistaTactil : textos.pista}
-        </p>
-        <button type="button" onClick={() => setSemilla((s) => s + 1)} className="boton min-h-10">
-          <Building2 aria-hidden="true" className="size-4" />
-          {textos.otra}
-        </button>
+      <div className="bg-black">
+        <p className="lienzo py-3 text-[0.6875rem] text-[#B8B8B8]">{textos.trafico}</p>
       </div>
     </div>
   );

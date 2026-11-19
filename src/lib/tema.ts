@@ -19,11 +19,11 @@ export const scriptTema = `
 (function () {
   try {
     var guardado = localStorage.getItem('${CLAVE_TEMA}');
-    var oscuro = guardado === 'dark' ||
-      (guardado !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    // v5: oscuro por defecto, como el reel. El claro queda a un clic.
+    var oscuro = guardado !== 'light';
     document.documentElement.setAttribute('${ATRIBUTO_TEMA}', oscuro ? 'dark' : 'light');
   } catch (e) {
-    document.documentElement.setAttribute('${ATRIBUTO_TEMA}', 'light');
+    document.documentElement.setAttribute('${ATRIBUTO_TEMA}', 'dark');
   }
 })();
 `.trim();

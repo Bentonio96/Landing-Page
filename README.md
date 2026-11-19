@@ -8,38 +8,43 @@
 
 ## La idea
 
-Sigue un reel de un portafolio de desarrollador que abre con «The footer is the
-main character now» y termina con «empezó como un footer y terminó siendo una
-ciudad». Se tomó la estructura y el movimiento; los colores son los de Benjamín
-(«Obsidiana», del CV) y la ciudad es Santiago, con autos.
+Calcada del reel de un portafolio de desarrollador que abre con «The footer is
+the main character now» y termina con «empezó como un footer y terminó siendo
+una ciudad». Benjamín pidió que fuera igual al reel: misma paleta monocroma
+(casi negra por defecto, con modo claro a un clic), misma estructura y mismos
+movimientos, con su contenido. Lo único que no se copia es la ilustración de la
+multitud del reel, que es arte de otra persona: en su lugar hay «tráfico» de
+verdad, una cuadra de Santiago con la avenida llena de autos.
 
-1. **Píldora flotante** arriba al centro: nombre, tema y menú. Al lado del
-   nombre va la ruta de la sección en voz de terminal (`~/proyectos`), que rueda
-   hacia arriba al cambiar.
-2. **Hero:** «< SOFTWARE ENGINEER />» en Archivo ancha (eje `wdth`), con las
-   letras que se encienden de gris a tinta; detrás, código tenue que sube en
-   bucle y sale del propio contenido del sitio (perfil, proyectos, stack).
+1. **Píldora flotante** arriba al centro: nombre, tema y menú. El nombre gira
+   sobre su eje cada vez que cambia la sección.
+2. **Hero:** «< SOFTWARE ENGINEER />» con letras que entran extruidas (copias
+   grises corridas que se recogen), código tenue que sube detrás y rayas
+   verticales finas. Abajo, «©2026», la etiqueta entre llaves y el retrato
+   **recortado con BiRefNet** (sin el cerro de fondo) sobre un fondo claro.
 3. **Transición:** en escritorio el inicio queda fijo; el titular sube, la
    foto crece hasta el centro y «Hola, soy Benjamín.» se revela a sus lados.
-4. **Stack** en columnas con regla superior y chips; los principales, rellenos.
-5. **Proyectos en carpetas:** la captura es la hoja que sale de la carpeta al
-   apuntar o al llevar el foco adentro.
-6. **Experiencia** en una línea de tiempo ondulada que se dibuja con el scroll.
-7. **Contacto** con un formulario que arma un borrador de correo (no envía nada
-   a ningún servidor).
-8. **El pie es el protagonista:** banda de tinta con «Nos vemos.» y, abajo, una
-   cuadra de Santiago dibujada en canvas: la cordillera, una torre alta, una
-   torre de antena, edificios que se levantan uno a uno, autos en la avenida y
-   Benjamín junto a su auto violeta. El cursor enciende las ventanas por donde
-   pasa; «Construir otra cuadra» genera otra.
+4. **Stack tecnológico** en columnas en cascada, con regla, bajada y chips; los
+   principales, rellenos.
+5. **Proyectos destacados** en carpetas: hojas que asoman y una tapa de vidrio
+   esmerilado; al apuntar, las hojas se abren en abanico.
+6. **Experiencia.** en una onda que se dibuja con el scroll, con nodos de anillo.
+7. **Hablemos.** con un formulario de líneas que arma un borrador de correo.
+8. **Pie:** banda negra con «Nos vemos.» y, abajo, la banda blanca con
+   «BENJAMÍN.» gigante, la cordillera, una torre alta, una torre de antena,
+   tres carriles de autos, peatones y Benjamín junto a su auto. El cursor
+   enciende ventanas; doble clic levanta otra cuadra. Cierra con «Por fin, algo
+   de tráfico en mi sitio.».
+9. **Preguntar:** el «Ask AI» del reel, sin modelo detrás. Responde con los
+   datos del sitio por palabras clave y lo dice en el panel.
 
 | Hero | Saludo | Proyectos |
 |---|---|---|
-| ![Hero](docs/capturas-v5/v5-hero-oscuro.jpg) | ![Saludo](docs/capturas-v5/v5-saludo-claro.jpg) | ![Proyectos](docs/capturas-v5/v5-proyectos-claro.jpg) |
+| ![Hero](docs/capturas-v5/v5-hero-oscuro.jpg) | ![Saludo](docs/capturas-v5/v5-saludo-oscuro.jpg) | ![Proyectos](docs/capturas-v5/v5-proyectos-oscuro.jpg) |
 
-| Ciudad | Móvil | Móvil, ciudad |
+| Ciudad | Móvil | Preguntar |
 |---|---|---|
-| ![Ciudad](docs/capturas-v5/v5-ciudad-oscuro.jpg) | ![Móvil](docs/capturas-v5/v5-movil-hero-claro.jpg) | ![Móvil ciudad](docs/capturas-v5/v5-movil-ciudad-claro.jpg) |
+| ![Ciudad](docs/capturas-v5/v5-ciudad.jpg) | ![Móvil](docs/capturas-v5/v5-movil-oscuro.jpg) | ![Preguntar](docs/capturas-v5/v5-preguntar.jpg) |
 
 ## Decisiones
 
@@ -54,8 +59,10 @@ ciudad». Se tomó la estructura y el movimiento; los colores son los de Benjam�
   alto, con JavaScript y sin movimiento reducido. En los demás casos el hero y
   el saludo van uno debajo del otro.
 - **Movimiento reducido** (`prefers-reduced-motion` o `?reduced=1`): titular
-  encendido, sin código en movimiento, sin tramo fijo y la ciudad armada con
-  los autos quietos; el cursor igual enciende ventanas.
+  quieto, sin código en movimiento, sin tramo fijo y la ciudad armada con los
+  autos quietos; el cursor igual enciende ventanas.
+- **Oscuro por defecto**, como el reel; el modo claro queda guardado si se
+  elige. La banda de la ciudad es blanca en los dos temas.
 - **Nada se corta:** el tamaño del titular y del nombre de fondo se calculan del
   ancho útil (medidos en em), y se revisó que ningún texto salga del viewport en
   375, 768 y 1440 px.

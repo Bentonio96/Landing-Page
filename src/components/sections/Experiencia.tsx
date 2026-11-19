@@ -24,40 +24,44 @@ export function Experiencia({ idioma, t }: Props) {
 
       <div className="relative mt-14 hidden h-[7.5rem] lg:block" aria-hidden="true">
         <svg viewBox="0 0 1000 100" preserveAspectRatio="none" className="onda absolute inset-0 size-full overflow-visible">
-          <path d={ONDA} pathLength={1} fill="none" stroke="currentColor" strokeWidth={1.5} vectorEffect="non-scaling-stroke" className="text-bordefuerte" />
+          <path d={ONDA} pathLength={1} fill="none" stroke="currentColor" strokeWidth={1.5} vectorEffect="non-scaling-stroke" className="text-texto" />
         </svg>
         {experiencia.map((h, i) => (
           <span
             key={h.id}
             className={cn(
-              "nodo absolute size-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-texto",
-              h.actual ? "bg-acentovivo" : "bg-fondo",
+              "absolute flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-texto bg-fondo",
+              h.actual ? "size-6 bg-texto" : "size-5",
             )}
             style={{ left: `${((i + 0.5) / n) * 100}%`, top: i % 2 === 0 ? "18%" : "82%" }}
-          />
+          >
+            <span className={cn("rounded-full", h.actual ? "size-2 bg-fondo" : "size-1.5 bg-texto")} />
+          </span>
         ))}
       </div>
 
-      <ol className="relative mt-12 grid gap-12 border-l border-bordefuerte pl-7 lg:mt-6 lg:grid-cols-4 lg:gap-8 lg:border-l-0 lg:pl-0">
+      <ol className="relative mt-12 grid gap-12 border-l border-bordefuerte pl-7 lg:mt-6 lg:grid-cols-4 lg:gap-10 lg:border-l-0 lg:pl-0">
         {experiencia.map((h, i) => (
-          <li key={h.id} className={cn("relative", i % 2 === 1 && "lg:mt-14")}>
+          <li key={h.id} className={cn("relative", i % 2 === 1 && "lg:mt-16")}>
             <span
               aria-hidden="true"
               className={cn(
                 "absolute -left-[2.2rem] top-1 size-3.5 rounded-full border-2 border-texto lg:hidden",
-                h.actual ? "bg-acentovivo" : "bg-fondo",
+                h.actual ? "bg-texto" : "bg-fondo",
               )}
             />
-            <p className="mono flex flex-wrap items-center gap-2 text-[0.75rem] text-tenue">
-              {h.actual ? (
-                <span className="rounded-[4px] bg-texto px-1.5 py-0.5 font-medium text-fondo">{t.experiencia.actual}</span>
-              ) : null}
-              {h.periodo[idioma]}
-            </p>
-            <h3 className="ancho mt-3 text-t3 font-bold">
+            {h.actual ? (
+              <p className="mb-3">
+                <span className="inline-block rounded-[4px] border border-bordefuerte px-2 py-0.5 text-mini">
+                  {t.experiencia.actual}
+                </span>
+              </p>
+            ) : null}
+            <p className="text-mini text-tenue">{h.periodo[idioma]}</p>
+            <h3 className="mt-3 text-t3 font-semibold tracking-[-0.02em]">
               {h.rol[idioma].split(" · ")[0]}
               {h.rol[idioma].includes(" · ") ? (
-                <span className="mt-1 block text-base font-semibold tracking-normal [font-variation-settings:'wdth'_100]">
+                <span className="mt-1 block text-base font-medium tracking-normal text-atenuado">
                   <span className="sr-only">, </span>
                   {h.rol[idioma].split(" · ").slice(1).join(" · ")}
                 </span>

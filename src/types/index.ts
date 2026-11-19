@@ -17,6 +17,8 @@ export type Proyecto = {
   nombre: string;
   /** Una o dos líneas describiendo qué es. */
   descripcion: Texto;
+  /** Bajada corta bajo la carpeta (v5). */
+  resumen?: Texto;
   /** Tecnologías usadas, en orden de relevancia. */
   tecnologias: string[];
   /** URL de la demo en vivo. Si falta, no se muestra el botón "Ver sitio". */

@@ -1,114 +1,98 @@
 @import "tailwindcss";
 
-/* Modo oscuro por atributo data-tema (ver lib/tema.ts). */
 @custom-variant dark (&:where([data-tema="dark"], [data-tema="dark"] *));
 
 /* ============================================================
-   v5 «Ciudad»
-
-   Sigue el reel «The footer is the main character now»: titular
-   ancho entre corchetes, píldora flotante, foto que crece al hacer
-   scroll, carpetas de proyectos, línea de tiempo ondulada y un pie
-   que termina construyendo una ciudad. La paleta es la de Benjamín
-   («Obsidiana», sacada del CV): tinta azulada, grises fríos y un
-   solo violeta para lo que se toca o importa.
+   v5 «Ciudad» — calcada del reel «The footer is the main
+   character now»: monocroma, casi negra por defecto, una sola
+   grotesca, píldora flotante, carpetas de vidrio y un pie blanco
+   que termina siendo una ciudad con tráfico.
    ============================================================ */
 
 :root {
   color-scheme: light;
-
-  --c-fondo:         #F6F7F9;
-  --c-superficie:    #FFFFFF;
-  --c-elevado:       #E9ECF1;
-  --c-texto:         #0E1117;  /* 17.6:1 sobre fondo */
-  --c-atenuado:      #414A58;  /*  8.4:1 */
-  --c-tenue:         #555E6C;  /*  6.1:1 */
-  --c-borde:         #DCE0E7;
-  --c-borde-fuerte:  #B9C1CD;
-  --c-acento:        #4335C9;  /*  7.6:1 */
-  --c-acento-sobre:  #FFFFFF;
-  --c-acento-vivo:   #6C5CFF;  /* solo rellenos decorativos */
-  /* El código del fondo del hero: decorativo y oculto a lectores. */
-  --c-codigo:        rgba(14, 17, 23, 0.06);
-  --c-marca-agua:    #E3E7ED;
-  --c-sombra:        rgba(14, 17, 23, 0.10);
-  /* El pie va en tinta en los dos temas, como la banda oscura del reel. */
-  --c-pie:           #0E1117;
-  --c-pie-texto:     #F1F3F7;
-  --c-pie-tenue:     #AFB7C4;
-  --c-pie-borde:     #262D39;
+  --c-fondo:        #F4F4F4;
+  --c-superficie:   #FFFFFF;
+  --c-elevado:      #E8E8E8;
+  --c-chip:         #E6E6E6;
+  --c-texto:        #111111;   /* 17.8:1 */
+  --c-atenuado:     #474747;   /*  8.9:1 */
+  --c-tenue:        #666666;   /*  5.3:1 */
+  --c-borde:        #DEDEDE;
+  --c-borde-fuerte: #C4C4C4;
+  --c-acento:       #111111;
+  --c-acento-sobre: #F4F4F4;
+  --c-codigo:       rgba(17, 17, 17, 0.07);
+  --c-sombra:       rgba(0, 0, 0, 0.12);
+  --c-vidrio:       rgba(255, 255, 255, 0.55);
+  --c-vidrio-borde: rgba(17, 17, 17, 0.10);
+  --c-carpeta:      #DADADA;
+  --c-hoja:         #F7F7F7;
+  --c-foto:         #EDEDED;
 }
 
 [data-tema="dark"] {
   color-scheme: dark;
-
-  --c-fondo:         #0E1117;
-  --c-superficie:    #141922;
-  --c-elevado:       #1D232E;
-  --c-texto:         #F1F3F7;  /* 17.0:1 */
-  --c-atenuado:      #AFB7C4;  /*  9.4:1 */
-  --c-tenue:         #8B94A3;  /*  6.2:1 */
-  --c-borde:         #252C38;
-  --c-borde-fuerte:  #3A4353;
-  --c-acento:        #A79BFF;  /*  7.9:1 */
-  --c-acento-sobre:  #0E1117;
-  --c-acento-vivo:   #6C5CFF;
-  --c-codigo:        rgba(241, 243, 247, 0.045);
-  --c-marca-agua:    #1A202A;
-  --c-sombra:        rgba(0, 0, 0, 0.5);
-  --c-pie:           #080A0E;
-  --c-pie-texto:     #F1F3F7;
-  --c-pie-tenue:     #AFB7C4;
-  --c-pie-borde:     #1F2530;
+  --c-fondo:        #151515;
+  --c-superficie:   #1C1C1C;
+  --c-elevado:      #232323;
+  --c-chip:         #242424;
+  --c-texto:        #F2F2F2;   /* 16.4:1 */
+  --c-atenuado:     #B8B8B8;   /*  9.4:1 */
+  --c-tenue:        #8F8F8F;   /*  5.6:1 */
+  --c-borde:        #2A2A2A;
+  --c-borde-fuerte: #3E3E3E;
+  --c-acento:       #F2F2F2;
+  --c-acento-sobre: #151515;
+  --c-codigo:       rgba(242, 242, 242, 0.075);
+  --c-sombra:       rgba(0, 0, 0, 0.55);
+  --c-vidrio:       rgba(70, 70, 70, 0.38);
+  --c-vidrio-borde: rgba(255, 255, 255, 0.10);
+  --c-carpeta:      #222222;
+  --c-hoja:         #2B2B2B;
+  --c-foto:         #E9E9E9;
 }
 
 @theme inline {
-  --color-fondo:        var(--c-fondo);
-  --color-superficie:   var(--c-superficie);
-  --color-elevado:      var(--c-elevado);
-  --color-texto:        var(--c-texto);
-  --color-atenuado:     var(--c-atenuado);
-  --color-tenue:        var(--c-tenue);
-  --color-borde:        var(--c-borde);
-  --color-bordefuerte:  var(--c-borde-fuerte);
-  --color-acento:       var(--c-acento);
-  --color-acentosobre:  var(--c-acento-sobre);
-  --color-acentovivo:   var(--c-acento-vivo);
-  --color-pie:          var(--c-pie);
-  --color-pietexto:     var(--c-pie-texto);
-  --color-pietenue:     var(--c-pie-tenue);
-  --color-pieborde:     var(--c-pie-borde);
+  --color-fondo:       var(--c-fondo);
+  --color-superficie:  var(--c-superficie);
+  --color-elevado:     var(--c-elevado);
+  --color-chip:        var(--c-chip);
+  --color-texto:       var(--c-texto);
+  --color-atenuado:    var(--c-atenuado);
+  --color-tenue:       var(--c-tenue);
+  --color-borde:       var(--c-borde);
+  --color-bordefuerte: var(--c-borde-fuerte);
+  --color-acento:      var(--c-acento);
+  --color-acentosobre: var(--c-acento-sobre);
 
   --font-sans: var(--fuente-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--fuente-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
+  --text-mini: 0.75rem;
+  --text-mini--line-height: 1.45;
   --text-menor: 0.8125rem;
   --text-menor--line-height: 1.5;
-  --text-base: 1rem;
+  --text-base: 0.9375rem;
   --text-base--line-height: 1.6;
-  --text-cuerpo: 1.0625rem;
-  --text-cuerpo--line-height: 1.65;
-  --text-guia: clamp(1.125rem, 1rem + 0.55vw, 1.4375rem);
-  --text-guia--line-height: 1.45;
-  --text-t3: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem);
-  --text-t3--line-height: 1.15;
-  --text-t2: clamp(2.5rem, 1.55rem + 3.6vw, 4.75rem);
-  --text-t2--line-height: 0.98;
+  --text-cuerpo: 1rem;
+  --text-cuerpo--line-height: 1.6;
+  --text-guia: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+  --text-guia--line-height: 1.4;
+  --text-t3: clamp(1.25rem, 1.05rem + 0.75vw, 1.625rem);
+  --text-t3--line-height: 1.2;
+  --text-t2: clamp(2.75rem, 1.7rem + 3.8vw, 5rem);
+  --text-t2--line-height: 1;
 
   --spacing-seccion: clamp(5.5rem, 3rem + 8vw, 10rem);
-  --spacing-canal: clamp(1rem, 0.4rem + 2.6vw, 2.5rem);
-  --container-lienzo: 82rem;
+  --spacing-canal: clamp(1.25rem, 0.4rem + 3.4vw, 6rem);
+  --container-lienzo: 84rem;
 
   --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* ============================================================
-   BASE
-   ============================================================ */
-
 @layer base {
   * { border-color: var(--c-borde); }
-
   html {
     background-color: var(--c-fondo);
     scroll-padding-top: 6rem;
@@ -117,30 +101,23 @@
   @media (prefers-reduced-motion: no-preference) {
     html:not([data-reducido]) { scroll-behavior: smooth; }
   }
-
   body {
     color: var(--c-texto);
     font-family: var(--font-sans);
     font-size: var(--text-cuerpo);
-    line-height: 1.65;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: clip;
   }
-
   h1, h2, h3 { text-wrap: balance; }
   p { text-wrap: pretty; }
-
   :focus-visible {
     outline: 2px solid var(--c-acento);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 3px;
   }
-
-  ::selection {
-    background-color: var(--c-acento);
-    color: var(--c-acento-sobre);
-  }
+  ::selection { background-color: var(--c-texto); color: var(--c-fondo); }
 }
 
 @layer components {
@@ -150,121 +127,113 @@
     margin-inline: auto;
     padding-inline: var(--spacing-canal);
   }
-
-  /* La voz ancha: titulares y nombres. El ancho sale del eje wdth. */
-  .ancho {
-    font-variation-settings: "wdth" 122;
-    letter-spacing: -0.025em;
-  }
-
   .titulo-seccion {
     font-size: var(--text-t2);
     line-height: var(--text-t2--line-height);
-    font-weight: 700;
-    font-variation-settings: "wdth" 118;
+    font-weight: 600;
     letter-spacing: -0.035em;
   }
-
   .mono { font-family: var(--font-mono); }
-
-  /* Enlace de texto con subrayado que crece desde la izquierda */
   .enlace {
     background-image: linear-gradient(currentColor, currentColor);
     background-repeat: no-repeat;
     background-position: 0 100%;
     background-size: 0% 1px;
-    transition: background-size 0.35s var(--ease-salida), color 0.2s ease;
+    transition: background-size 0.35s var(--ease-salida);
   }
   .enlace:hover { background-size: 100% 1px; }
 
-  /* Botón rectangular de poca curva, como los del reel. */
+  /* Botones del reel: claros, rectangulares, con flecha. */
   .boton {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
     min-height: 2.75rem;
-    padding: 0.625rem 1.125rem;
-    border: 1px solid var(--c-borde-fuerte);
+    padding: 0.6rem 1.1rem;
     border-radius: 6px;
-    font-size: var(--text-menor);
-    font-weight: 600;
-    line-height: 1.2;
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s var(--ease-salida);
-  }
-  .boton:hover { border-color: var(--c-texto); }
-  .boton:active { transform: translateY(1px); }
-  .boton--lleno {
     background: var(--c-texto);
-    border-color: var(--c-texto);
     color: var(--c-fondo);
+    font-size: var(--text-menor);
+    font-weight: 500;
+    line-height: 1.2;
+    transition: transform 0.25s var(--ease-salida), opacity 0.2s ease;
   }
-  .boton--lleno:hover {
-    background: var(--c-acento);
-    border-color: var(--c-acento);
-    color: var(--c-acento-sobre);
-  }
+  .boton:hover { opacity: 0.88; }
+  .boton:active { transform: translateY(1px); }
   .boton svg { transition: transform 0.25s var(--ease-salida); }
   .boton:hover svg.flecha { transform: translate(2px, -2px); }
+  .boton--hueco {
+    background: transparent;
+    color: var(--c-texto);
+    border: 1px solid var(--c-borde-fuerte);
+  }
 
-  /* Chips del stack: rectángulos chicos. Los principales, rellenos. */
   .chip {
     display: inline-flex;
     align-items: center;
-    min-height: 2rem;
-    padding: 0.3rem 0.7rem;
-    border: 1px solid var(--c-borde-fuerte);
-    border-radius: 5px;
+    min-height: 2.25rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    background: var(--c-chip);
     font-size: var(--text-menor);
-    line-height: 1.25;
+    font-weight: 500;
+    line-height: 1.2;
     color: var(--c-texto);
   }
   .chip--principal {
     background: var(--c-texto);
-    border-color: var(--c-texto);
     color: var(--c-fondo);
-    font-weight: 600;
   }
+
+  /* Campos del formulario: solo una línea abajo, como en el reel. */
+  .campo {
+    display: block;
+    width: 100%;
+    margin-top: 0.6rem;
+    padding: 0.5rem 0 0.7rem;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--c-borde-fuerte);
+    border-radius: 0;
+    color: var(--c-texto);
+    font-size: var(--text-cuerpo);
+    transition: border-color 0.2s ease;
+  }
+  .campo::placeholder { color: var(--c-tenue); }
+  .campo:hover { border-bottom-color: var(--c-atenuado); }
+  .campo:focus { outline: none; border-bottom-color: var(--c-texto); }
+  .campo:focus-visible { outline: 2px solid var(--c-acento); outline-offset: 4px; }
 }
 
 /* ============================================================
-   PÍLDORA
-
-   El texto rueda hacia arriba cuando cambia de sección, como el
-   nombre del reel al hacer scroll.
+   PÍLDORA: el nombre gira sobre su eje al cambiar de sección.
    ============================================================ */
 
 .pildora {
-  background: color-mix(in srgb, var(--c-superficie) 86%, transparent);
-  border: 1px solid var(--c-borde);
-  box-shadow: 0 10px 30px -14px var(--c-sombra);
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  background: color-mix(in srgb, var(--c-superficie) 82%, transparent);
+  border: 1px solid var(--c-vidrio-borde);
+  box-shadow: 0 12px 32px -16px var(--c-sombra);
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
 }
-
-.rueda {
-  display: inline-grid;
-  overflow: hidden;
-  height: 1.5em;
-  line-height: 1.5em;
+.nombre-gira {
+  display: inline-block;
+  perspective: 300px;
 }
-.rueda > span {
-  grid-area: 1 / 1;
-  white-space: nowrap;
+.nombre-gira > span {
+  display: inline-block;
+  transform-origin: 50% 50%;
 }
-.rueda > span[data-sale] {
-  animation: rueda-sale 0.45s var(--ease-salida) forwards;
+.nombre-gira > span[data-gira] {
+  animation: nombre-gira 0.7s var(--ease-salida);
 }
-.rueda > span[data-entra] {
-  animation: rueda-entra 0.45s var(--ease-salida) both;
+@keyframes nombre-gira {
+  0%   { transform: rotateX(0); }
+  45%  { transform: rotateX(90deg) translateY(-0.1em); }
+  55%  { transform: rotateX(-90deg) translateY(0.1em); }
+  100% { transform: rotateX(0); }
 }
-@keyframes rueda-sale {
-  to { transform: translateY(-110%) rotateX(60deg); opacity: 0; }
-}
-@keyframes rueda-entra {
-  from { transform: translateY(110%) rotateX(-60deg); opacity: 0; }
-}
-
 .menu-panel {
   transform-origin: top center;
   animation: menu-abre 0.28s var(--ease-salida);
@@ -274,72 +243,67 @@
 }
 
 /* ============================================================
-   ESCENARIO: hero + «Hola, soy Benjamín»
-
-   Sin JavaScript, con movimiento reducido, en pantallas bajas o en
-   móvil, las dos partes van una debajo de otra (flujo normal).
-   Con todo a favor, la sección mide 240svh y su interior queda
-   fijo: el titular sube, la foto crece hasta el centro y el saludo
-   se revela a sus lados. --p (0 → 1) lo escribe Movimiento.tsx.
+   HERO
    ============================================================ */
 
-.escenario__foto {
-  position: relative;
-  width: min(15rem, 62vw);
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  border-radius: 6px;
-  background: var(--c-elevado);
+/* Tenues rayas verticales del fondo del reel, debajo del código. */
+.escenario__fijo {
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 3px,
+    color-mix(in srgb, var(--c-texto) 1.8%, transparent) 3px,
+    color-mix(in srgb, var(--c-texto) 1.8%, transparent) 4px
+  );
 }
 
-/* Titular: cada letra se enciende de gris a tinta, escalonada. */
 .titular {
-  /* Medido: la línea más larga («< SOFTWARE») ocupa 6,9 em a wdth 112, y
-     7,8 em con el corrimiento de escritorio. El tamaño sale del ancho útil
-     para que nunca se corte. */
-  font-size: min(calc((100vw - 2.5rem) / 7.15), 9.5rem);
-  line-height: 0.9;
-  font-weight: 800;
-  font-variation-settings: "wdth" 112;
-  letter-spacing: -0.035em;
+  /* «< SOFTWARE» mide 6,0 em a wdth 92; 6,8 em con el corrimiento. */
+  font-size: min(calc((100vw - 2.5rem) / 6.25), 9.5rem);
+  line-height: 0.92;
+  font-weight: 700;
+  font-variation-settings: "wdth" 92;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
 }
 @media (min-width: 768px) {
-  .titular { font-size: min(calc((100vw - 6rem) / 8.1), 9.5rem); }
+  .titular { font-size: min(calc((100vw - 8rem) / 7), 9.5rem); }
 }
 .titular .corchete {
-  font-weight: 500;
-  font-size: 0.62em;
-  color: var(--c-acento);
+  font-weight: 300;
+  font-size: 0.6em;
+  vertical-align: 0.2em;
   letter-spacing: 0;
-  display: inline-block;
-  vertical-align: 0.18em;
 }
-.titular .letra {
-  display: inline-block;
-  animation: letra-enciende 0.9s var(--ease-salida) both;
-  animation-delay: calc(0.25s + var(--i) * 0.055s);
-}
+/* Cada letra entra extruida: copias grises corridas que se recogen
+   hasta quedar planas, como el 3D del reel. */
+.titular .letra,
 .titular .corchete {
-  animation: corchete-entra 0.9s var(--ease-salida) both;
+  display: inline-block;
+  animation: letra-extruida 1.1s var(--ease-salida) both;
   animation-delay: calc(0.2s + var(--i) * 0.05s);
 }
-@keyframes letra-enciende {
-  0%   { color: var(--c-borde-fuerte); transform: translateY(0.18em) rotateX(-70deg); }
-  55%  { color: var(--c-tenue); }
-  100% { color: var(--c-texto); transform: none; }
-}
-@keyframes corchete-entra {
-  from { transform: translateX(calc(var(--lado) * 0.6em)); opacity: 0; }
+@keyframes letra-extruida {
+  0% {
+    color: var(--c-borde-fuerte);
+    transform: translate(0.12em, -0.1em);
+    text-shadow:
+      -0.03em 0.03em 0 var(--c-borde-fuerte),
+      -0.06em 0.06em 0 var(--c-borde-fuerte),
+      -0.09em 0.09em 0 var(--c-borde),
+      -0.12em 0.12em 0 var(--c-borde);
+  }
+  60% { color: var(--c-atenuado); }
+  100% {
+    color: var(--c-texto);
+    transform: none;
+    text-shadow: 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent;
+  }
 }
 :root[data-fuentes="pendientes"] .titular .letra,
-:root[data-fuentes="pendientes"] .titular .corchete {
-  animation-play-state: paused;
-}
+:root[data-fuentes="pendientes"] .titular .corchete { animation-play-state: paused; }
 
-/* Código de fondo: dos copias que suben en bucle, muy tenues. */
 .codigo-fondo {
-  /* Solo detrás del titular: nunca detrás de texto que se lee. */
   position: absolute;
   inset: 0 0 auto;
   height: min(78svh, 46rem);
@@ -347,22 +311,28 @@
   pointer-events: none;
   color: var(--c-codigo);
   font-family: var(--font-mono);
-  font-size: 12px;
-  line-height: 1.7;
+  font-size: 11px;
+  line-height: 1.75;
   white-space: pre;
-  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, #000 30%, transparent 100%);
-  mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, #000 30%, transparent 100%);
 }
 .codigo-fondo__pista {
   display: flex;
   flex-direction: column;
-  animation: codigo-sube 90s linear infinite;
+  animation: codigo-sube 110s linear infinite;
 }
-@keyframes codigo-sube {
-  to { transform: translateY(-50%); }
+@keyframes codigo-sube { to { transform: translateY(-50%); } }
+
+/* La foto: el recorte va sobre un fondo claro, como en el reel. */
+.escenario__foto {
+  position: relative;
+  width: min(15rem, 62vw);
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--c-foto);
 }
 
-/* --- Flujo normal (base) --- */
+/* --- Flujo normal --- */
 .escenario { position: relative; }
 .escenario__fijo { position: relative; }
 .escenario__hero {
@@ -371,25 +341,19 @@
   text-align: center;
 }
 .escenario__foto { margin: 2rem auto 0; }
-.escenario__pie { position: relative; }
-.escenario__sobre { position: relative; }
 
-/* --- Modo fijo --- */
+/* --- Tramo fijo (escritorio) --- */
 @media (min-width: 1024px) and (min-height: 620px) and (prefers-reduced-motion: no-preference) {
-  :root[data-js]:not([data-reducido]) .escenario {
-    height: 240svh;
-  }
+  :root[data-js]:not([data-reducido]) .escenario { height: 250svh; }
   :root[data-js]:not([data-reducido]) .escenario__fijo {
     position: sticky;
     top: 0;
     height: 100svh;
     overflow: hidden;
-    /* e: la foto crece; r: el saludo se revela; s: el titular sube */
-    --s: clamp(0, calc(var(--p, 0) / 0.55), 1);
-    --e: clamp(0, calc((var(--p, 0) - 0.08) / 0.62), 1);
-    --r: clamp(0, calc((var(--p, 0) - 0.42) / 0.45), 1);
+    --s: clamp(0, calc(var(--p, 0) / 0.5), 1);
+    --e: clamp(0, calc((var(--p, 0) - 0.05) / 0.6), 1);
+    --r: clamp(0, calc((var(--p, 0) - 0.45) / 0.4), 1);
   }
-  /* El código se apaga mientras aparece el saludo: nunca detrás de texto. */
   :root[data-js]:not([data-reducido]) .codigo-fondo {
     height: 100svh;
     opacity: calc(1 - var(--r));
@@ -398,25 +362,26 @@
     position: absolute;
     inset: 0 0 auto;
     padding-top: clamp(6.5rem, 15svh, 9rem);
-    transform: translateY(calc(var(--s) * -75svh));
+    transform: translateY(calc(var(--s) * -80svh));
   }
   :root[data-js]:not([data-reducido]) .escenario__pie {
     position: absolute;
     inset: auto 0 clamp(1.5rem, 4svh, 2.5rem);
     transform: translateY(calc(var(--s) * -115svh));
-    clip-path: inset(0 0 0 0);
   }
+  /* En el hero la foto toca el borde inferior; luego sube al centro. */
   :root[data-js]:not([data-reducido]) .escenario__foto {
-    --foto-w: clamp(17rem, 26vw, 23rem);
+    --foto-w: clamp(17rem, 25vw, 23rem);
     position: absolute;
     margin: 0;
     left: 50%;
     top: 50%;
     width: var(--foto-w);
-    max-height: 66svh;
+    max-height: 64svh;
+    border-radius: calc(8px + (1 - var(--e)) * 0px);
     transform:
-      translate(-50%, calc(-50% + (1 - var(--e)) * 24svh))
-      scale(calc(0.6 + 0.4 * var(--e)));
+      translate(-50%, calc(-50% + (1 - var(--e)) * 33svh))
+      scale(calc(0.62 + 0.38 * var(--e)));
     will-change: transform;
   }
   :root[data-js]:not([data-reducido]) .escenario__sobre {
@@ -424,23 +389,21 @@
     inset: 0;
     display: grid;
     align-items: center;
-    grid-template-columns: 1fr clamp(17rem, 26vw, 23rem) 1fr;
-    gap: clamp(1.5rem, 3vw, 3.5rem);
+    grid-template-columns: 1fr clamp(17rem, 25vw, 23rem) 1fr;
+    gap: clamp(2rem, 4vw, 4.5rem);
     padding-block: 5.5rem 2rem;
     pointer-events: none;
   }
-  :root[data-js]:not([data-reducido]) .escenario__sobre > * {
-    pointer-events: auto;
-  }
+  :root[data-js]:not([data-reducido]) .escenario__sobre > * { pointer-events: auto; }
   :root[data-js]:not([data-reducido]) .sobre__izq {
     grid-column: 1;
     clip-path: inset(0 calc((1 - var(--r)) * 100%) 0 0);
-    transform: translateX(calc((1 - var(--r)) * 2.5rem));
+    transform: translateX(calc((1 - var(--r)) * 3rem));
   }
   :root[data-js]:not([data-reducido]) .sobre__der {
     grid-column: 3;
     clip-path: inset(0 0 0 calc((1 - var(--r)) * 100%));
-    transform: translateX(calc((1 - var(--r)) * -2.5rem));
+    transform: translateX(calc((1 - var(--r)) * -3rem));
   }
   :root[data-js]:not([data-reducido]) .escenario__fijo[data-fuera] .sobre__izq,
   :root[data-js]:not([data-reducido]) .escenario__fijo[data-fuera] .sobre__der {
@@ -449,129 +412,118 @@
 }
 
 /* ============================================================
-   CARPETAS DE PROYECTOS
-
-   Una carpeta con pestaña. Al apuntar o al llevar el foco adentro,
-   la hoja con la captura sale y la tapa se inclina hacia adelante.
+   CARPETAS: fondo oscuro, hojas que asoman y tapa de vidrio
+   esmerilado. Al apuntar, las hojas se abren en abanico.
    ============================================================ */
 
 .carpeta {
   position: relative;
-  aspect-ratio: 5 / 4;
-  perspective: 900px;
+  aspect-ratio: 1 / 0.86;
   isolation: isolate;
 }
 .carpeta__fondo {
   position: absolute;
-  inset: 9% 0 0;
-  border-radius: 4px 10px 10px 10px;
-  background: var(--c-elevado);
-  border: 1px solid var(--c-borde);
+  inset: 8% 0 0;
+  border-radius: 4px 12px 12px 12px;
+  background: var(--c-carpeta);
 }
 .carpeta__fondo::before {
   content: "";
   position: absolute;
-  left: -1px;
-  bottom: 100%;
-  width: 38%;
-  height: 13%;
-  min-height: 1.1rem;
-  border: 1px solid var(--c-borde);
-  border-bottom: 0;
+  left: 0;
+  bottom: calc(100% - 1px);
+  width: 36%;
+  height: 10%;
+  min-height: 0.9rem;
   border-radius: 10px 14px 0 0;
-  background: var(--c-elevado);
+  background: var(--c-carpeta);
 }
 .carpeta__hoja {
   position: absolute;
-  left: 7%;
-  right: 7%;
-  top: 14%;
-  height: 70%;
-  border-radius: 4px;
+  left: 9%;
+  right: 9%;
+  top: 13%;
+  height: 62%;
+  border-radius: 5px;
   overflow: hidden;
-  background: var(--c-superficie);
-  border: 1px solid var(--c-borde);
-  box-shadow: 0 6px 18px -10px var(--c-sombra);
-  transition: transform 0.55s var(--ease-salida);
+  background: var(--c-hoja);
+  box-shadow: 0 6px 18px -8px var(--c-sombra);
+  transition: transform 0.6s var(--ease-salida);
 }
-.carpeta__hoja--atras {
-  left: 11%;
-  right: 4%;
-  top: 11%;
-  transform: rotate(3deg);
-}
+.carpeta__hoja--1 { transform: rotate(-4deg) translate(-4%, 2%); }
+.carpeta__hoja--2 { transform: rotate(3deg) translate(4%, 1%); }
 .carpeta__frente {
   position: absolute;
-  inset: 36% 0 0;
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--c-superficie) 92%, transparent);
-  border: 1px solid var(--c-borde-fuerte);
-  box-shadow: 0 -10px 24px -18px var(--c-sombra);
-  transform-origin: 50% 100%;
-  transition: transform 0.55s var(--ease-salida);
+  inset: 34% 0 0;
+  border-radius: 12px;
+  background: var(--c-vidrio);
+  border: 1px solid var(--c-vidrio-borde);
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
   justify-content: space-between;
-  gap: 1rem;
-  padding: clamp(0.9rem, 2.2vw, 1.25rem);
+  padding: clamp(0.85rem, 1.6vw, 1.15rem);
 }
-.tarjeta-proyecto:hover .carpeta__hoja:not(.carpeta__hoja--atras),
-.tarjeta-proyecto:focus-within .carpeta__hoja:not(.carpeta__hoja--atras) {
-  transform: translateY(-20%) rotate(-2.5deg);
-}
-.tarjeta-proyecto:hover .carpeta__hoja--atras,
-.tarjeta-proyecto:focus-within .carpeta__hoja--atras {
-  transform: translateY(-11%) rotate(5deg);
-}
-.tarjeta-proyecto:hover .carpeta__frente,
-.tarjeta-proyecto:focus-within .carpeta__frente {
-  transform: rotateX(-14deg);
-}
+.tarjeta-proyecto:hover .carpeta__hoja--0,
+.tarjeta-proyecto:focus-within .carpeta__hoja--0 { transform: translate(-6%, -24%) rotate(-7deg); }
+.tarjeta-proyecto:hover .carpeta__hoja--1,
+.tarjeta-proyecto:focus-within .carpeta__hoja--1 { transform: translate(-2%, -12%) rotate(-1deg); }
+.tarjeta-proyecto:hover .carpeta__hoja--2,
+.tarjeta-proyecto:focus-within .carpeta__hoja--2 { transform: translate(8%, -18%) rotate(8deg); }
 
-/* Hoja sin captura (sistema interno): renglones de un documento. */
 .hoja-renglones {
   position: absolute;
   inset: 0;
   padding: 12% 10%;
   display: grid;
   align-content: start;
-  gap: 0.55rem;
+  gap: 0.5rem;
 }
 .hoja-renglones span {
-  height: 0.4rem;
+  height: 0.35rem;
   border-radius: 2px;
-  background: var(--c-elevado);
+  background: var(--c-borde-fuerte);
 }
 
 /* ============================================================
-   LÍNEA DE TIEMPO ONDULADA
-
-   El trazo se dibuja con el scroll: --p va de 0 a 1 en
-   stroke-dashoffset (pathLength = 1).
+   EXPERIENCIA: onda que se dibuja con el scroll.
    ============================================================ */
 
 .onda path {
   stroke-dasharray: 1;
   stroke-dashoffset: calc(1 - var(--p, 1));
 }
-.nodo {
-  transition: background-color 0.3s ease, transform 0.4s var(--ease-salida);
-  transform: scale(calc(0.4 + 0.6 * var(--visto, 1)));
-}
 
 /* ============================================================
-   PIE Y CIUDAD
+   PIE: la banda de la ciudad es blanca en los dos temas.
    ============================================================ */
 
+.banda-ciudad {
+  --c-texto: #111111;
+  --c-fondo: #FFFFFF;
+  --c-borde-fuerte: #BDBDBD;
+  --c-marca-agua: #ECECEC;
+  background: #FFFFFF;
+  color: #111111;
+}
 .marca-agua {
-  /* «BENJAMÍN.» mide 6,84 em: cabe entero en el ancho, como «ASWIN.». */
-  font-size: min(calc((100vw - 2rem) / 7), 20rem);
+  font-size: min(calc((100vw - 2rem) / 5.6), 22rem);
   line-height: 0.8;
-  font-weight: 800;
-  font-variation-settings: "wdth" 125;
+  font-weight: 700;
+  font-variation-settings: "wdth" 100;
   letter-spacing: -0.05em;
   color: var(--c-marca-agua);
   white-space: nowrap;
+}
+
+/* Panel de preguntas */
+.panel-preguntas {
+  animation: panel-abre 0.32s var(--ease-salida);
+  transform-origin: bottom right;
+}
+@keyframes panel-abre {
+  from { transform: translateY(10px) scale(0.97); opacity: 0; }
 }
 
 /* ============================================================
@@ -584,7 +536,9 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .codigo-fondo__pista { animation: none !important; }
+  .codigo-fondo__pista,
+  .titular .letra,
+  .titular .corchete { animation: none !important; }
 }
 :root[data-reducido] *,
 :root[data-reducido] *::before,
@@ -593,11 +547,6 @@
   animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
 }
-:root[data-reducido] .codigo-fondo__pista { animation: none !important; }
-
-/* Con movimiento reducido el titular llega encendido, sin esperar demoras. */
-@media (prefers-reduced-motion: reduce) {
-  .titular .letra, .titular .corchete { animation: none !important; }
-}
+:root[data-reducido] .codigo-fondo__pista,
 :root[data-reducido] .titular .letra,
 :root[data-reducido] .titular .corchete { animation: none !important; }

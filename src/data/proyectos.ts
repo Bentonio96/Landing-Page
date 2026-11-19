@@ -18,6 +18,7 @@ import type { Proyecto } from "@/types";
 export const proyectos: Proyecto[] = [
   {
     slug: "kerr",
+    resumen: { es: "Misión ficticia a un agujero negro, en WebGL2", en: "Fictional black-hole mission in WebGL2" },
     nombre: "Kerr",
     descripcion: {
       es: "Misión tripulada ficticia hacia un agujero negro en rotación. La lente gravitacional se calcula en WebGL2, el scroll cruza el horizonte de eventos y el HUD usa física real. Banda sonora original con Web Audio.",
@@ -31,6 +32,7 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "kinetica",
+    resumen: { es: "Festival ficticio de luz y sonido", en: "Fictional light and sound festival" },
     nombre: "Kinetica",
     descripcion: {
       es: "Landing de un festival ficticio de luz, sonido y movimiento: un orbe iridiscente en WebGL2, partículas que forman figuras, tipografía cinética y un carrusel 3D de artistas. En español e inglés, y accesible.",
@@ -44,6 +46,7 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "epicentro",
+    resumen: { es: "Sismos de Chile en tiempo real", en: "Real-time earthquakes in Chile" },
     nombre: "Epicentro",
     descripcion: {
       es: "Rastreador de sismos en Chile en tiempo real con datos del USGS. Mapa, estadísticas de los últimos 30 días y un listado que funciona entero con teclado y lector de pantalla.",
@@ -63,6 +66,7 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "turnera",
+    resumen: { es: "Sitio de producto para clínicas", en: "Product site for small clinics" },
     nombre: "Turnera",
     descripcion: {
       es: "Sitio de producto para una app ficticia de gestión de turnos en clínicas pequeñas. El producto no existe; el rigor visual y el presupuesto de rendimiento sí.",
@@ -82,6 +86,7 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "centinela",
+    resumen: { es: "Consola de operaciones de seguridad", en: "Security operations console" },
     nombre: "Centinela",
     descripcion: {
       es: "Consola de operaciones de seguridad. Siete vistas sobre un mismo conjunto de incidentes: el panel del turno, la tabla de triaje, un tablero kanban, el calendario, la analítica, el equipo y los ajustes.",
@@ -98,6 +103,7 @@ export const proyectos: Proyecto[] = [
     // pública ni repositorio, así que la tarjeta se renderiza sin botones.
     // Si prefieres dejar solo los tres públicos, borra este bloque.
     slug: "portal-ciberoperaciones",
+    resumen: { es: "CMPC · Sistema interno", en: "CMPC · Internal system" },
     nombre: "Portal de Ciberoperaciones",
     descripcion: {
       es: "Portal interno de CMPC que centraliza la operación diaria del área y funciona como catálogo de servicios para incidentes de TI y OT.",

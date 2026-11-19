@@ -17,7 +17,7 @@ export function BotonCopiar({ email, texto, avisoCopiado, avisoFallo }: Props) {
     }
   }
   return (
-    <button type="button" onClick={copiar} aria-label={texto} title={texto} className="boton size-11 p-0">
+    <button type="button" onClick={copiar} aria-label={texto} title={texto} className="inline-flex size-9 items-center justify-center rounded-md border border-bordefuerte text-texto transition-colors hover:border-texto">
       <Copy aria-hidden="true" className="size-4" />
     </button>
   );

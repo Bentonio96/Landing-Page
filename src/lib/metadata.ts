@@ -3,11 +3,8 @@ import type { Idioma } from "@/types";
 import { CANONICA_URL, perfil, seo, SITIO_URL } from "@/data/perfil";
 
 export const viewportBase: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F6F7F9" },
-    { media: "(prefers-color-scheme: dark)", color: "#0E1117" },
-  ],
-  colorScheme: "light dark",
+  themeColor: "#151515",
+  colorScheme: "dark light",
 };
 
 /**

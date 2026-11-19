@@ -5,7 +5,7 @@ import { Pildora } from "@/components/layout/Pildora";
 import { Pie } from "@/components/layout/Pie";
 import { SaltarAlContenido } from "@/components/layout/SaltarAlContenido";
 import { Escenario } from "@/components/sections/Escenario";
-import { QuienSoy } from "@/components/sections/QuienSoy";
+import { Preguntas } from "@/components/ui/Preguntas";
 import { Stack } from "@/components/sections/Stack";
 import { Proyectos } from "@/components/sections/Proyectos";
 import { Experiencia } from "@/components/sections/Experiencia";
@@ -45,13 +45,13 @@ export function Pagina({ idioma }: Props) {
       <Pildora idioma={idioma} t={t} />
       <main id="contenido">
         <Escenario t={t} />
-        <QuienSoy idioma={idioma} t={t} />
         <Stack idioma={idioma} t={t} />
         <Proyectos idioma={idioma} t={t} />
         <Experiencia idioma={idioma} t={t} />
         <Contacto t={t} />
       </main>
       <Pie t={t} />
+      <Preguntas idioma={idioma} t={t} />
       <Movimiento />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados) }} />
     </ProveedorAvisos>

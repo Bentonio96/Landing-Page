@@ -4,7 +4,6 @@ import type { Diccionario } from "@/i18n/diccionario";
 import { perfil } from "@/data/perfil";
 import { proyectos } from "@/data/proyectos";
 import { stack } from "@/data/stack";
-import { BLUR_PERFIL } from "@/lib/blur";
 import { Negritas } from "@/components/ui/Negritas";
 
 type Props = { t: Diccionario };
@@ -78,8 +77,8 @@ export function Escenario({ t }: Props) {
         <div className="escenario__hero lienzo">
           <p className="mx-auto inline-flex items-center gap-2.5 rounded-full border border-borde bg-superficie/70 px-3.5 py-1.5 text-menor text-atenuado">
             <span aria-hidden="true" className="relative flex size-2">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-acentovivo opacity-60 motion-reduce:hidden" />
-              <span className="relative inline-flex size-2 rounded-full bg-acentovivo" />
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#3ecf6e] opacity-60 motion-reduce:hidden" />
+              <span className="relative inline-flex size-2 rounded-full bg-[#3ecf6e]" />
             </span>
             {t.hero.disponible}
           </p>
@@ -88,13 +87,13 @@ export function Escenario({ t }: Props) {
             <span className="sr-only">
               {perfil.nombre}, {t.hero.rol}
             </span>
-            <span aria-hidden="true" className="block whitespace-nowrap md:pr-[0.9em]">
+            <span aria-hidden="true" className="block whitespace-nowrap md:pr-[0.8em]">
               <span className="corchete mr-[0.12em]" style={{ ["--i" as string]: 0, ["--lado" as string]: -1 }}>
                 &lt;
               </span>
               <Letras palabra={primera} desde={1} />
             </span>
-            <span aria-hidden="true" className="block whitespace-nowrap md:pl-[0.9em]">
+            <span aria-hidden="true" className="block whitespace-nowrap md:pl-[0.8em]">
               <Letras palabra={segunda ?? ""} desde={primera.length + 1} />
               <span
                 className="corchete ml-[0.12em]"
@@ -107,48 +106,49 @@ export function Escenario({ t }: Props) {
         </div>
 
         <figure className="escenario__foto">
+          {/* Retrato recortado con BiRefNet (sin el cerro de fondo), sobre un
+              fondo claro como el del reel. */}
           <Image
-            src="/benjamin-pena.jpg"
+            src="/retrato.webp"
             alt={t.hero.altFoto}
             fill
             priority
-            placeholder="blur"
-            blurDataURL={BLUR_PERFIL}
             sizes="(max-width: 768px) 62vw, 24rem"
-            className="object-cover object-[52%_28%] grayscale"
+            className="object-contain object-bottom grayscale"
           />
         </figure>
 
-        <div className="escenario__pie lienzo mt-8 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 md:mt-0">
-          <p className="ancho text-t3 font-bold">©2026</p>
-          <p className="mono text-menor font-medium">
-            <span aria-hidden="true" className="text-tenue">{"{{ "}</span>/{t.hero.etiqueta}
-            <span aria-hidden="true" className="text-tenue">{" }}"}</span>
+        <div className="escenario__pie lienzo mt-8 lg:!pr-[calc(var(--spacing-canal)+8rem)] flex flex-wrap items-end justify-between gap-x-6 gap-y-2 md:mt-0">
+          <p className="text-[clamp(1.5rem,1.1rem+1.2vw,2.25rem)] font-semibold tracking-[-0.03em]">©2026</p>
+          <p className="text-mini font-medium uppercase tracking-[0.02em]">
+            <span aria-hidden="true">{"{{ "}</span>/{t.hero.etiqueta}
+            <span aria-hidden="true">{" }}"}</span>
           </p>
         </div>
 
         <div id="sobre-mi" className="escenario__sobre lienzo grid gap-10 py-20 md:grid-cols-2 md:py-28">
           <div className="sobre__izq">
-            <h2 className="ancho text-[clamp(2.5rem,1.6rem+3.4vw,4.5rem)] font-bold leading-[0.98]">
+            <h2 className="text-[clamp(2.75rem,1.7rem+3.6vw,5rem)] font-semibold leading-[1] tracking-[-0.035em]">
               {t.hero.saludo}
             </h2>
-            <p className="mt-5 max-w-[22ch] text-t3 font-semibold">{t.hero.subtitulo}</p>
-            <div className="mt-6 max-w-sm border-t border-bordefuerte pt-4 text-menor">
-              <p className="text-tenue">{t.hero.actualmente}</p>
-              <p className="mt-1 font-semibold">{t.hero.actual}</p>
-              <p className="text-atenuado">{t.hero.actualDetalle}</p>
+            <p className="mt-6 max-w-[16ch] text-t3 font-semibold leading-tight">{t.hero.subtitulo}</p>
+            <div className="mt-7 max-w-xs border-t border-bordefuerte pt-4 text-menor">
+              <p className="text-mini text-tenue">{t.hero.actualmente}</p>
+              <p className="mt-2 font-semibold">{t.hero.actual}</p>
+              <p className="text-atenuado">{t.hero.actualRol}</p>
+              <p className="text-tenue">{t.hero.actualDetalle}</p>
             </div>
           </div>
           <div className="sobre__der">
-            <p className="max-w-[34ch] text-guia text-atenuado">
+            <p className="max-w-[24ch] text-guia text-atenuado">
               <Negritas texto={t.hero.intro} />
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <a href="#proyectos" className="boton boton--lleno">
+              <a href="#proyectos" className="boton">
                 {t.hero.verProyectos}
                 <ArrowUpRight aria-hidden="true" className="flecha size-4" />
               </a>
-              <a href={perfil.cv} download={perfil.cvArchivo} className="boton">
+              <a href={perfil.cv} download={perfil.cvArchivo} className="boton boton--hueco">
                 <Download aria-hidden="true" className="size-4" />
                 {t.hero.descargarCV}
               </a>

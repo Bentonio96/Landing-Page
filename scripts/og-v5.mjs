@@ -10,7 +10,7 @@ import puppeteer from "puppeteer-core";
 
 const RAIZ = process.cwd();
 const CHROME = process.env.CHROME ?? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-const foto = (await readFile(path.join(RAIZ, "public/benjamin-pena.jpg"))).toString("base64");
+const foto = (await readFile(path.join(RAIZ, "public/retrato.webp"))).toString("base64");
 
 const textos = {
   es: { disponible: "Disponible para proyectos freelance", etiqueta: "full stack y datos" },
@@ -35,21 +35,21 @@ function html({ disponible, etiqueta }) {
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400;500&display=block" rel="stylesheet">
 <style>
   *{margin:0;box-sizing:border-box}
-  body{width:1200px;height:630px;background:#0E1117;color:#F1F3F7;font-family:Archivo,sans-serif;position:relative;overflow:hidden}
-  pre{position:absolute;inset:28px 40px;font:13px/1.75 "JetBrains Mono",monospace;color:rgba(241,243,247,.07)}
-  .t{position:absolute;left:64px;top:118px;font-weight:800;font-variation-settings:"wdth" 112;font-size:112px;line-height:.9;letter-spacing:-.035em;text-transform:uppercase}
-  .c{color:#A79BFF;font-weight:500;font-size:.62em;vertical-align:.18em;letter-spacing:0}
+  body{width:1200px;height:630px;background:#151515;color:#F2F2F2;font-family:Archivo,sans-serif;position:relative;overflow:hidden}
+  pre{position:absolute;inset:28px 40px;font:13px/1.75 "JetBrains Mono",monospace;color:rgba(242,242,242,.07)}
+  .t{position:absolute;left:64px;top:118px;font-weight:700;font-variation-settings:"wdth" 92;font-size:124px;line-height:.92;letter-spacing:-.03em;text-transform:uppercase}
+  .c{color:#F2F2F2;font-weight:300;font-size:.62em;vertical-align:.18em;letter-spacing:0}
   .l2{padding-left:.9em}
-  img{position:absolute;right:64px;bottom:64px;width:190px;height:238px;object-fit:cover;object-position:52% 28%;border-radius:6px;filter:grayscale(1)}
+  img{position:absolute;right:64px;bottom:0;width:250px;height:290px;object-fit:contain;object-position:bottom;background:#E9E9E9;border-radius:8px 8px 0 0;filter:grayscale(1)}
   .pie{position:absolute;left:64px;bottom:64px;display:grid;gap:14px}
-  .n{font-weight:700;font-variation-settings:"wdth" 118;font-size:34px;letter-spacing:-.02em}
-  .d{display:flex;align-items:center;gap:10px;font-size:20px;color:#AFB7C4}
-  .d i{width:10px;height:10px;border-radius:50%;background:#6C5CFF}
-  .e{font:500 18px "JetBrains Mono",monospace;color:#F1F3F7}.e b{color:#8B94A3;font-weight:400}
+  .n{font-weight:600;font-size:34px;letter-spacing:-.02em}
+  .d{display:flex;align-items:center;gap:10px;font-size:20px;color:#B8B8B8}
+  .d i{width:10px;height:10px;border-radius:50%;background:#3ecf6e}
+  .e{font:500 18px "JetBrains Mono",monospace;color:#F2F2F2}.e b{color:#8F8F8F;font-weight:400}
 </style></head><body>
 <pre>${codigo}</pre>
 <div class="t"><div><span class="c">&lt;</span> SOFTWARE</div><div class="l2">ENGINEER <span class="c">/&gt;</span></div></div>
-<img src="data:image/jpeg;base64,${foto}">
+<img src="data:image/webp;base64,${foto}">
 <div class="pie"><p class="n">Benjamín Peña Díaz</p><p class="d"><i></i>${disponible}</p><p class="e"><b>{{ </b>/${etiqueta}<b> }}</b></p></div>
 </body></html>`;
 }

@@ -16,9 +16,8 @@ type DocumentoConTransicion = Document & {
 };
 
 /**
- * La píldora flotante del reel: nombre, tema y menú. Al lado del nombre va
- * la ruta de la sección en la que estás, en voz de terminal (`~/stack`), y
- * rueda hacia arriba cada vez que cambia.
+ * La píldora flotante del reel: nombre, tema y menú. El nombre gira sobre
+ * su eje cada vez que cambia la sección.
  */
 export function Pildora({ idioma, t }: Props) {
   const secciones = [
@@ -140,20 +139,17 @@ export function Pildora({ idioma, t }: Props) {
       <div className="pointer-events-auto relative">
         <nav
           aria-label={t.nav.explorar}
-          className="pildora flex items-center gap-1 rounded-xl p-1.5 pl-4"
+          className="pildora flex items-center gap-1 rounded-xl p-1.5 pl-5"
         >
-          <a href="#inicio" className="flex min-h-9 items-center gap-3 pr-2 text-menor">
-            <span className="ancho font-bold">Benjamín</span>
-            <span aria-hidden="true" className="rueda mono hidden min-w-[9.5ch] text-[0.75rem] text-tenue sm:inline-grid">
-              {ruta.previa ? (
-                <span key={`p${ruta.n}`} data-sale="">
-                  ~/{nombreDe(ruta.previa)}
-                </span>
-              ) : null}
-              <span key={`a${ruta.n}`} data-entra={ruta.n > 0 ? "" : undefined}>
-                ~/{nombreDe(ruta.actual)}
+          {/* Como en el reel, el nombre gira sobre su eje cada vez que
+              cambia la sección. La sección actual va para lectores de pantalla. */}
+          <a href="#inicio" className="flex min-h-9 min-w-[8.5rem] items-center pr-3 text-menor font-semibold">
+            <span className="nombre-gira" aria-hidden="true">
+              <span key={ruta.n} data-gira={ruta.n > 0 ? "" : undefined}>
+                Benjamín
               </span>
             </span>
+            <span className="sr-only">Benjamín Peña Díaz, {nombreDe(ruta.actual)}</span>
           </a>
           <button
             type="button"
@@ -172,7 +168,7 @@ export function Pildora({ idioma, t }: Props) {
             aria-controls="menu-principal"
             aria-label={abierto ? t.nav.cerrarMenu : t.nav.menu}
             onClick={() => setAbierto((a) => !a)}
-            className="inline-flex size-9 items-center justify-center rounded-lg bg-texto text-fondo transition-colors hover:bg-acento hover:text-acentosobre"
+            className="inline-flex size-9 items-center justify-center rounded-lg bg-texto text-fondo transition-opacity hover:opacity-85"
           >
             {abierto ? <X aria-hidden="true" className="size-4" /> : <MoreHorizontal aria-hidden="true" className="size-4" />}
           </button>
@@ -193,9 +189,7 @@ export function Pildora({ idioma, t }: Props) {
                     className="flex min-h-11 items-center justify-between rounded-lg px-3 text-base font-medium transition-colors hover:bg-elevado"
                   >
                     {s.nombre}
-                    <span aria-hidden="true" className="mono text-[0.75rem] text-tenue">
-                      ~/{s.nombre.toLowerCase()}
-                    </span>
+                    <span aria-hidden="true" className="text-tenue">↗</span>
                   </a>
                 </li>
               ))}
@@ -206,11 +200,11 @@ export function Pildora({ idioma, t }: Props) {
                 hrefLang={idiomaAlterno(idioma)}
                 lang={idiomaAlterno(idioma)}
                 aria-label={t.idioma.etiqueta}
-                className="boton"
+                className="boton boton--hueco"
               >
                 {t.idioma.nombre}
               </a>
-              <a href={perfil.cv} download={perfil.cvArchivo} className="boton">
+              <a href={perfil.cv} download={perfil.cvArchivo} className="boton boton--hueco">
                 <Download aria-hidden="true" className="size-4" />
                 CV
               </a>
